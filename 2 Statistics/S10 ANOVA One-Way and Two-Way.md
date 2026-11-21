@@ -5,168 +5,427 @@ tags: [math243, statistics, anova, f-test]
 
 # S10 · ANOVA: One-Way and Two-Way
 
-**Why this matters for the term final.** ANOVA is a big-mark question that appears almost every year. 2021-22 Q8(b) (18 marks): one-way ANOVA with **unequal** group sizes (three salesmen) — solved below. 2022-23 Q8(b) (10 marks): one-way ANOVA for four brands of bulbs at 5% and 1%, and Q8(c) (15 marks): **two-way ANOVA** (corn types × soil blocks). 2023-24 Q8(b) (20 marks): one-way ANOVA for prices in three cities. The 2022-23 and 2023-24 solutions are in [[TF 2022-23 Solutions]] and [[TF 2023-24 Solutions]]; this note teaches the method and includes a fresh two-way practice. ==The calculation is completely mechanical: learn the five formulas and the table layout and you cannot lose these marks.==
+**Why this matters for the TF.** ANOVA appeared in 2021-22 Q8(b) (three salesmen, unequal sizes), 2022-23 Q8(b) (one-way, four bulb brands) and Q8(c) (**two-way**, soil blocks × corn types), and 2023-24 Q8(b) (one-way, prices in three cities, 20 marks).
+
+The calculation is long but purely mechanical, so a practised student collects full marks. The 2022-23 and 2023-24 questions are solved in [[TF 2022-23 Solutions]] and [[TF 2023-24 Solutions]].
 
 ---
 
-## 1. The idea of analysis of variance
+## Core tools (memorize)
 
-Suppose we want to compare the means of three or more groups (three teaching methods, four bulb brands, three cities' prices). Doing many separate two-sample $t$-tests would be tedious and would inflate the chance of a Type I error. **Analysis of variance (ANOVA)**, developed by R. A. Fisher, tests all the means at once:
-
-$$H_0: \mu_1 = \mu_2 = \dots = \mu_k \qquad\text{against}\qquad H_1: \text{at least two means are unequal}$$
-
-> [!important] Memorize: The ANOVA idea
-> ==ANOVA splits the total variation of all observations into parts due to identifiable sources (variation **between** groups, caused by differences among group means) and a part due to chance (variation **within** groups).== If the between-group variation is large compared with the within-group variation, the group means are significantly different. The comparison is made with the $F$ ratio:
-> $$F = \frac{\text{mean square between groups}}{\text{mean square within groups (error)}}$$
-> If $H_0$ is true, both mean squares estimate the same $\sigma^2$ and $F$ is close to 1. A large $F$ leads to rejection. The test is always **right-tailed**.
-
-> [!important] Memorize: Assumptions of ANOVA
-> The samples are drawn independently and at random; each population is **normally** distributed; all populations have the **same variance** $\sigma^2$ (homogeneity of variance); and the effects are additive.
-
-## 2. F-test for two variances (brief)
-
-To test $H_0: \sigma_1^2 = \sigma_2^2$, compute $F = \dfrac{s_1^2}{s_2^2}$ with the **larger** sample variance in the numerator (so $F \ge 1$), and compare with $F_{\alpha,(n_1 - 1),(n_2 - 1)}$ (for a two-tailed test use $\alpha/2$ in the table). Lecture example: route variances $8.9947^2$ and $4.3753^2$ give $F = 4.23$; with 6 and 7 df at $\alpha/2 = 0.05$, the critical value is 3.87, so the variances differ. This is the same $F$ distribution that ANOVA uses (see [[S7 Sampling Distributions CLT and Confidence Intervals]]).
-
-## 3. One-way ANOVA (completely randomized design)
-
-We have $k$ groups; group $i$ has $n_i$ observations with total $T_i$. Let $N = \sum n_i$ and $G = \sum T_i$ (grand total).
-
-> [!important] Memorize: One-way ANOVA formulas
-> $$\text{Correction term: } CT = \frac{G^2}{N}$$
+> [!important] Memorize: one-way ANOVA ($k$ groups, $N$ observations in total)
+> $G$ is the grand total, $T_i$ the total of group $i$ and $n_i$ its size.
 >
-> $$\text{Total SS: } S_T = \sum\sum x_{ij}^2 - CT$$
+> **Correction term:**
 >
-> $$\text{Between-groups SS: } S_B = \sum_{i=1}^{k} \frac{T_i^2}{n_i} - CT$$
+> $$CT=\frac{G^2}{N}$$
 >
-> $$\text{Within-groups (error) SS: } S_W = S_T - S_B$$
+> **Total sum of squares:**
 >
-> $$F = \frac{S_B/(k - 1)}{S_W/(N - k)} \sim F_{(k-1),\,(N-k)}$$
-> Reject $H_0$ if $F_{cal} > F_{\alpha,(k-1),(N-k)}$.
+> $$S_T=\sum\sum x^2-CT$$
+>
+> **Between-groups sum of squares:**
+>
+> $$S_B=\sum_i\frac{T_i^2}{n_i}-CT$$
+>
+> **Within-groups (error) sum of squares:**
+>
+> $$S_W=S_T-S_B$$
+>
+> **F ratio:**
+>
+> $$F=\frac{S_B/(k-1)}{S_W/(N-k)}\sim F_{k-1,\ N-k}$$
+>
+> ==Reject $H_0$ (all means equal) if $F_{cal}>F_{\alpha}(k-1,N-k)$.==
 
-> [!important] Memorize: One-way ANOVA table
-> | Source of variation | df | Sum of squares | Mean square | $F$ |
+> [!important] Memorize: two-way ANOVA ($r$ blocks/rows × $c$ treatments/columns, one value per cell)
+> **Correction term:**
+>
+> $$CT=\frac{G^2}{rc}$$
+>
+> **Total sum of squares:**
+>
+> $$S_T=\sum x^2-CT$$
+>
+> **Rows (blocks) sum of squares:**
+>
+> $$S_R=\frac{\sum R_i^2}{c}-CT$$
+>
+> **Columns (treatments) sum of squares:**
+>
+> $$S_C=\frac{\sum C_j^2}{r}-CT$$
+>
+> **Error sum of squares:**
+>
+> $$S_E=S_T-S_R-S_C$$
+>
+> **F ratio for rows:**
+>
+> $$F_R=\frac{S_R/(r-1)}{S_E/[(r-1)(c-1)]}$$
+>
+> **F ratio for columns:**
+>
+> $$F_C=\frac{S_C/(c-1)}{S_E/[(r-1)(c-1)]}$$
+
+> [!important] Memorize: ANOVA table layout (always draw it)
+>
+> | Source | df | SS | MS = SS/df | $F$ |
 > |---|---|---|---|---|
-> | Between groups | $k - 1$ | $S_B$ | $MS_B = S_B/(k-1)$ | $MS_B/MS_W$ |
-> | Within groups (error) | $N - k$ | $S_W$ | $MS_W = S_W/(N-k)$ | |
-> | Total | $N - 1$ | $S_T$ | | |
+> | Between groups (or rows / columns) | $k-1$ | $S_B$ | $MS_B$ | $MS_B/MS_W$ |
+> | Within (error) | $N-k$ | $S_W$ | $MS_W$ | |
+> | Total | $N-1$ | $S_T$ | | |
 
-**Why it works.** $S_T$ measures how all $N$ observations vary around the grand mean. $S_B$ measures how the group means vary around the grand mean (weighted by group size). $S_W$ is what is left: the scatter of observations around their own group mean, which can only be chance. Note that the formula $\sum T_i^2/n_i$ handles **unequal** group sizes automatically; just divide each squared total by its own $n_i$.
-
-> [!tip] Exam trick: coding the data
-> Subtracting the same constant from every observation does not change $S_T$, $S_B$, $S_W$ or $F$, and dividing every observation by the same constant $c$ divides every sum of squares by $c^2$, so $F$ is unchanged. So you may subtract a convenient number (e.g. 20) or divide by 100 to make the arithmetic small. State clearly that you coded the data. If you report sums of squares, convert back (multiply by $c^2$).
-
-> [!example] Past TF 2021-22 Q8(b) (18 marks): Do three salesmen differ in average sales?
-> **Data** (weekly sales, Tk thousand). A (5 sales): 300, 400, 300, 500, 0. B (4 sales): 600, 300, 300, 400. C (5 sales): 700, 300, 400, 600, 500. Given $F_{0.05,(2,11)} = 3.98$.
+> [!note] Minimal theory
+> ANOVA tests $H_0:\mu_1=\mu_2=\dots=\mu_k$ against $H_1$: at least two means differ.
 >
-> **Hypothesis:** $H_0: \mu_A = \mu_B = \mu_C$ (the salesmen's average sales are equal) against $H_1$: at least two means differ.
+> It assumes independent random samples from normal populations with a **common variance**. The test is always right-tailed.
+
+> [!tip] Coding trick
+> Subtracting a constant from every value changes nothing.
 >
-> **Coding:** divide every value by 100 (this does not change $F$).
+> Dividing every value by $h$ divides every SS by $h^2$ but leaves $F$ unchanged.
+>
+> Use this to keep numbers small.
+
+---
+
+## Problem types you will face
+
+### Type 1 — one-way ANOVA, equal group sizes
+
+**Recipe:** totals $T_i$ → $G$ → $CT$ → $\sum x^2$ → $S_T$, $S_B$, $S_W$ → ANOVA table → compare with $F_\alpha$ → comment.
+
+> [!example] Practice 1 (TF style): yield of three reactors
+> A: 72, 75, 78, 74, 76. B: 65, 68, 70, 72, 69. C: 78, 82, 85, 88, 90. Test at 5% ($F_{0.05}(2,12)=3.89$).
+>
+> **Hypothesis.** $H_0:\mu_A=\mu_B=\mu_C$ against $H_1$: at least two means differ.
+>
+> **Level of significance.** $\alpha=0.05$.
+>
+> **Step 1 — totals.**
+>
+> | | A | B | C | |
+> |---|---|---|---|---|
+> | $T_i$ | 375 | 344 | 423 | $G=1142$ |
+> | $\sum x^2$ | 28145 | 23694 | 35877 | 87716 |
+>
+> $N=15$, $k=3$.
+>
+> **Step 2 — correction term.**
+>
+> $$CT=\frac{1142^2}{15}=86944.27$$
+>
+> **Step 3 — total SS.**
+>
+> $$S_T=87716-86944.27=771.73$$
+>
+> **Step 4 — between SS.**
+>
+> $$S_B=\frac{375^2+344^2+423^2}{5}-86944.27=633.73$$
+>
+> **Step 5 — within SS.**
+>
+> $$S_W=771.73-633.73=138.00$$
+>
+> **Step 6 — ANOVA table.**
+>
+> | Source | df | SS | MS | $F$ |
+> |---|---|---|---|---|
+> | Between reactors | 2 | 633.73 | 316.87 | 27.55 |
+> | Within | 12 | 138.00 | 11.50 | |
+> | Total | 14 | 771.73 | | |
+>
+> **Decision.** $27.55>3.89$, so reject $H_0$.
+>
+> **Comment.** The mean yields of the reactors differ significantly. Reactor C (mean 84.6) is the highest.
+
+---
+
+### Type 2 — one-way ANOVA, unequal group sizes
+
+Use $T_i^2/n_i$ with each group's own $n_i$. Nothing else changes.
+
+> [!example] Past TF 2021-22 Q8(b) (18 marks): three salesmen
+> **Given.** Sales in Tk thousand. A: 300, 400, 300, 500, 0. B: 600, 300, 300, 400. C: 700, 300, 400, 600, 500. $F_{0.05}(2,11)=3.98$.
+>
+> **Hypothesis.** $H_0:\mu_A=\mu_B=\mu_C$ against $H_1$: at least two differ.
+>
+> **Level of significance.** $\alpha=0.05$.
+>
+> **Step 1 — coding.** Divide by 100 (this does not change $F$).
 >
 > | | A | B | C |
 > |---|---|---|---|
-> | | 3 | 6 | 7 |
-> | | 4 | 3 | 3 |
-> | | 3 | 3 | 4 |
-> | | 5 | 4 | 6 |
-> | | 0 | – | 5 |
+> | Coded values | 3, 4, 3, 5, 0 | 6, 3, 3, 4 | 7, 3, 4, 6, 5 |
 > | $n_i$ | 5 | 4 | 5 |
 > | $T_i$ | 15 | 16 | 25 |
 > | $\sum x^2$ | 59 | 70 | 135 |
 >
-> $N = 14$, $k = 3$, $G = 15 + 16 + 25 = 56$.
-> $$CT = \frac{56^2}{14} = 224, \qquad S_T = (59 + 70 + 135) - 224 = 264 - 224 = 40$$
+> $N=14$ and $G=56$.
 >
-> $$S_B = \frac{15^2}{5} + \frac{16^2}{4} + \frac{25^2}{5} - 224 = 45 + 64 + 125 - 224 = 10, \qquad S_W = 40 - 10 = 30$$
+> **Step 2 — correction term.**
+>
+> $$CT=\frac{56^2}{14}=224$$
+>
+> **Step 3 — total SS.**
+>
+> $$S_T=264-224=40$$
+>
+> **Step 4 — between SS.**
+>
+> $$\begin{aligned}
+> S_B &= \frac{15^2}{5}+\frac{16^2}{4}+\frac{25^2}{5}-224\\
+> &= 45+64+125-224\\
+> &= 10
+> \end{aligned}$$
+>
+> **Step 5 — within SS.**
+>
+> $$S_W=40-10=30$$
+>
+> **Step 6 — ANOVA table.**
 >
 > | Source | df | SS | MS | $F$ |
 > |---|---|---|---|---|
-> | Between salesmen | 2 | 10 | 5.000 | $5/2.727 = 1.83$ |
-> | Within (error) | 11 | 30 | 2.727 | |
+> | Between salesmen | 2 | 10 | 5.000 | 1.83 |
+> | Within | 11 | 30 | 2.727 | |
 > | Total | 13 | 40 | | |
 >
-> (In original units every SS is multiplied by $100^2$: $S_B = 100{,}000$, $S_W = 300{,}000$, $S_T = 400{,}000$; $F$ is the same.)
+> **Decision.** $1.83<3.98$, so do not reject $H_0$.
 >
-> **Decision:** $F_{cal} = 1.83 < F_{0.05,(2,11)} = 3.98$, so we do not reject $H_0$.
-> **Comment:** There is no significant difference among the average sales of the three salesmen at the 5% level; the observed differences (means 300, 400 and 500 thousand Tk) can be explained by chance variation.
+> **Comment.** The salesmen's average sales do not differ significantly. In original units every SS is multiplied by $100^2$, but $F$ is the same.
 
-**Pairwise comparison (if $H_0$ is rejected).** The lecture compares each pair with $t = \dfrac{|\bar{x}_i - \bar{x}_j|}{\sqrt{MS_W\left(\frac{1}{n_i} + \frac{1}{n_j}\right)}}$ against $t_{\alpha/2,(N-k)}$, to find which particular means differ. Only do this when the overall $F$ test is significant (or when asked).
-
-## 4. Two-way ANOVA without replication (randomized block design)
-
-Sometimes the observations are classified by **two** factors, with exactly one observation in each cell. A typical example: four types of corn (treatments, columns) are each planted in five blocks of land (rows), and the blocks may differ in soil fertility. Two-way ANOVA separates the variation due to **rows**, the variation due to **columns**, and the remaining random **error**, and tests both factors.
-
-Let there be $r$ rows and $c$ columns, $N = rc$ observations, row totals $R_i$, column totals $C_j$, grand total $G$.
-
-> [!important] Memorize: Two-way ANOVA formulas (one observation per cell)
-> $$CT = \frac{G^2}{N}, \qquad S_T = \sum\sum x_{ij}^2 - CT$$
+> [!example] Practice 2 (TF style): three catalysts, unequal sizes
+> A: 68, 70, 73, 75. B: 72, 74, 76, 78, 77. C: 75, 78, 80, 82, 85, 88. Test at 5% ($F_{0.05}(2,12)=3.89$).
 >
-> $$S_R = \frac{\sum R_i^2}{c} - CT \;(\text{rows / blocks}), \qquad S_C = \frac{\sum C_j^2}{r} - CT \;(\text{columns / treatments})$$
+> **Step 1 — totals.**
 >
-> $$S_E = S_T - S_R - S_C$$
+> | | A | B | C | |
+> |---|---|---|---|---|
+> | $n_i$ | 4 | 5 | 6 | $N=15$ |
+> | $T_i$ | 286 | 377 | 488 | $G=1151$ |
+> | $\sum x^2$ | 20478 | 28449 | 39802 | 88729 |
+>
+> **Step 2 — correction term.**
+>
+> $$CT=\frac{1151^2}{15}=88320.07$$
+>
+> **Step 3 — total SS.**
+>
+> $$S_T=88729-88320.07=408.93$$
+>
+> **Step 4 — between SS.**
+>
+> $$S_B=\frac{286^2}{4}+\frac{377^2}{5}+\frac{488^2}{6}-88320.07=245.40$$
+>
+> **Step 5 — within SS.**
+>
+> $$S_W=408.93-245.40=163.53$$
+>
+> **Step 6 — ANOVA table.**
 >
 > | Source | df | SS | MS | $F$ |
 > |---|---|---|---|---|
-> | Rows (blocks) | $r - 1$ | $S_R$ | $MS_R = S_R/(r-1)$ | $F_R = MS_R/MS_E$ |
-> | Columns (treatments) | $c - 1$ | $S_C$ | $MS_C = S_C/(c-1)$ | $F_C = MS_C/MS_E$ |
-> | Error | $(r-1)(c-1)$ | $S_E$ | $MS_E = S_E/[(r-1)(c-1)]$ | |
-> | Total | $rc - 1$ | $S_T$ | | |
-> ==Compare $F_R$ with $F_{\alpha,(r-1),(r-1)(c-1)}$ and $F_C$ with $F_{\alpha,(c-1),(r-1)(c-1)}$.== Note: row totals are divided by the number of **columns** (each row total is a sum of $c$ values), and column totals by the number of **rows**.
-
-Two null hypotheses are tested: $H_{01}$: there is no difference among the row (block) means, and $H_{02}$: there is no difference among the column (treatment) means.
-
-**Fresh practice (two-way).** Three fertilizers (columns) are tried on four plots of different soil (rows); yields (kg):
-
-| Soil plot | Fertilizer F1 | F2 | F3 | Row total $R_i$ |
-|---|---|---|---|---|
-| P1 | 45 | 43 | 51 | 139 |
-| P2 | 47 | 46 | 52 | 145 |
-| P3 | 48 | 50 | 55 | 153 |
-| P4 | 42 | 37 | 49 | 128 |
-| Column total $C_j$ | 182 | 176 | 207 | $G = 565$ |
-
-Test at 5% whether yields differ (i) among soil plots and (ii) among fertilizers. Given $F_{0.05,(3,6)} = 4.76$ and $F_{0.05,(2,6)} = 5.14$.
-
-$r = 4$, $c = 3$, $N = 12$. $CT = 565^2/12 = 26602.08$. $\sum x^2 = 26867$, so $S_T = 26867 - 26602.08 = 264.92$.
-
-$S_R = \dfrac{139^2 + 145^2 + 153^2 + 128^2}{3} - CT = \dfrac{80139}{3} - 26602.08 = 26713.00 - 26602.08 = 110.92$.
-
-$S_C = \dfrac{182^2 + 176^2 + 207^2}{4} - CT = \dfrac{106949}{4} - 26602.08 = 26737.25 - 26602.08 = 135.17$.
-
-$S_E = 264.92 - 110.92 - 135.17 = 18.83$.
-
-| Source | df | SS | MS | $F$ |
-|---|---|---|---|---|
-| Soil plots (rows) | 3 | 110.92 | 36.97 | 11.78 |
-| Fertilizers (columns) | 2 | 135.17 | 67.58 | 21.53 |
-| Error | 6 | 18.83 | 3.139 | |
-| Total | 11 | 264.92 | | |
-
-**Decision.** (i) $F_R = 11.78 > 4.76$: reject $H_{01}$; the soil plots differ significantly in yield. (ii) $F_C = 21.53 > 5.14$: reject $H_{02}$; the fertilizers differ significantly, F3 giving the highest total yield.
-
-> [!warning] Common mistakes in ANOVA
-> Forgetting to subtract $CT$; dividing row totals by the number of rows instead of the number of columns; using $N$ instead of $N - k$ for the error df; putting the smaller mean square in the numerator; and, with coded data, forgetting that $F$ is unchanged but sums of squares scale by $c^2$. When a question asks for two significance levels (5% and 1%), compare the same $F_{cal}$ with both critical values and write both decisions.
-
-## 5. How the parts connect
-
-$S_T = S_B + S_W$ (one-way) and $S_T = S_R + S_C + S_E$ (two-way) mirror the regression identity $SST = SSR + SSE$ in [[S6 Correlation and Regression]]: in every case we split total variation into an explained part and an unexplained part, and the $F$ ratio compares them after dividing each by its degrees of freedom. The degrees of freedom also add up: $(k - 1) + (N - k) = N - 1$.
+> | Between | 2 | 245.40 | 122.70 | 9.00 |
+> | Within | 12 | 163.53 | 13.63 | |
+> | Total | 14 | 408.93 | | |
+>
+> **Decision.** $9.00>3.89$, so reject $H_0$.
+>
+> **Comment.** The catalysts give significantly different mean yields.
 
 ---
 
-> [!question]- Self-check
-> **1. Three groups of sizes 4, 5, 6. Degrees of freedom of $F$?**
-> $k - 1 = 2$ and $N - k = 15 - 3 = 12$.
+### Type 3 — large numbers: code first
+
+> [!example] Practice 3 (TF style): output of three machines
+> M1: 1505, 1512, 1498, 1510. M2: 1520, 1515, 1525, 1518. M3: 1500, 1495, 1508, 1502. Test at 5% ($F_{0.05}(2,9)=4.26$).
 >
-> **2. $G = 120$, $N = 12$, $\sum x^2 = 1300$. Find $CT$ and $S_T$.**
-> $CT = 14400/12 = 1200$; $S_T = 100$.
+> **Step 1 — code** by subtracting 1500.
 >
-> **3. In a two-way table with 5 rows and 4 columns, what are the error df?**
-> $(5-1)(4-1) = 12$.
+> M1: 5, 12, −2, 10. M2: 20, 15, 25, 18. M3: 0, −5, 8, 2.
 >
-> **4. $MS_B = 12$, $MS_W = 3$, critical $F = 3.89$. Decision?**
-> $F = 4 > 3.89$: reject $H_0$, means differ.
+> **Step 2 — totals.** Group totals 25, 78 and 5, so $G=108$. Sums of squares 273, 1574 and 93, which add to 1940. $N=12$.
 >
-> **5. Why can't we just do several $t$-tests instead of ANOVA?**
-> Many separate tests increase the overall chance of a Type I error and are tedious; ANOVA tests all means simultaneously at the chosen $\alpha$.
+> **Step 3 — correction term.**
+>
+> $$CT=\frac{108^2}{12}=972$$
+>
+> **Step 4 — total SS.**
+>
+> $$S_T=1940-972=968$$
+>
+> **Step 5 — between SS.**
+>
+> $$S_B=\frac{25^2+78^2+5^2}{4}-972=711.5$$
+>
+> **Step 6 — within SS.**
+>
+> $$S_W=968-711.5=256.5$$
+>
+> **Step 7 — F ratio.**
+>
+> $$F=\frac{711.5/2}{256.5/9}=\frac{355.75}{28.5}=12.48$$
+>
+> **Decision.** $12.48>4.26$, so reject $H_0$.
+>
+> **Comment.** The machines' mean outputs differ (M2 is highest).
+
+---
+
+### Type 4 — two-way ANOVA (blocks × treatments)
+
+**Recognise it:** a table where rows are blocks (soil, workers, days) and columns are treatments (varieties, machines), with one value per cell, and the question asks about both factors.
+
+**Recipe:** row totals, column totals, $CT$, $S_T$, $S_R$, $S_C$, $S_E$ by subtraction, then two $F$ ratios, each compared with its own critical value.
+
+> [!example] Practice 4 (TF style): soil plots × fertilizers
+> **Given.** Yields (kg):
+>
+> | Plot | F1 | F2 | F3 | $R_i$ |
+> |---|---|---|---|---|
+> | P1 | 45 | 43 | 51 | 139 |
+> | P2 | 47 | 46 | 52 | 145 |
+> | P3 | 48 | 50 | 55 | 153 |
+> | P4 | 42 | 37 | 49 | 128 |
+> | $C_j$ | 182 | 176 | 207 | $G=565$ |
+>
+> $F_{0.05}(3,6)=4.76$ and $F_{0.05}(2,6)=5.14$.
+>
+> **Hypotheses.** $H_{01}$: the soil plots do not differ. $H_{02}$: the fertilizers do not differ.
+>
+> **Level of significance.** $\alpha=0.05$.
+>
+> Here $r=4$, $c=3$, and $\sum x^2=26867$.
+>
+> **Step 1 — correction term.**
+>
+> $$CT=\frac{565^2}{12}=26602.08$$
+>
+> **Step 2 — total SS.**
+>
+> $$S_T=26867-26602.08=264.92$$
+>
+> **Step 3 — rows (plots) SS.**
+>
+> $$S_R=\frac{139^2+145^2+153^2+128^2}{3}-CT=110.92$$
+>
+> **Step 4 — columns (fertilizers) SS.**
+>
+> $$S_C=\frac{182^2+176^2+207^2}{4}-CT=135.17$$
+>
+> **Step 5 — error SS.**
+>
+> $$S_E=264.92-110.92-135.17=18.83$$
+>
+> **Step 6 — ANOVA table.**
+>
+> | Source | df | SS | MS | $F$ |
+> |---|---|---|---|---|
+> | Plots (rows) | 3 | 110.92 | 36.97 | 11.78 |
+> | Fertilizers (columns) | 2 | 135.17 | 67.58 | 21.53 |
+> | Error | 6 | 18.83 | 3.139 | |
+> | Total | 11 | 264.92 | | |
+>
+> **Decision.** $11.78>4.76$ and $21.53>5.14$, so both hypotheses are rejected.
+>
+> **Comment.** Yields differ significantly between plots and between fertilizers. F3 is the best fertilizer.
+
+> [!example] Practice 5 (TF style): workers × machines
+> Output of 4 workers (rows) on 3 machines (columns): W1: 22, 26, 24. W2: 18, 24, 20. W3: 25, 27, 29. W4: 20, 23, 23. Test both factors at 5% ($F_{0.05}(3,6)=4.76$, $F_{0.05}(2,6)=5.14$).
+>
+> **Step 1 — totals.** Row totals: 72, 62, 81, 66. Column totals: 85, 100, 96. $G=281$ and $\sum x^2=6689$.
+>
+> **Step 2 — correction term.**
+>
+> $$CT=\frac{281^2}{12}=6580.08$$
+>
+> **Step 3 — total SS.**
+>
+> $$S_T=6689-6580.08=108.92$$
+>
+> **Step 4 — rows (workers) SS.**
+>
+> $$S_R=\frac{72^2+62^2+81^2+66^2}{3}-CT=68.25$$
+>
+> **Step 5 — columns (machines) SS.**
+>
+> $$S_C=\frac{85^2+100^2+96^2}{4}-CT=30.17$$
+>
+> **Step 6 — error SS.**
+>
+> $$S_E=108.92-68.25-30.17=10.50$$
+>
+> **Step 7 — ANOVA table.**
+>
+> | Source | df | SS | MS | $F$ |
+> |---|---|---|---|---|
+> | Workers | 3 | 68.25 | 22.75 | 13.00 |
+> | Machines | 2 | 30.17 | 15.08 | 8.62 |
+> | Error | 6 | 10.50 | 1.75 | |
+> | Total | 11 | 108.92 | | |
+>
+> **Decision.** $13.00>4.76$ and $8.62>5.14$.
+>
+> **Comment.** Both workers and machines differ significantly in output.
+
+---
+
+### Type 5 — F-test for two variances
+
+**Recipe:** put the larger variance on top:
+
+$$F=\frac{\text{larger } s^2}{\text{smaller } s^2}$$
+
+with df (numerator $n-1$, denominator $n-1$). For a two-tailed test at $\alpha$, compare with $F_{\alpha/2}$.
+
+> [!example] Practice 6 (TF style): two filling machines
+> Machine A ($n=8$): 52, 55, 50, 54, 53, 56, 51, 57. Machine B ($n=10$): 48, 49, 47, 50, 46, 51, 45, 49, 48, 47. Are the variances equal, at 5%?
+>
+> **Step 1 — variance of A.** $\sum x=428$ and $\sum x^2=22940$:
+>
+> $$s_A^2=\frac{22940-428^2/8}{7}=\frac{42}{7}=6.0$$
+>
+> **Step 2 — variance of B.** $\sum x=480$ and $\sum x^2=23070$:
+>
+> $$s_B^2=\frac{23070-480^2/10}{9}=\frac{30}{9}=3.33$$
+>
+> **Hypothesis.** $H_0:\sigma_A^2=\sigma_B^2$ against $H_1:\sigma_A^2\ne\sigma_B^2$.
+>
+> **Calculated value.**
+>
+> $$F=\frac{6.0}{3.333}=1.80$$
+>
+> **Critical region.** $F>F_{0.025}(7,9)=4.20$.
+>
+> **Decision.** $1.80<4.20$, so do not reject $H_0$.
+>
+> **Comment.** The variances can be regarded as equal.
+
+---
+
+## Extra practice
+
+> [!question]- Extra practice (try first, then open for answers)
+> **E1.** Groups: (8, 10, 12), (12, 14, 13), (6, 7, 8). One-way ANOVA at 5% ($F_{0.05}(2,6)=5.14$).
+>
+> Answer: $G=90$, $CT=900$, $S_T=66$, $S_B=54$, $S_W=12$, so $F=27/2=13.5>5.14$. Reject.
+>
+> **E2.** With $k=4$ groups and $N=20$, what are the df of the $F$ ratio?
+>
+> Answer: (3, 16).
+>
+> **E3.** In a two-way table with 5 blocks and 4 treatments, what are the error df?
+>
+> Answer: $(5-1)(4-1)=12$.
+>
+> **E4.** Every observation is divided by 10. What happens to SS and to $F$?
+>
+> Answer: every SS is divided by 100, and $F$ is unchanged.
+>
+> **E5.** $s_1^2=80.9$ with $n_1=7$ and $s_2^2=19.1$ with $n_2=8$. Is there a difference in variation at 10% ($F_{0.05}(6,7)=3.87$)?
+>
+> Answer: $F=4.23>3.87$, so reject: the variances differ.
 
 ---
 

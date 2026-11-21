@@ -8,7 +8,7 @@ tags: [math243, home]
 Welcome. This vault is a complete, exam-focused course for the MATH 243 (L-2/T-2, CSE) term final. It was built from the course lecture slides in the `resources` folder and from a careful study of the last five term finals (2019-20 to 2023-24). The goal is simple: by the time you finish these notes you should be able to solve **any** question from those five papers on your own, and the solutions of the two newest papers are kept for the very end as a final check.
 
 > [!important] How this guide is organised
-> The notes follow the order of the course: ==probability first, then statistics==. Every topic note begins by telling you which past term-final questions use it, explains the ideas in plain language, marks the formulas and definitions you must memorize, and then works through real past questions (2019-20, 2020-21, 2021-22) in full exam style. The 2022-23 and 2023-24 papers are solved separately in the last folder so that you can use them as mock exams.
+> The notes follow the order of the course: ==probability first, then statistics==, and they are ==problem-first==. Every topic note has the same shape: which past term-final questions use the topic, one box of core formulas to memorize, the theory the term final has actually asked (written as ready-to-copy exam answers, and nothing more), and then the main part, **"Problem types you will face"**, where each type of question is explained in a few lines and then solved through real past questions (2019-20, 2020-21, 2021-22) and fresh practice problems in the same style. Each note ends with extra practice and answers. The 2022-23 and 2023-24 papers are solved separately in the last folder so that you can use them as mock exams.
 
 ## Part 1 — Probability
 

@@ -1,121 +1,308 @@
 ---
 title: "S7 · Sampling Distributions, CLT and Confidence Intervals"
-tags: [math243, statistics, sampling-distribution, clt, estimation]
+tags: [math243, statistics, sampling-distribution, clt, confidence-interval]
 ---
 
 # S7 · Sampling Distributions, CLT and Confidence Intervals
 
-**Why this matters for the term final.** This chapter is the bridge between probability and hypothesis testing. 2023-24 Q6(b) (10 marks) asked: "What do you mean by the central limit theorem? Write an algorithm to solve problems involving the CLT. Discuss its applications in Computer Science." 2022-23 Q7(b) asked for a **99% confidence interval** for a population mean, and 2019-20 and 2020-21 tests (see [[S8 Hypothesis Testing Concepts and z t Tests]]) rely on the standard error $\sigma/\sqrt{n}$, which comes from here. The 2023-24 and 2022-23 answers are in [[TF 2023-24 Solutions]] and [[TF 2022-23 Solutions]]; this note builds the full understanding and gives fresh solved practice.
+**Why this matters for the TF.** 2023-24 Q6(b) asked for the central limit theorem, an algorithm for CLT problems and its applications in computer science (10 marks of pure theory).
+
+2022-23 Q7(b) and 2018-19 asked for a 99% confidence interval. Every z-test in [[S8 Hypothesis Testing Concepts and z t Tests]] also rests on the CLT.
+
+Solutions of those papers are in [[TF 2023-24 Solutions]] and [[TF 2022-23 Solutions]].
 
 ---
 
-## 1. Sampling distribution and standard error
+## Core tools (memorize)
 
-If we take a random sample of size $n$ and compute its mean $\bar{x}$, we get one number. If we took another sample, we would get a slightly different $\bar{x}$. So the sample mean is itself a **random variable**, and its probability distribution (over all possible samples) is called the **sampling distribution of $\bar{x}$**. In general, the probability distribution of any statistic is called its **sampling distribution**.
-
-> [!important] Memorize: Mean and standard error of $\bar{x}$
-> If a population has mean $\mu$ and standard deviation $\sigma$, and $\bar{x}$ is the mean of a random sample of size $n$ (with replacement, or from a large population), then
-> $$E(\bar{x}) = \mu, \qquad SD(\bar{x}) = \sigma_{\bar{x}} = \frac{\sigma}{\sqrt{n}}$$
-> ==The standard deviation of a sampling distribution is called the **standard error (SE)**.== It measures how much the statistic varies from sample to sample. Larger samples give smaller standard errors, so $\bar{x}$ becomes a more precise estimate of $\mu$.
-
-For sampling **without** replacement from a finite population of size $N$, multiply by the finite population correction: $\sigma_{\bar{x}} = \frac{\sigma}{\sqrt{n}}\sqrt{\frac{N - n}{N - 1}}$ (ignore it when $n$ is less than about 5% of $N$).
-
-Other standard errors you will need: for a sample proportion $\hat{p}$, $SE(\hat{p}) = \sqrt{\frac{P(1-P)}{n}}$; for a difference of two independent means, $SE(\bar{x}_1 - \bar{x}_2) = \sqrt{\frac{\sigma_1^2}{n_1} + \frac{\sigma_2^2}{n_2}}$; for a difference of proportions, $SE(\hat{p}_1 - \hat{p}_2) = \sqrt{\frac{P_1Q_1}{n_1} + \frac{P_2Q_2}{n_2}}$.
-
-## 2. The Central Limit Theorem
-
-> [!important] Memorize: Central Limit Theorem (CLT)
-> ==If $\bar{x}$ is the mean of a random sample of size $n$ taken from **any** population (of any shape) with finite mean $\mu$ and finite variance $\sigma^2$, then, as $n$ becomes large, the sampling distribution of $\bar{x}$ approaches a normal distribution with mean $\mu$ and variance $\sigma^2/n$:==
-> $$Z = \frac{\bar{x} - \mu}{\sigma/\sqrt{n}} \;\longrightarrow\; N(0,1) \quad \text{as } n \to \infty$$
-> Equivalently, the **sum** $T = x_1 + \dots + x_n$ is approximately $N(n\mu,\; n\sigma^2)$. The approximation is usually good when $n \ge 30$. If the population itself is normal, $\bar{x}$ is exactly normal for every $n$.
-
-**Why it is so important.** In real life we rarely know the shape of the population (waiting times are skewed, file sizes are skewed, defect counts are discrete). The CLT says that, regardless of the shape, averages of large samples behave normally. That is why we can use the normal ($z$) table for large-sample tests and confidence intervals, and why the normal distribution appears everywhere: many measured quantities are the sum of many small independent effects. It also explains the normal approximation to the binomial and Poisson distributions (a binomial count is a sum of $n$ Bernoulli variables; see [[P6 Bernoulli Binomial Multinomial Hypergeometric Geometric]] and [[P8 Normal Distribution]]).
-
-> [!important] Memorize: Algorithm for solving CLT problems (2023-24 Q6b)
-> **Step 1.** Identify the population mean $\mu$, population SD $\sigma$ and sample size $n$, and decide whether the question is about a single observation, a sample mean $\bar{x}$ or a sample total $T$.
-> **Step 2.** Check the conditions: random, independent observations; $n \ge 30$ (or the population is normal).
-> **Step 3.** Find the mean and standard error of the statistic: for $\bar{x}$, mean $\mu$ and SE $\sigma/\sqrt{n}$; for the total $T$, mean $n\mu$ and SE $\sigma\sqrt{n}$.
-> **Step 4.** Convert the required value to a $z$-score: $z = \dfrac{\bar{x} - \mu}{\sigma/\sqrt{n}}$ (or $z = \dfrac{T - n\mu}{\sigma\sqrt{n}}$).
-> **Step 5.** Draw the normal curve, shade the required area, and read $\Phi(z)$ from the standard normal table (use $1 - \Phi(z)$ for right tails and $\Phi(z_2) - \Phi(z_1)$ for intervals).
-> **Step 6.** State the answer in words in the context of the problem.
-
-In pseudo-code form (examiners like this for a CS class):
-
-```text
-INPUT  mu, sigma, n, type ("mean" or "sum"), bounds a, b
-IF n < 30 AND population not normal: warn "CLT approximation may be poor"
-IF type == "mean":  center = mu;     se = sigma / sqrt(n)
-ELSE:               center = n*mu;   se = sigma * sqrt(n)
-z1 = (a - center) / se ;  z2 = (b - center) / se
-prob = Phi(z2) - Phi(z1)          # use -inf / +inf for one-sided
-OUTPUT prob
-```
-
-**Applications of the CLT in Computer Science.** In **performance engineering and benchmarking**, we run a program many times and average the run times; by the CLT the average is approximately normal, so we can report a confidence interval such as "mean latency 12.4 ± 0.3 ms" and compare two algorithms with a $z$- or $t$-test. In **A/B testing** of websites and apps, the click-through rate of each version is an average of many 0/1 outcomes, so the CLT justifies the two-proportion $z$-test used to decide which design is better. In **networking and queueing**, the total delay of a packet over many hops or the total load from many independent users is a sum of many random terms, so it is approximately normal, which helps in capacity planning (e.g., the probability that total traffic exceeds link capacity). In **machine learning**, the average loss or accuracy over a large test set is approximately normal, which gives error bars on model accuracy; mini-batch gradients are averages of many per-example gradients and are approximately normal. In **Monte Carlo simulation and randomized algorithms**, an estimate is an average of many random samples, and the CLT tells us the error shrinks like $1/\sqrt{n}$ and how many samples we need for a given accuracy. In **reliability and storage**, the total size of many files or the total number of bit errors in a large transmission can be approximated by the normal distribution. CLT also underlies **random number generation** (summing 12 uniform numbers gives an approximately normal number) and **anomaly detection** (flagging averages that are more than 3 standard errors from normal behavior).
-
-**Fresh practice 1 (sample mean).** A server's response time has mean 50 ms and SD 10 ms (the distribution is skewed). For a random sample of 36 requests, what is the probability that the average response time exceeds 52 ms?
-By the CLT, $\bar{x} \sim N(50, 10^2/36)$, so $SE = 10/6 = 1.667$. $z = (52 - 50)/1.667 = 1.20$. $P(\bar{x} > 52) = 1 - \Phi(1.20) = 1 - 0.8849 = 0.1151$.
-
-**Fresh practice 2 (sum).** File sizes have mean 2 MB and SD 1.2 MB. What is the probability that 36 files will not fit on an 80 MB disk?
-The total $T$ is approximately $N(36 \times 2,\; 36 \times 1.2^2)$, i.e. mean 72 MB and SD $1.2\sqrt{36} = 7.2$ MB. $z = (80 - 72)/7.2 = 1.11$. $P(T > 80) = 1 - \Phi(1.11) = 1 - 0.8665 = 0.1335$.
-
-## 3. The $t$, $\chi^2$ and $F$ distributions (sampling distributions you must know)
-
-> [!important] Memorize: Student's $t$ distribution
-> If $x_1, \dots, x_n$ is a random sample from a **normal** population and $\sigma$ is unknown, then
-> $$t = \frac{\bar{x} - \mu}{s/\sqrt{n}}, \qquad s^2 = \frac{\sum (x_i - \bar{x})^2}{n - 1}$$
-> follows a $t$ distribution with $\nu = n - 1$ degrees of freedom. The $t$ curve is bell-shaped and symmetric about 0 like $Z$, but has **heavier tails** (more spread), with variance $\nu/(\nu - 2)$ for $\nu > 2$. As $\nu \to \infty$ it approaches the standard normal. It is used for small samples ($n < 30$) when $\sigma$ is unknown.
-
-The **chi-square distribution** with $\nu$ degrees of freedom is the distribution of a sum of squares of $\nu$ independent standard normal variables. It takes only non-negative values, is positively skewed, has mean $\nu$ and variance $2\nu$, and becomes more symmetric as $\nu$ grows. For a normal sample, $\frac{(n-1)s^2}{\sigma^2} \sim \chi^2_{n-1}$. It is used for tests on a variance and for goodness-of-fit and independence tests ([[S9 Chi-Square Tests]]).
-
-The **$F$ distribution** with $(\nu_1, \nu_2)$ degrees of freedom is the ratio of two independent chi-squares each divided by its degrees of freedom: $F = \dfrac{\chi^2_{\nu_1}/\nu_1}{\chi^2_{\nu_2}/\nu_2}$. It is non-negative and positively skewed. For two normal samples, $F = s_1^2/s_2^2$ follows $F_{n_1 - 1,\,n_2 - 1}$ when the population variances are equal. It is used to compare variances and in ANOVA ([[S10 ANOVA One-Way and Two-Way]]).
-
-**Degrees of freedom** means the number of values that are free to vary after the constraints are imposed. If $n$ deviations $(x_i - \bar{x})$ must add up to zero, only $n - 1$ of them are free, so $s^2$ has $n - 1$ degrees of freedom.
-
-## 4. Estimation: point and interval
-
-A **point estimate** is a single number used to estimate a parameter, such as $\bar{x}$ for $\mu$, $s^2$ for $\sigma^2$, or $\hat{p}$ for $P$. A good estimator is **unbiased** (its expected value equals the parameter, e.g. $E(\bar{x}) = \mu$, $E(s^2) = \sigma^2$, which is why we divide by $n - 1$), **consistent** (gets closer to the parameter as $n$ grows) and **efficient** (has the smallest variance).
-
-A point estimate is almost never exactly right, so we also give an **interval estimate** (confidence interval): a range of values, computed from the sample, which contains the parameter with a stated confidence level $1 - \alpha$, such as 95%.
-
-> [!important] Memorize: Confidence interval for a population mean $\mu$
-> **$\sigma$ known, or $n \ge 30$ (use $s$ for $\sigma$):**
-> $$\bar{x} - z_{\alpha/2}\frac{\sigma}{\sqrt{n}} \;\le\; \mu \;\le\; \bar{x} + z_{\alpha/2}\frac{\sigma}{\sqrt{n}}$$
-> **$\sigma$ unknown and $n < 30$ (normal population):**
-> $$\bar{x} - t_{\alpha/2,\,n-1}\frac{s}{\sqrt{n}} \;\le\; \mu \;\le\; \bar{x} + t_{\alpha/2,\,n-1}\frac{s}{\sqrt{n}}$$
-> ==Critical values: 90% → $z = 1.645$; 95% → $z = 1.96$; 99% → $z = 2.58$ (more precisely 2.576).==
-
-**Meaning of a 95% confidence interval.** If we repeated the sampling many times and built an interval each time, about 95% of those intervals would contain the true $\mu$. It does **not** mean "$\mu$ has a 95% probability of being in this particular interval"; $\mu$ is fixed and the interval is random. Higher confidence (99%) gives a wider interval; a larger sample gives a narrower interval.
-
-The quantity $E = z_{\alpha/2}\frac{\sigma}{\sqrt{n}}$ is the **margin of error**. Solving for $n$ gives the sample size needed for a desired margin: $n = \left(\dfrac{z_{\alpha/2}\,\sigma}{E}\right)^2$, rounded up.
-
-**Fresh practice 3 (large sample, 95% CI).** A sample of 64 batteries has mean life 72 hours; the population SD is 12 hours. The 95% CI is $72 \pm 1.96 \times \frac{12}{8} = 72 \pm 2.94$, i.e. **69.06 to 74.94 hours**. A 99% interval would be $72 \pm 2.58 \times 1.5 = 72 \pm 3.87$, i.e. 68.13 to 75.87 hours (wider, as expected).
-
-**Fresh practice 4 (small sample, $t$ interval).** Eight measurements of a resistor (ohms): 12.1, 11.8, 12.4, 12.0, 11.6, 12.3, 12.2, 11.9. Find a 95% CI for the mean.
-$\bar{x} = 96.3/8 = 12.0375$. $s = 0.2669$ (from $s^2 = \sum(x - \bar{x})^2/7$). With $\nu = 7$, $t_{0.025,7} = 2.365$. Margin $= 2.365 \times 0.2669/\sqrt8 = 2.365 \times 0.0944 = 0.223$. CI: **11.81 to 12.26 ohms**.
-
-**Fresh practice 5 (sample size).** How many observations are needed to estimate a mean within ±2 units with 95% confidence if $\sigma = 10$? $n = (1.96 \times 10/2)^2 = 96.04$, so take $n = 97$.
-
-> [!warning] Common mistake
-> Using $z$ instead of $t$ for a small sample with unknown $\sigma$, or using the one-tailed value 1.645 for a 95% two-sided interval. A confidence interval is always two-sided here, so use $z_{\alpha/2}$: 1.96 for 95%, 2.58 for 99%.
+> [!important] Memorize
+> **Mean of the sample mean** — use in any question about $\bar x$:
+>
+> $$E(\bar X)=\mu$$
+>
+> **Standard error of the sample mean:**
+>
+> $$SE(\bar X)=\frac{\sigma}{\sqrt n}$$
+>
+> **Standardising $\bar X$** (normal for large $n$):
+>
+> $$Z=\frac{\bar X-\mu}{\sigma/\sqrt n}\approx N(0,1)$$
+>
+> **z-interval for $\mu$** — use when $\sigma$ is known or $n\ge30$ (use $s$ for $\sigma$ when $n$ is large):
+>
+> $$\bar x\pm z_{\alpha/2}\frac{\sigma}{\sqrt n}$$
+>
+> **Values of $z_{\alpha/2}$:**
+>
+> $$90\%:\ 1.645 \qquad\qquad 95\%:\ 1.96 \qquad\qquad 99\%:\ 2.58$$
+>
+> **t-interval for $\mu$** — use for a small sample with $\sigma$ unknown:
+>
+> $$\bar x\pm t_{\alpha/2,\,n-1}\frac{s}{\sqrt n}$$
+>
+> **Sample SD** (divide by $n-1$):
+>
+> $$s^2=\frac{\sum(x-\bar x)^2}{n-1}=\frac{\sum x^2-n\bar x^2}{n-1}$$
+>
+> **Sample size for a margin of error $E$** — always round up:
+>
+> $$n=\left(\frac{z_{\alpha/2}\,\sigma}{E}\right)^2$$
 
 ---
 
-> [!question]- Self-check
-> **1. Population SD is 20. What sample size makes the standard error 2?**
-> $20/\sqrt n = 2 \Rightarrow n = 100$.
+## Theory the TF actually asks (2023-24 Q6b, keep in full)
+
+> [!important] Central Limit Theorem — statement
+> ==If $\bar X$ is the mean of a random sample of size $n$ taken from **any** population with mean $\mu$ and finite variance $\sigma^2$, then as $n$ becomes large the distribution of $\bar X$ approaches the normal distribution with mean $\mu$ and variance $\sigma^2/n$:==
 >
-> **2. State the CLT in one sentence.**
-> For large $n$, the mean of a random sample from any population with finite variance is approximately normal with mean $\mu$ and SD $\sigma/\sqrt n$.
+> $$Z=\frac{\bar X-\mu}{\sigma/\sqrt n}\ \longrightarrow\ N(0,1)\quad\text{as } n\to\infty.$$
 >
-> **3. $\bar{x} = 50$, $s = 8$, $n = 16$, $t_{0.025,15} = 2.131$. 95% CI?**
-> $50 \pm 2.131 \times 2 = 50 \pm 4.26$: 45.74 to 54.26.
+> In practice the approximation is good when $n\ge30$, whatever the shape of the population. If the population is itself normal, $\bar X$ is exactly normal for every $n$.
 >
-> **4. What happens to the width of a CI if $n$ is multiplied by 4?**
-> The SE is halved, so the width is halved.
+> The theorem is important because it lets us use the normal table for sample means and totals even when we do not know the population's distribution. That is the basis of large-sample z-tests and confidence intervals.
+
+> [!important] An algorithm to solve problems using the CLT
+> **Step 1.** Identify the population mean $\mu$, population standard deviation $\sigma$ (or the sample SD $s$ for large $n$), and the sample size $n$.
 >
-> **5. Name two differences between the $t$ and the standard normal distribution.**
-> $t$ has heavier tails (larger variance $\nu/(\nu-2)$) and depends on degrees of freedom; it approaches $N(0,1)$ as $\nu \to \infty$.
+> **Step 2.** Check the conditions: random, independent observations and $n\ge30$ (or a normal population).
+>
+> **Step 3.** Compute the standard error $SE=\sigma/\sqrt n$. If the question is about a **total** $\sum X$, use mean $n\mu$ and SD $\sigma\sqrt n$, or divide the total by $n$ to turn it into a question about $\bar X$.
+>
+> **Step 4.** Convert the required value(s) of $\bar x$ to $z=(\bar x-\mu)/SE$.
+>
+> **Step 5.** Read $\Phi(z)$ from the standard normal table and combine the areas: left tail $\Phi(z)$, right tail $1-\Phi(z)$, between $\Phi(z_2)-\Phi(z_1)$.
+>
+> **Step 6.** State the answer in the words of the problem.
+>
+> The same algorithm written as pseudo-code:
+>
+> ```
+> input mu, sigma, n, a, b
+> se = sigma / sqrt(n)
+> z1 = (a - mu) / se ;  z2 = (b - mu) / se
+> prob = Phi(z2) - Phi(z1)
+> output prob
+> ```
+
+> [!important] Applications of the CLT in Computer Science
+> **Performance measurement and benchmarking.** The average response time, latency or execution time over many runs is approximately normal. So we can report a mean with a confidence interval and test whether a new algorithm is really faster.
+>
+> **A/B testing of software and websites.** Click-through rates and conversion averages from many users are compared with z-tests that rely on the CLT.
+>
+> **Monte Carlo simulation and randomized algorithms.** The average of many random trials, as in estimating $\pi$ or an integral, is approximately normal. This lets us compute the error of the estimate and the number of trials needed.
+>
+> **Networking and queueing.** The total traffic, packet delay or load from many independent users is approximately normal. This is used for capacity planning and setting buffer sizes.
+>
+> **Machine learning and data science.** Averaged errors, cross-validation scores, bootstrap estimates and mini-batch gradients behave approximately normally, which justifies confidence intervals for model accuracy.
+>
+> **Quality control and reliability.** Average defect counts or failure times from samples are monitored with control charts based on normal limits.
+
+> [!note] Point vs interval estimate, in one line each
+> A ==point estimate== is a single value used to estimate a parameter ($\bar x$ for $\mu$).
+>
+> An ==interval estimate (confidence interval)== is a range that contains the parameter with a stated confidence. 95% means that 95% of such intervals built from repeated samples would contain $\mu$.
+
+---
+
+## Problem types you will face
+
+### Type 1 — probability about a sample mean (CLT)
+
+**Recognise it:** "A random sample of $n$ is taken... find the probability that the sample mean is...".
+
+**Recipe:** follow the CLT algorithm above.
+
+> [!example] Practice 1 (TF style): bulb lifetimes
+> Bulb life has mean 800 h and SD 40 h. Find the probability that the mean life of a random sample of 16 bulbs is less than 775 h.
+>
+> **Step 1 — standard error.**
+>
+> $$SE=\frac{40}{\sqrt{16}}=10$$
+>
+> **Step 2 — standardise.**
+>
+> $$z=\frac{775-800}{10}=-2.5$$
+>
+> **Step 3 — probability.**
+>
+> $$P(\bar X<775)=\Phi(-2.5)=1-0.9938=0.0062$$
+>
+> **Answer.** **0.0062.** (The population of lifetimes is assumed normal here, since $n=16<30$.)
+
+> [!example] Practice 2 (TF style): mean between two values
+> A population has $\mu=50$ and $\sigma=12$. For $n=36$, find $P(48<\bar X<53)$.
+>
+> **Step 1 — standard error.**
+>
+> $$SE=\frac{12}{6}=2$$
+>
+> **Step 2 — standardise both ends.**
+>
+> $$z_1=\frac{48-50}{2}=-1$$
+>
+> $$z_2=\frac{53-50}{2}=1.5$$
+>
+> **Step 3 — probability.**
+>
+> $$\begin{aligned}
+> P &= \Phi(1.5)-\Phi(-1)\\
+> &= 0.9332-(1-0.8413)\\
+> &= 0.7745
+> \end{aligned}$$
+>
+> **Answer.** **0.7745.**
+
+> [!example] Practice 3 (TF style): skewed population, large sample
+> Waiting times are exponential with mean 4 minutes, so $\sigma=4$. For 64 customers, find $P(\bar X>4.5)$.
+>
+> **Step 1 — check the CLT.** The population is skewed, but $n=64\ge30$, so the CLT applies.
+>
+> **Step 2 — standard error and $z$.**
+>
+> $$SE=\frac{4}{8}=0.5$$
+>
+> $$z=\frac{4.5-4}{0.5}=1$$
+>
+> **Step 3 — probability.**
+>
+> $$P(\bar X>4.5)=1-\Phi(1)=1-0.8413=0.1587$$
+>
+> **Answer.** **0.1587.**
+
+> [!example] Practice 4 (TF style): a total (elevator problem)
+> Passenger weights have $\mu=70$ kg and $\sigma=14$ kg. A lift carries 49 passengers and has a limit of 3600 kg. Find the probability that the limit is exceeded.
+>
+> **Step 1 — turn the total into a mean.** A total above 3600 means a mean above
+>
+> $$\frac{3600}{49}=73.47$$
+>
+> **Step 2 — standard error and $z$.**
+>
+> $$SE=\frac{14}{7}=2$$
+>
+> $$z=\frac{73.47-70}{2}=1.73$$
+>
+> **Step 3 — probability.**
+>
+> $$P=1-\Phi(1.73)=1-0.9582=0.0418$$
+>
+> **Answer.** **0.0418.**
+
+---
+
+### Type 2 — confidence interval for a mean
+
+**Recognise it:** "Compute a 95% / 99% confidence interval for the population mean."
+
+**Recipe:** decide between $z$ (σ known or $n\ge30$) and $t$ (small $n$, σ unknown). Compute the margin $E$, and write $\bar x-E\le\mu\le\bar x+E$ with a one-line interpretation.
+
+> [!example] Practice 5 (TF style): $\sigma$ known, 95%
+> $n=36$, $\bar x=2.6$, $\sigma=0.3$.
+>
+> **Step 1 — margin of error.**
+>
+> $$E=1.96\times\frac{0.3}{6}=0.098$$
+>
+> **Step 2 — interval.**
+>
+> $$2.6-0.098\le\mu\le2.6+0.098$$
+>
+> **Answer.** 95% CI: ==$2.502\le\mu\le2.698$==.
+
+> [!example] Practice 6 (TF style): large sample, 99%
+> $n=100$, $\bar x=42$, $s=8$.
+>
+> **Step 1 — margin of error.**
+>
+> $$E=2.58\times\frac{8}{10}=2.064$$
+>
+> **Step 2 — interval.**
+>
+> $$42-2.064\le\mu\le42+2.064$$
+>
+> **Answer.** 99% CI: ==$39.94\le\mu\le44.06$==. We are 99% confident that the population mean lies in this range.
+
+> [!example] Practice 7 (TF style): small sample from raw data, $t$-interval
+> Ten measurements: 9.8, 10.2, 10.4, 9.8, 10.0, 10.2, 9.6, 10.1, 10.3, 9.9. Find a 95% CI.
+>
+> **Step 1 — totals and mean.**
+>
+> $$\sum x=100.3 \qquad \sum x^2=1006.59$$
+>
+> $$\bar x=10.03$$
+>
+> **Step 2 — sample SD.**
+>
+> $$\begin{aligned}
+> s^2 &= \frac{1006.59-10(10.03)^2}{9}\\
+> &= \frac{0.581}{9}\\
+> &= 0.06456
+> \end{aligned}$$
+>
+> $$s=0.2541$$
+>
+> **Step 3 — critical value.** df = 9, so
+>
+> $$t_{0.025,9}=2.262$$
+>
+> **Step 4 — margin of error.**
+>
+> $$E=2.262\times\frac{0.2541}{\sqrt{10}}=0.182$$
+>
+> **Answer.** 95% CI: ==$9.848\le\mu\le10.212$==.
+
+> [!example] Practice 8 (TF style): small sample, summary data, 99%
+> $n=16$, $\bar x=27.9$, $s=3.23$.
+>
+> **Step 1 — critical value.** df = 15, so
+>
+> $$t_{0.005,15}=2.947$$
+>
+> **Step 2 — margin of error.**
+>
+> $$E=2.947\times\frac{3.23}{4}=2.380$$
+>
+> **Answer.** 99% CI: ==$25.52\le\mu\le30.28$==.
+
+---
+
+### Type 3 — sample size (occasionally asked)
+
+> [!example] Practice 9 (TF style)
+> How large a sample is needed to estimate $\mu$ within 0.05 with 95% confidence if $\sigma=0.3$?
+>
+> **Step 1 — formula.**
+>
+> $$n=\left(\frac{1.96\times0.3}{0.05}\right)^2=138.3$$
+>
+> **Step 2 — round up.**
+>
+> **Answer.** **$n=139$.**
+
+---
+
+## Extra practice
+
+> [!question]- Extra practice (try first, then open for answers)
+> **E1.** $\mu=50$, $\sigma=8$, $n=25$. Find $P(\bar X>52)$.
+>
+> Answer: $z=2/1.6=1.25$, so $P=0.1056$.
+>
+> **E2.** $n=64$, $\bar x=120$, $s=16$. Find the 95% CI.
+>
+> Answer: $120\pm1.96(2)$, which is $116.08$ to $123.92$.
+>
+> **E3.** $n=9$, $\bar x=20$, $s=3$. Find the 95% CI ($t_{0.025,8}=2.306$).
+>
+> Answer: $20\pm2.306$, which is $17.69$ to $22.31$.
+>
+> **E4.** Why can a z-interval be used for $n=100$ even when the population is skewed?
+>
+> Answer: by the CLT, $\bar X$ is approximately normal for large $n$.
+>
+> **E5.** How does the width of a CI change if $n$ is multiplied by 4?
+>
+> Answer: it halves, because the width is proportional to $1/\sqrt n$.
 
 ---
 

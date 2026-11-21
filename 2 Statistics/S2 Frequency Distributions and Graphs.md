@@ -5,151 +5,410 @@ tags: [math243, statistics, graphs]
 
 # S2 · Frequency Distributions and Graphs
 
-**Why this matters for the term final.** Graph and table questions appear every year. In 2023-24, Q5(a) asked "What are stem-and-leaf plots and how do you create them?" and Q5(b) asked you to explain and interpret a scatter plot of price versus rating. In 2022-23, Q5(b) asked for a frequency table using Sturges' rule, a histogram and a cumulative frequency graph from 60 raw values, and Q6(b) asked for a stem-and-leaf plot of pencil lengths with median, mode and range. In 2021-22, Q5(a) asked for an ogive to read the median and a count of workers in an interval, and Q5(b)(i) asked for class limits and class marks. The 2021-22 questions are fully solved here; the 2023-24 and 2022-23 ones are solved in [[TF 2023-24 Solutions]] and [[TF 2022-23 Solutions]], and this note gives you fresh practice of exactly the same kind.
+**Why this matters for the TF.** A table-and-graph question appears every year.
+
+2023-24 asked how to make a stem-and-leaf plot (Q5a) and to interpret a scatter plot (Q5b). 2022-23 asked for a Sturges' rule table, histogram and ogive from 60 raw values (Q5b), and a stem-and-leaf plot with median, mode and range (Q6b). 2021-22 asked for an ogive with the median and a count in an interval (Q5a), and for class limits and marks (Q5b-i).
+
+The 2021-22 questions are solved below. The newer two papers are in [[TF 2023-24 Solutions]] and [[TF 2022-23 Solutions]], and the practice problems below are built in exactly their shape.
 
 ---
 
-## 1. Frequency distribution: the vocabulary
+## Core tools (memorize)
 
-When we have many raw observations, we organize them into a **frequency distribution**, which is a table showing each value or class of values together with the number of observations (the **frequency**, $f$) falling in it. If there are few distinct values we list each value separately (an **ungrouped** frequency distribution). If the values are many and spread out, we group them into **classes** (a **grouped** frequency distribution).
+> [!important] Memorize
+> **Sturges' rule** — use when asked "how many classes":
+>
+> $$K=1+3.322\log_{10}N$$
+>
+> **Class width** — round **up** so that the largest value fits:
+>
+> $$h\approx\frac{\text{Largest}-\text{Smallest}}{K}$$
+>
+> **Class boundaries** (integer data) — use to draw histograms and ogives:
+>
+> $$\text{boundary}=\text{limit}\mp0.5$$
+>
+> **Class mark** — use as the $x$ value of a class:
+>
+> $$\text{mark}=\frac{\text{lower limit}+\text{upper limit}}{2}$$
+>
+> **Width** = difference of consecutive lower boundaries.
+>
+> **Median from grouped data** — use to verify an ogive reading:
+>
+> $$\text{Median}=L+\frac{N/2-F}{f}\times h$$
+>
+> **Quartiles and percentiles** — same formula, only the position changes:
+>
+> $$Q_1:\ \frac N4 \qquad\qquad Q_3:\ \frac{3N}4 \qquad\qquad P_k:\ \frac{kN}{100}$$
+>
+> $L$ = lower boundary of the class holding that position, $F$ = cumulative frequency **before** it, $f$ = its frequency, $h$ = its width.
+>
+> **Less-than ogive** — plot cumulative frequency against the **upper boundary**, starting at (first lower boundary, 0).
 
-> [!important] Memorize: Class terminology
-> The ==class limits== are the smallest and largest values that can actually be **written** in a class, for example 200–219. The ==class boundaries== are the points halfway between the upper limit of one class and the lower limit of the next, for example 199.5–219.5; they remove the gaps between classes so that the classes touch each other. The ==class mark== (mid-value) is the midpoint of the class: $\text{class mark} = \dfrac{\text{lower limit} + \text{upper limit}}{2}$ (the same result is obtained from the boundaries). The ==class width== $h$ is the difference between two consecutive lower boundaries (or lower limits), equivalently upper boundary minus lower boundary.
+---
 
-If data are recorded to the nearest integer, boundaries are found by subtracting 0.5 from each lower limit and adding 0.5 to each upper limit. If data are recorded to one decimal place, subtract and add 0.05, and so on. When a table is written like "20–30, 30–40, …" the classes are already given by boundaries (the convention is that 30 goes into the class 30–40), and the class mark is simply $(20+30)/2 = 25$.
+## Theory the TF actually asks
 
-## 2. How many classes? Sturges' rule
+### Stem-and-leaf plot (2023-24 Q5a, 10 marks)
 
-> [!important] Memorize: Sturges' rule (used in 2022-23 Q5b)
-> $$K = 1 + 3.322 \log_{10} N$$
-> where $K$ is the number of classes and $N$ is the total number of observations. Round $K$ to a whole number. Then
-> $$\text{class width } h \approx \frac{\text{Largest value} - \text{Smallest value}}{K}$$
-> and round $h$ **up** to a convenient number.
+> [!important] Exam answer: Stem-and-leaf plot
+> A ==stem-and-leaf plot== displays quantitative data by splitting each value into a **stem** (the leading digit or digits) and a **leaf** (the last digit).
+>
+> Stems are written once in a column in increasing order. The leaves of all values with that stem are written in a row beside it, in increasing order.
+>
+> It looks like a histogram turned on its side, but ==it keeps every original value==. So the exact median, mode and range can be read, and the shape (symmetry, skewness, gaps, outliers) is visible.
+>
+> **How to create it.**
+>
+> **Step 1.** Choose the split: for two-digit data the tens digit is the stem and the units digit the leaf; for data like 17.4 the integer part is the stem and the decimal digit the leaf.
+>
+> **Step 2.** Write all stems from smallest to largest, including empty ones.
+>
+> **Step 3.** Write each leaf next to its stem.
+>
+> **Step 4.** Arrange each row's leaves in increasing order.
+>
+> **Step 5.** Add a key such as "4 | 2 means 42".
+>
+> **Example.** Scores 42, 57, 38, 61, 45, 49, 53, 66, 71, 58:
+>
+> ```text
+> Stem | Leaf     (Key: 4 | 2 means 42)
+>   3  | 8
+>   4  | 2 5 9
+>   5  | 3 7 8
+>   6  | 1 6
+>   7  | 1
+> ```
 
-For example, with $N = 50$ observations, $K = 1 + 3.322 \times \log_{10}50 = 1 + 3.322 \times 1.699 = 6.64 \approx 7$ classes. If the data run from 12 to 75, the range is 63 and $h = 63/7 = 9$, so we could use classes 12–20, 21–29, 30–38 and so on (each containing 9 integers).
+### Scatter plot (2023-24 Q5b)
 
-**Step-by-step method to build a grouped frequency table.** First find the largest and smallest values and the range. Second, decide the number of classes $K$ (by Sturges' rule if asked, otherwise usually 5 to 15). Third, compute the width $h$ and round it up. Fourth, choose the first lower limit (the smallest value or a convenient number just below it) and write down all the classes by repeatedly adding $h$. Fifth, go through the raw data one by one and put a tally mark against the right class; this prevents missing values. Sixth, count the tallies to get the frequencies and check that the total equals $N$. Finally add columns for class boundaries, class marks and cumulative frequency, because the graphs and almost every later calculation need them.
+> [!important] Exam answer: Scatter plot
+> A ==scatter plot== is a graph of **paired** data $(x,y)$ in which each pair is one point. The explanatory variable goes on the x-axis and the response on the y-axis.
+>
+> It shows whether a relationship exists, and its:
+>
+> **Direction** — points rising = positive, falling = negative.
+>
+> **Form** — straight-line or curved.
+>
+> **Strength** — tight band = strong, wide cloud = weak.
+>
+> It also reveals outliers. It is the first step before computing correlation or fitting a regression line ([[S6 Correlation and Regression]]).
 
-> [!warning] Common mistake
-> Always check that the frequencies add up to $N$. In a 60-value question one missed tally costs you the histogram, ogive and every number after it.
+![[m243-correlation-types.png]]
+
+When you interpret a plot in the exam, write three things: the direction, the strength, and what it means in the story. Support it with $r$ if you can.
+
+Remember that a curved pattern can give $r\approx 0$ even when the variables are strongly related.
+
+**Other graphs** (one line each if they come up):
+
+A **histogram** has touching bars over class boundaries (height = frequency).
+
+A **frequency polygon** joins frequencies plotted at class marks.
+
+A **bar chart** has separated bars for categories.
+
+A **pie chart** uses angles
+
+$$\text{angle}=\frac{f}{N}\times360^\circ$$
+
+A **box plot** shows the five-number summary (min, $Q_1$, median, $Q_3$, max). Outliers lie beyond
+
+$$Q_1-1.5\,IQR \qquad\text{or}\qquad Q_3+1.5\,IQR$$
+
+![[m243-boxplot.png]]
+
+---
+
+## Problem types you will face
+
+### Type 1 — Class limits, boundaries and class marks
+
+**Recognise it:** you are told where classes start and how wide they are, or given limits, and asked for boundaries or marks.
+
+**Recipe:** for integer data, lower limit = lower boundary + 0.5 and upper limit = upper boundary − 0.5. The mark is the midpoint. Each next class adds the width.
 
 > [!example] Past TF 2021-22 Q5(b)(i): class limits and class marks
-> **Problem:** 34 observations recorded to the nearest integer range from 201 to 337. Seven classes of width 20 are to be used, beginning the first class at 199.5. Find the class limits and class marks.
+> **Given.** 34 integer observations from 201 to 337; seven classes of width 20, the first beginning at 199.5.
 >
-> **Solution.** Since the first class begins at 199.5 (a boundary) and the width is 20, the class boundaries are 199.5–219.5, 219.5–239.5, 239.5–259.5, 259.5–279.5, 279.5–299.5, 299.5–319.5 and 319.5–339.5. The data are integers, so each lower limit is the lower boundary plus 0.5 and each upper limit is the upper boundary minus 0.5. Hence the class limits are **200–219, 220–239, 240–259, 260–279, 280–299, 300–319, 320–339**. The class marks are the midpoints: $(200+219)/2 = 209.5$, and each next one is 20 more, giving **209.5, 229.5, 249.5, 269.5, 289.5, 309.5, 329.5**. Check: the seven classes cover 200 to 339, which contains the smallest value 201 and the largest value 337, so all 34 observations fit.
+> **Step 1 — boundaries.** 199.5 is a boundary, so the boundaries are:
+>
+> 199.5–219.5, 219.5–239.5, 239.5–259.5, 259.5–279.5, 279.5–299.5, 299.5–319.5, 319.5–339.5.
+>
+> **Step 2 — limits.** Because the data are integers, the class limits are:
+>
+> **200–219, 220–239, 240–259, 260–279, 280–299, 300–319, 320–339.**
+>
+> **Step 3 — class marks.** The first mark is
+>
+> $$\frac{200+219}{2}=209.5$$
+>
+> and then 20 more each time:
+>
+> **209.5, 229.5, 249.5, 269.5, 289.5, 309.5, 329.5.**
+>
+> **Check.** 200 to 339 contains the smallest value 201 and the largest value 337, so all 34 observations fit.
 
-## 3. Histogram, frequency polygon and ogive
+> [!example] Practice 1 (TF style)
+> Weights recorded to one decimal place are grouped as 40.0–44.9, 45.0–49.9, 50.0–54.9. Find the boundaries, marks and width.
+>
+> **Step 1 — boundaries.** The gap between 44.9 and 45.0 is 0.1, so boundaries are limits $\mp0.05$:
+>
+> 39.95–44.95, 44.95–49.95, 49.95–54.95.
+>
+> **Step 2 — marks.**
+>
+> $$\frac{40.0+44.9}{2}=42.45$$
+>
+> then 47.45 and 52.45.
+>
+> **Step 3 — width.**
+>
+> $$44.95-39.95=5$$
 
-A **histogram** is a graph of a grouped frequency distribution in which the class boundaries are marked on the x-axis and a rectangle (bar) is drawn over each class with height equal to the frequency. The bars **touch each other** because the data are continuous (this is the difference from a bar chart). If class widths are unequal, the height must be the frequency per unit width (frequency density), otherwise wide classes look too important. The tallest bar marks the modal class.
+---
 
-A **frequency polygon** is drawn by plotting the frequency of each class against its class mark and joining the points with straight lines. To close the polygon, add one empty class at each end with zero frequency, so the polygon starts and ends on the x-axis.
+### Type 2 — Build a frequency table from raw data with Sturges' rule
 
-> [!important] Memorize: Ogive (cumulative frequency graph)
-> An ==ogive== is the graph of the **cumulative frequency**. For a "less-than" ogive, the cumulative frequency (number of observations less than a value) is plotted against the **upper class boundary**, starting from the point (first lower boundary, 0), and the points are joined by straight lines or a smooth curve. The ogive always rises from 0 to $N$. ==Its main use is to read the median, quartiles and percentiles graphically, and to count how many observations lie between two values.==
+**Recognise it:** a block of raw numbers and "use Sturges' rule" or "construct a frequency table".
 
-To read the median from a less-than ogive, mark $N/2$ on the y-axis, draw a horizontal line to the ogive, then drop a vertical line to the x-axis; the x-value is the median. For $Q_1$ use $N/4$, for $Q_3$ use $3N/4$, and for the $k$-th percentile use $kN/100$. To count values between $a$ and $b$, read the ogive heights at $a$ and $b$ and subtract.
+**Recipe:** find $N$, min, max. Compute $K$ and $h$ (round $h$ up so that min $+Kh$ passes the max). Write the classes, tally, check the total equals $N$. Add boundaries, marks and cumulative frequency.
 
-The median formula used to verify the graph is (see [[S3 Measures of Central Tendency]]):
+> [!example] Practice 2 (TF style, like 2022-23 Q5b)
+> The response times (ms) of 40 server requests are:
+> 52, 61, 47, 58, 66, 73, 55, 49, 62, 68, 57, 44, 71, 59, 63, 50, 54, 77, 65, 60, 48, 56, 69, 62, 53, 58, 64, 41, 75, 61, 57, 67, 51, 63, 59, 70, 46, 60, 55, 64.
+> Make a frequency table using Sturges' rule, then describe the histogram and ogive.
+>
+> **Step 1 — basic facts.** $N=40$, smallest $=41$, largest $=77$, range $=36$.
+>
+> **Step 2 — number of classes.**
+>
+> $$\begin{aligned}
+> K &= 1+3.322\log_{10}40\\
+> &= 1+3.322(1.6021)\\
+> &= 6.32\approx 6
+> \end{aligned}$$
+>
+> **Step 3 — width.** $36/6=6$, but six classes of width 6 starting at 41 end at 76 and would miss 77. So we round the width up to
+>
+> $$h=7$$
+>
+> (This "round up so the largest value fits" step is exactly where marks are lost.)
+>
+> **Step 4 — tally** into classes 41–47, 48–54, … :
+>
+> | Class | Boundaries | Mark | $f$ | Cum. $f$ |
+> |---|---|---|---|---|
+> | 41–47 | 40.5–47.5 | 44 | 4 | 4 |
+> | 48–54 | 47.5–54.5 | 51 | 7 | 11 |
+> | 55–61 | 54.5–61.5 | 58 | 13 | 24 |
+> | 62–68 | 61.5–68.5 | 65 | 10 | 34 |
+> | 69–75 | 68.5–75.5 | 72 | 5 | 39 |
+> | 76–82 | 75.5–82.5 | 79 | 1 | 40 |
+>
+> The total is 40, as it must be.
+>
+> **Step 5 — histogram.** Bars over the boundaries 40.5, 47.5, …, 82.5 with heights 4, 7, 13, 10, 5, 1. The tallest bar (54.5–61.5) is the modal class. The shape is roughly symmetric with a slightly longer right tail.
+>
+> **Step 6 — ogive.** The less-than ogive plots
+>
+> (40.5, 0), (47.5, 4), (54.5, 11), (61.5, 24), (68.5, 34), (75.5, 39), (82.5, 40)
+>
+> and joins them. The real 2022-23 version has the same layout, and its drawn graphs are in [[TF 2022-23 Solutions]].
 
-$$\text{Median} = L + \frac{\frac{N}{2} - F}{f_m} \times h$$
+![[m243-tf2223-q5b-hist-ogive.png]]
 
-where $L$ is the lower boundary of the median class, $F$ is the cumulative frequency before the median class, $f_m$ is the frequency of the median class and $h$ is its width.
+---
+
+### Type 3 — Ogive: read the median, quartiles and "how many between"
+
+**Recognise it:** "draw a suitable diagram and read the median", "how many lie between a and b", or unequal class widths.
+
+**Recipe:** make the cumulative table and plot against upper boundaries. Read at $N/2$ (median), $N/4$, $3N/4$, and verify with the formula. For "between a and b", take full classes plus a proportional part of the partial class.
 
 > [!example] Past TF 2021-22 Q5(a) (18 marks): ogive, median, workers between 2000 and 2170 Tk
-> **Data.** Monthly wages and workers: 1900–1950: 6, 1950–2000: 10, 2000–2050: 22, 2050–2100: 30, 2100–2150: 16, 2150–2200: 12, 2200–2400: 15.
+> **Given.** 1900–1950: 6, 1950–2000: 10, 2000–2050: 22, 2050–2100: 30, 2100–2150: 16, 2150–2200: 12, 2200–2400: 15.
 >
-> **Choice of diagram.** The last class (2200–2400) is four times wider than the others, so a plain histogram would be misleading. Since we must read the median and count workers in an interval, the ==suitable diagram is the less-than ogive==.
+> **Step 1 — choice of diagram.** The last class is four times wider than the others, so a histogram would mislead. We need the median and a count, so the ==suitable diagram is the less-than ogive==.
 >
-> **Cumulative frequency table.**
+> **Step 2 — cumulative table.**
 >
 > | Wages (less than) | 1900 | 1950 | 2000 | 2050 | 2100 | 2150 | 2200 | 2400 |
 > |---|---|---|---|---|---|---|---|---|
 > | Cumulative no. of workers | 0 | 6 | 16 | 38 | 68 | 84 | 96 | 111 |
 >
-> Plot these eight points (upper boundary, cumulative frequency) and join them. $N = 111$.
->
 > ![[m243-tf2122-q5a-ogive.png]]
 >
-> **Median from the graph.** $N/2 = 55.5$. A horizontal line at 55.5 meets the ogive above about 2079 on the wage axis, so the median wage is about **Tk 2079**.
+> **Step 3 — median from the graph.** $N/2=55.5$. The horizontal line at 55.5 meets the ogive above about **Tk 2079**.
 >
-> **Verification by formula.** The 55.5-th value lies in the class 2050–2100 (cumulative frequency goes from 38 to 68). So $L = 2050$, $F = 38$, $f_m = 30$, $h = 50$:
-> $$\text{Median} = 2050 + \frac{55.5 - 38}{30} \times 50 = 2050 + 29.17 = 2079.17 \text{ Tk}$$
-> which agrees with the graph.
+> **Step 4 — verify by formula.** The 55.5-th worker is in 2050–2100, so $L=2050$, $F=38$, $f=30$, $h=50$.
 >
-> **Workers earning between 2000 and 2170 Tk.** All workers of the classes 2000–2050, 2050–2100 and 2100–2150 are included: $22 + 30 + 16 = 68$. From the class 2150–2200 (12 workers, width 50) we need the part from 2150 to 2170, which is 20 out of 50, so assuming uniform spread inside the class we take $12 \times \frac{20}{50} = 4.8$. Total $= 68 + 4.8 = 72.8 \approx$ **73 workers**. From the ogive: height at 2170 is about $84 + 4.8 = 88.8$, height at 2000 is 16, difference $\approx 72.8$.
+> $$\begin{aligned}
+> \text{Median} &= 2050+\frac{55.5-38}{30}\times50\\
+> &= 2050+29.17\\
+> &= 2079.17\ \text{Tk}
+> \end{aligned}$$
+>
+> **Step 5 — between 2000 and 2170 Tk.** Full classes 2000–2050, 2050–2100 and 2100–2150 give
+>
+> $$22+30+16=68$$
+>
+> From 2150–2200 we need only 2150 to 2170, which is $20/50$ of the class:
+>
+> $$12\times\frac{20}{50}=4.8$$
+>
+> **Answer.** Median **= Tk 2079.17**; workers between 2000 and 2170 Tk **= 72.8 ≈ 73**.
 
-## 4. Charts for qualitative data and time (brief)
-
-A **bar chart** shows categories (qualitative data) with separated bars whose heights are the frequencies; bars do not touch. A **compound (multiple) bar chart** puts bars of two or more groups side by side for comparison. A **Pareto chart** is a bar chart for categorical data in which the bars are arranged from the highest frequency to the lowest, which quickly shows the most important categories. A **pie chart** divides a circle into sectors whose angles are proportional to the frequencies, with angle $= \frac{f}{N} \times 360^\circ$; it shows parts of a whole. A **time series graph** (line graph) plots values against time to show trends, such as yearly sales.
-
-## 5. Stem-and-leaf plot
-
-> [!important] Memorize: Stem-and-leaf plot (2023-24 Q5a, 10 marks)
-> A ==stem-and-leaf plot== is a way of displaying quantitative data in which each value is split into a **stem** (the leading digit or digits) and a **leaf** (the last digit). The stems are written once in a vertical column in increasing order, and the leaves of all values with the same stem are written in a row to the right of that stem, in increasing order. It looks like a histogram turned on its side, but ==unlike a histogram it keeps every original data value==, so we can still read the exact values, find the median, mode and range directly, and see the shape (symmetry, skewness, gaps, outliers) of the distribution.
-
-**How to create a stem-and-leaf plot.** First decide how to split the numbers: for two-digit numbers the tens digit is the stem and the units digit is the leaf; for numbers like 17.4 the integer part is the stem and the decimal digit is the leaf. Second, write all possible stems from the smallest to the largest in a column, including stems with no leaves (so that gaps are visible). Third, go through the data and write each leaf next to its stem. Fourth, rewrite the plot with the leaves of each row arranged in increasing order (an **ordered** stem-and-leaf plot). Finally, always add a **key** such as "4 | 2 means 42", so the reader knows the units.
-
-**Example (fresh).** The scores of 20 students are: 42, 57, 38, 61, 45, 49, 53, 66, 71, 58, 44, 39, 62, 55, 47, 51, 68, 74, 59, 46.
-
-```text
-Stem | Leaf           (Key: 4 | 2 means 42)
-  3  | 8 9
-  4  | 2 4 5 6 7 9
-  5  | 1 3 5 7 8 9
-  6  | 1 2 6 8
-  7  | 1 4
-```
-
-From the plot we can read everything. There are $n = 20$ values, so the median is the average of the 10th and 11th ordered values. Counting leaves: stem 3 has 2 values, stem 4 has 6 (total 8), so the 9th, 10th and 11th values are 51, 53 and 55. The median is $(53 + 55)/2 = 54$. The range is $74 - 38 = 36$. No value repeats, so there is no unique mode, but the modal rows (most leaves) are the 40s and 50s. The shape is roughly symmetric with a slight tail.
-
-**A decimal example (fresh, same style as the pencil question).** Battery lives in hours: 4.2, 3.8, 4.5, 5.1, 4.2, 3.9, 4.7, 5.0, 4.2, 4.8, 3.6, 4.4. Use the integer part as stem and the first decimal as leaf.
-
-```text
-Stem | Leaf           (Key: 4 | 2 means 4.2 hours)
-  3  | 6 8 9
-  4  | 2 2 2 4 5 7 8
-  5  | 0 1
-```
-
-$n = 12$, so the median is the average of the 6th and 7th values: 4.2 and 4.4, giving median $= 4.3$ hours. The mode is the most repeated leaf: 4.2 appears three times, so mode $= 4.2$ hours. Range $= 5.1 - 3.6 = 1.5$ hours. If two values tie for the most repeats, the data are **bimodal** and you must report both modes.
-
-## 6. Scatter plot
-
-> [!important] Memorize: Scatter plot (2023-24 Q5b)
-> A ==scatter plot== (scatter diagram) is a graph of **paired** data $(x, y)$ in which each pair is plotted as one point, with the independent (explanatory) variable on the x-axis and the dependent (response) variable on the y-axis. It is the first step in correlation and regression analysis, because it shows whether a relationship exists, its **direction** (positive or negative), its **form** (linear or curved) and its **strength** (how tightly the points cluster), and it reveals outliers.
-
-![[m243-correlation-types.png]]
-
-**How to interpret a scatter plot.** If the points rise from left to right, the relationship is positive (as $x$ increases, $y$ tends to increase). If they fall from left to right, it is negative. If the points lie close to a straight line, the linear relationship is strong; if they form a wide cloud, it is weak; if there is no pattern, there is no relationship. A curved pattern means a non-linear relationship, in which case Pearson's $r$ can be near zero even though $x$ and $y$ are strongly related (last panel above). In an exam answer, always draw the plot with labelled axes, describe direction, form and strength in words, and, if you can, support it with the value of $r$ (see [[S6 Correlation and Regression]]).
-
-**Quick example.** Hours studied (2, 4, 5, 7, 9) and marks (45, 55, 60, 72, 85): the points rise steadily and lie close to a line, so there is a strong positive linear relationship; more study hours go with higher marks.
-
-## 7. Box plot (box-and-whisker plot)
-
-![[m243-boxplot.png]]
-
-A **box plot** displays the ==five-number summary==: minimum, first quartile $Q_1$, median $Q_2$, third quartile $Q_3$ and maximum. A box is drawn from $Q_1$ to $Q_3$ with a line at the median, and "whiskers" extend from the box to the smallest and largest values that are not outliers. The length of the box is the interquartile range $IQR = Q_3 - Q_1$. A value is usually flagged as an outlier if it is below $Q_1 - 1.5\,IQR$ or above $Q_3 + 1.5\,IQR$. If the median is in the middle of the box and the whiskers are equal, the distribution is symmetric; if the right whisker is longer and the median is nearer $Q_1$, the distribution is positively skewed. Box plots are excellent for comparing two or more groups side by side.
-
-> [!tip] Exam trick: which graph to draw?
-> For raw quantitative data with few values, use a stem-and-leaf plot. For grouped data, use a histogram (shape and mode) or an ogive (median, quartiles, "how many between"). For two related variables, use a scatter plot. For categories, use a bar, Pareto or pie chart. For data over time, use a time series graph. Write one sentence justifying your choice; examiners give a mark for it.
+> [!example] Practice 3 (TF style)
+> Marks of 80 students: 0–10: 5, 10–20: 9, 20–30: 14, 30–40: 20, 40–50: 16, 50–60: 10, 60–70: 6. Find the median, $Q_1$, $Q_3$ and the 90th percentile, and estimate how many students scored between 25 and 47.
+>
+> **Step 1 — cumulative frequencies** (less than 10, 20, …, 70): 5, 14, 28, 48, 64, 74, 80.
+>
+> **Step 2 — median.** $N/2=40$, class 30–40, $F=28$, $f=20$:
+>
+> $$\text{Median}=30+\frac{40-28}{20}\times10=36$$
+>
+> **Step 3 — $Q_1$.** $N/4=20$, class 20–30, $F=14$, $f=14$:
+>
+> $$Q_1=20+\frac{20-14}{14}\times10=24.29$$
+>
+> **Step 4 — $Q_3$.** $3N/4=60$, class 40–50, $F=48$, $f=16$:
+>
+> $$Q_3=40+\frac{60-48}{16}\times10=47.5$$
+>
+> **Step 5 — $P_{90}$.** $0.9N=72$, class 50–60, $F=64$, $f=10$:
+>
+> $$P_{90}=50+\frac{72-64}{10}\times10=58$$
+>
+> **Step 6 — between 25 and 47.**
+>
+> $$\begin{aligned}
+> \text{half of }20\text{–}30 &: 14\times0.5=7\\
+> \text{all of }30\text{–}40 &: 20\\
+> \tfrac{7}{10}\text{ of }40\text{–}50 &: 16\times0.7=11.2\\
+> \text{Total} &= 38.2
+> \end{aligned}$$
+>
+> **Answer.** Median **36**, $Q_1$ **24.29**, $Q_3$ **47.5**, $P_{90}$ **58**, and about **38 students** between 25 and 47.
 
 ---
 
-> [!question]- Self-check
-> **1. Classes 15–19, 20–24, 25–29 (integer data). Give the boundaries and class marks.**
-> Boundaries 14.5–19.5, 19.5–24.5, 24.5–29.5; class marks 17, 22, 27; width 5.
+### Type 4 — Stem-and-leaf, then median, mode and range
+
+**Recognise it:** a short list of raw values and "use a stem-and-leaf plot".
+
+**Recipe:** choose the stem/leaf split and write the ordered plot with a key. Count leaves to the middle position for the median. The most repeated value is the mode (report all if tied). Range = largest − smallest.
+
+> [!example] Practice 4 (TF style, two-digit data)
+> Ages of 20 club members: 23, 31, 45, 28, 37, 42, 31, 56, 38, 29, 44, 31, 50, 35, 27, 41, 39, 48, 33, 52.
 >
-> **2. Using Sturges' rule, how many classes for $N = 100$?**
-> $K = 1 + 3.322 \times 2 = 7.644 \approx 8$ classes.
+> **Step 1 — the plot.**
 >
-> **3. In a less-than ogive, against what is the cumulative frequency plotted?**
-> Against the upper class boundary (starting at the first lower boundary with 0).
+> ```text
+> Stem | Leaf           (Key: 3 | 1 means 31 years)
+>   2  | 3 7 8 9
+>   3  | 1 1 1 3 5 7 8 9
+>   4  | 1 2 4 5 8
+>   5  | 0 2 6
+> ```
 >
-> **4. Why is a stem-and-leaf plot sometimes preferred to a histogram?**
-> It shows the distribution's shape like a histogram but retains every original value, so exact median, mode and range can be read.
+> **Step 2 — median.** $n=20$, so the median is the mean of the 10th and 11th values. Stem 2 holds 4 values, so these are the 6th and 7th leaves of stem 3: 37 and 38.
 >
-> **5. A scatter plot shows points forming a U shape. Will Pearson's $r$ be large?**
-> No. $r$ measures only linear association, so it can be close to 0 even though there is a strong curved relationship.
+> $$\text{Median}=\frac{37+38}{2}=37.5$$
+>
+> **Step 3 — mode.** The value 31 appears three times.
+>
+> **Step 4 — range.**
+>
+> $$56-23=33$$
+>
+> **Answer.** **Median 37.5 years, mode 31 years, range 33 years.** The distribution is slightly skewed to the right (longer tail of larger ages).
+
+> [!example] Practice 5 (TF style, decimal data like 2022-23 Q6b)
+> Lengths (cm) of 14 bolts: 9.8, 10.4, 11.2, 10.4, 9.5, 10.9, 11.6, 10.1, 10.4, 9.9, 11.0, 10.7, 11.6, 10.2.
+>
+> **Step 1 — the plot.**
+>
+> ```text
+> Stem | Leaf           (Key: 10 | 4 means 10.4 cm)
+>   9  | 5 8 9
+>  10  | 1 2 4 4 4 7 9
+>  11  | 0 2 6 6
+> ```
+>
+> **Step 2 — median.** $n=14$, so the median is the mean of the 7th and 8th values. Stem 9 has 3 values, so these are the 4th and 5th leaves of stem 10, both 10.4.
+>
+> **Step 3 — mode.** 10.4 appears three times (11.6 only twice).
+>
+> **Step 4 — range.**
+>
+> $$11.6-9.5=2.1$$
+>
+> **Answer.** **Median 10.4 cm, mode 10.4 cm, range 2.1 cm.**
+
+---
+
+### Type 5 — Interpret a scatter plot
+
+**Recognise it:** a small table of paired values and "draw/explain the scatter plot" or "is there any relationship".
+
+**Recipe:** plot the points with labelled axes. State direction, strength and form, and back it with $r$.
+
+> [!example] Practice 6 (TF style)
+> Age of six used cars (years) and price (lakh Tk): (2, 78), (3, 74), (5, 65), (6, 60), (8, 52), (9, 47). Interpret the scatter plot.
+>
+> **Step 1 — plot.** Age on the x-axis, price on the y-axis.
+>
+> **Step 2 — read the pattern.** The points fall steadily from left to right and lie almost on a straight line.
+>
+> **Step 3 — support with $r$.**
+>
+> $$r=-0.9997$$
+>
+> **Answer.** There is a ==strong negative linear relationship==: older cars sell for less, losing roughly 4.4 lakh per year.
+
+> [!example] Practice 7 (TF style, the curved trap)
+> Hours of daily exercise $x=1,\dots,7$ and a fatigue score $y$ = 12, 18, 22, 23, 22, 18, 12. Interpret.
+>
+> **Step 1 — read the pattern.** The points rise and then fall symmetrically, forming an arch.
+>
+> **Step 2 — compute $r$.** The rising and falling halves cancel, so
+>
+> $$r=0$$
+>
+> **Answer.** There is a clear **non-linear** relationship but no *linear* one. $y$ clearly depends on $x$; a straight line is the wrong model here.
+
+---
+
+## Extra practice
+
+> [!question]- Answers
+> **1.** Classes 15–19, 20–24, 25–29 (integer data): boundaries and marks?
+>
+> 14.5–19.5, 19.5–24.5, 24.5–29.5; marks 17, 22, 27; width 5.
+>
+> **2.** Sturges' rule for $N=100$ and $N=60$?
+>
+> $K=7.64\approx8$ and $K=6.91\approx7$.
+>
+> **3.** In a less-than ogive, against what is cumulative frequency plotted?
+>
+> The upper class boundary, starting at the first lower boundary with 0.
+>
+> **4.** From Practice 3, how many students scored less than 45?
+>
+> $48+16\times0.5=56$.
+>
+> **5.** Values 3.2, 3.5, 3.5, 4.1, 4.4, 4.4, 4.8: median, mode, range?
+>
+> Median 4.1; modes 3.5 and 4.4 (bimodal); range 1.6.
+>
+> **6.** Why is a stem-and-leaf plot preferred to a histogram for small data?
+>
+> It shows the shape like a histogram but keeps every original value, so exact median, mode and range can be read.
 
 ---
 

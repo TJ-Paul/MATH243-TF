@@ -5,192 +5,500 @@ tags: [math243, probability, basics]
 
 # P1 · Probability Basics and Counting
 
-> [!abstract] Why this matters for the term final
-> No past term final asks a pure "define sample space" question, but every probability question you will meet (Bayes in 2019-20 Q7(a), 2022-23 Q1, 2023-24 Q1; joint distributions in 2023-24 Q2(b); hypergeometric in 2021-22 Q6(c)) is built on the ideas in this note: events, the addition rule, complements and combinations. In particular, ==combinations ($^nC_r$)== are used every time you pick balls, pens or cars "at random without replacement". Learn this note well and the later notes become easy.
+> [!abstract] Why this matters for the TF
+> No past term final asks "define a sample space", but every probability question is built on this note.
+>
+> ==Combinations== are used every time you pick balls, pens or cars at random (2021-22 Q6(c), 2023-24 Q2(b)).
+>
+> The ==addition and complement rules== appear inside almost every Bayes and distribution question.
+>
+> Treat this note as a warm-up: solve every problem below until counting feels automatic.
+
+## Core tools (memorize)
+
+> [!important] Memorize: the only formulas you need here
+> **Classical probability**
+>
+> Use when all outcomes are equally likely.
+>
+> $$
+> P(A)=\frac{n(A)}{n(S)}
+> $$
+>
+> **Complement**
+>
+> Use for "at least one" and "neither".
+>
+> $$
+> P(A^c)=1-P(A)
+> $$
+>
+> **Addition rule (two events)**
+>
+> Use for "A or B".
+>
+> $$
+> P(A\cup B)=P(A)+P(B)-P(A\cap B)
+> $$
+>
+> **Addition rule (three events)**
+>
+> $$
+> P(A\cup B\cup C)=P(A)+P(B)+P(C)-P(A\cap B)-P(A\cap C)-P(B\cap C)+P(A\cap B\cap C)
+> $$
+>
+> **De Morgan**
+>
+> Use for "neither".
+>
+> $$
+> (A\cup B)^c=A^c\cap B^c
+> $$
+>
+> $$
+> P(\text{neither})=1-P(A\cup B)
+> $$
+>
+> **Combination**
+>
+> Order does not matter. Use for "drawn at random", committees, samples.
+>
+> $$
+> {}^nC_r=\binom{n}{r}=\frac{n!}{r!\,(n-r)!}
+> $$
+>
+> **Permutation**
+>
+> Order matters. Use for arrangements and posts like president/secretary.
+>
+> $$
+> {}^nP_r=\frac{n!}{(n-r)!}
+> $$
+>
+> **Odds in favour of $A$ are $a:b$**
+>
+> $$
+> P(A)=\frac{a}{a+b}
+> $$
+>
+> **Odds against $A$ are $a:b$**
+>
+> $$
+> P(A)=\frac{b}{a+b}
+> $$
+
+Two short definitions are enough for this course.
+
+Events are ==mutually exclusive== if they cannot happen together, so $P(A\cap B)=0$.
+
+Events are ==exhaustive== if together they cover the whole sample space.
+
+A set of events that is both mutually exclusive and exhaustive is a **partition**. That is exactly what you need for the total probability rule and Bayes' theorem in [[P2 Conditional Probability Independence and Bayes]].
+
+> [!warning] Do not mix these up
+> Mutually exclusive ("cannot happen together") is not the same as independent ("one does not change the chance of the other").
+>
+> 2023-24 Q1(a) asked about this; the exam answer is in [[P2 Conditional Probability Independence and Bayes]].
 
 ---
 
-## 1. What probability measures
+## Problem types you will face
 
-Probability is a number between 0 and 1 that tells us how likely an outcome is. A probability of 0 means the event cannot happen, and a probability of 1 means it will certainly happen. Every other event lies somewhere in between. We use probability when we cannot predict the exact result of an experiment, but we do know the list of results that are possible. For example, when we toss a fair coin we cannot say whether a head or a tail will appear, but we know the only possibilities are H and T, and each has probability 0.5.
+### Type 1 — Drawing items at random (combinations)
 
-## 2. Random experiment, sample space and events
+**How to recognise it:** "a bag contains ... balls, ... are drawn at random", "a committee is chosen", "a lot contains defective items".
 
-A **random experiment** is an experiment that satisfies three conditions. First, all the possible outcomes are known in advance. Second, on any single performance we cannot say exactly which outcome will occur. Third, the experiment can be repeated under identical conditions. Tossing a coin, rolling a die and drawing a card from a deck are all random experiments.
+**Recipe:**
 
-> [!important] Memorize: Sample space and event
-> The **sample space** $S$ is the set of ==all possible outcomes== of a random experiment. An **event** is any subset of the sample space, that is, a collection of some of the outcomes. An event "occurs" if the outcome of the experiment is one of its elements.
+1. Count the total number of samples with $\binom{N}{n}$.
+2. Count the favourable samples by choosing each colour separately and multiplying.
+3. Divide.
 
-For a single die, $S=\{1,2,3,4,5,6\}$. The event "an even number appears" is $A=\{2,4,6\}$. For two tosses of a coin, $S=\{HH, HT, TH, TT\}$, and the event "at least one head" is $\{HH, HT, TH\}$. When a pair of dice is thrown, the sample space has $6\times 6=36$ equally likely ordered pairs, which is something you should remember because dice problems appear often in lectures.
-
-The **complement** of an event $A$, written $A^c$ or $\bar A$, is the set of outcomes in $S$ that are not in $A$. The **union** $A\cup B$ is the event that $A$ or $B$ (or both) occurs. The **intersection** $A\cap B$ is the event that both $A$ and $B$ occur.
-
-### Types of events
-
-Two events are **mutually exclusive** (or disjoint) when they cannot happen together, which means $A\cap B=\emptyset$. Getting a 1 and getting a 6 on one roll of a die are mutually exclusive, because a single roll cannot show both faces.
-
-A collection of events is **exhaustive** when together they cover the whole sample space, so at least one of them must happen. For a die, the events $\{1,2\}$, $\{3,4\}$ and $\{5,6\}$ are exhaustive (and also mutually exclusive). Events that are both mutually exclusive and exhaustive form a **partition** of the sample space; this idea is the backbone of the total probability rule and Bayes' theorem in [[P2 Conditional Probability Independence and Bayes]].
-
-Events are **equally likely** when they have the same chance of happening. Head and tail of a fair coin are equally likely; the six faces of a fair die are equally likely.
-
-> [!warning] Common mistake
-> Do not confuse **mutually exclusive** with **independent**. Mutually exclusive means "cannot happen together" ($P(A\cap B)=0$). Independent means "one does not change the chance of the other" ($P(A\cap B)=P(A)P(B)$). These are completely different ideas, and in fact two events with non-zero probabilities can never be both. This exact point was asked in 2023-24 Q1(a), and it is explained fully in [[P2 Conditional Probability Independence and Bayes]].
-
-### De Morgan's laws
-
-De Morgan's laws connect complements, unions and intersections. In words, the complement of a union is the intersection of the complements, and the complement of an intersection is the union of the complements.
+**General formula (three types of item):**
 
 $$
-(A\cup B)^c = A^c\cap B^c \qquad\qquad (A\cap B)^c = A^c\cup B^c
+P(\text{exactly } x \text{ of type 1 and } y \text{ of type 2})=\frac{\binom{N_1}{x}\binom{N_2}{y}\binom{N_3}{n-x-y}}{\binom{N}{n}}
 $$
 
-These are very useful for "neither" and "at least one" questions. "Neither $A$ nor $B$ happens" is $A^c\cap B^c=(A\cup B)^c$, so $P(\text{neither}) = 1-P(A\cup B)$.
+> [!example] Example 1.1 (lecture) — black balls
+> **Given.** A bag has 10 balls, 4 black and 6 white. Three are drawn without replacement. Find $P(\text{exactly 2 black})$.
+>
+> **Step 1 — Total samples.**
+>
+> $$
+> \binom{10}{3}=120
+> $$
+>
+> **Step 2 — Favourable samples.** Choose 2 of the 4 black and 1 of the 6 white.
+>
+> $$
+> \binom42\binom61=6\times6=36
+> $$
+>
+> **Answer.**
+>
+> $$
+> P(\text{exactly 2 black})=\frac{36}{120}=\mathbf{0.3}
+> $$
 
-For example, let $S=\{a,b,c,d,e\}$, $A=\{a,b,c\}$ and $B=\{b,d\}$. Then $A\cap B=\{b\}$, so $(A\cap B)^c=\{a,c,d,e\}$. Checking with De Morgan, $A^c=\{d,e\}$ and $B^c=\{a,c,e\}$, whose union is $\{a,c,d,e\}$. Both sides agree.
+> [!example] Practice 1.2 (TF style) — three colours
+> **Given.** A bag contains 5 red, 4 white and 3 blue balls. Three balls are drawn at random. Find the probability that (i) all are red, (ii) one of each colour is drawn, (iii) at least one is blue.
+>
+> **Step 1 — Total samples.** There are 12 balls.
+>
+> $$
+> \binom{12}{3}=220
+> $$
+>
+> **Step 2 — (i) All red.** There are $\binom53=10$ ways.
+>
+> $$
+> P=\frac{10}{220}=\frac1{22}\approx0.0455
+> $$
+>
+> **Step 3 — (ii) One of each colour.** There are $\binom51\binom41\binom31=60$ ways.
+>
+> $$
+> P=\frac{60}{220}=\frac3{11}\approx0.2727
+> $$
+>
+> **Step 4 — (iii) At least one blue.** This has many cases, so use the complement "no blue". With no blue, all 3 balls come from the 9 non-blue balls: $\binom93=84$ ways.
+>
+> $$
+> P(\text{at least one blue})=1-\frac{84}{220}=\frac{34}{55}\approx0.6182
+> $$
+>
+> **Answer.** (i) **0.0455**, (ii) **0.2727**, (iii) **0.6182**.
+
+> [!example] Practice 1.3 (TF style) — committee
+> **Given.** A committee of 4 is chosen at random from 6 men and 4 women. Find the probability that it contains (i) exactly 2 women, (ii) at least one woman.
+>
+> **Step 1 — Total committees.**
+>
+> $$
+> \binom{10}{4}=210
+> $$
+>
+> **Step 2 — (i) Exactly 2 women.** Choose 2 of the 4 women and 2 of the 6 men.
+>
+> $$
+> \binom42\binom62=6\times15=90
+> $$
+>
+> $$
+> P=\frac{90}{210}=\frac37\approx0.4286
+> $$
+>
+> **Step 3 — (ii) At least one woman.** The complement is "no woman", i.e. all 4 are men: $\binom64=15$ ways.
+>
+> $$
+> P(\text{at least one woman})=1-\frac{15}{210}=\frac{13}{14}\approx0.9286
+> $$
+>
+> **Answer.** (i) **0.4286**, (ii) **0.9286**.
+
+> [!example] Practice 1.4 — cards
+> **Given.** Two cards are drawn from a well-shuffled deck of 52. Find the probability that (i) one is a king and the other a queen, (ii) both are of the same suit.
+>
+> **Step 1 — Total.**
+>
+> $$
+> \binom{52}{2}=1326
+> $$
+>
+> **Step 2 — (i) King and queen.** One king from 4 and one queen from 4 gives $4\times4=16$ ways.
+>
+> $$
+> P=\frac{16}{1326}=\frac{8}{663}\approx0.0121
+> $$
+>
+> **Step 3 — (ii) Same suit.** Choose the suit (4 ways), then 2 cards of that suit, $\binom{13}{2}=78$. Total $4\times78=312$.
+>
+> $$
+> P=\frac{312}{1326}=\frac4{17}\approx0.2353
+> $$
+>
+> **Answer.** (i) **0.0121**, (ii) **0.2353**.
+
+> [!tip] Permutation or combination?
+> Ask: "If I swap two chosen objects, is it a different result?"
+>
+> Choosing a team of 3 from 5 is a combination: ${}^5C_3=10$.
+>
+> Electing a president, vice-president and secretary from 5 is a permutation: ${}^5P_3=60$.
+>
+> In TF bag problems it is almost always combinations.
 
 ---
 
-## 3. Definitions of probability
+### Type 2 — Overlapping events (addition rule and "neither")
 
-### Classical (a priori) definition
+**How to recognise it:** percentages of people who do A, do B, and do both.
 
-If an experiment has $n(S)$ equally likely, mutually exclusive outcomes, and $n(A)$ of them are favourable to event $A$, then
+**Recipe:**
 
-$$
-P(A)=\frac{n(A)}{n(S)}=\frac{\text{number of favourable outcomes}}{\text{total number of outcomes}} .
-$$
+1. Write $P(A)$, $P(B)$ and $P(A\cap B)$.
+2. Use the addition rule for "at least one".
+3. Use $1-P(A\cup B)$ for "neither".
+4. Use $P(A)-P(A\cap B)$ for "A only".
 
-This definition only works when the outcomes are equally likely and finite in number. For example, the probability of an even number on a fair die is $3/6=0.5$, and the probability of choosing a girl from a class of 12 girls and 18 boys is $12/30=0.4$.
+> [!example] Example 2.1 (lecture) — newspapers
+> **Given.** In an office of 100 employees, 75 read an English daily, 50 read a Bangla daily and 40 read both. Find the probability that a randomly chosen employee reads at least one paper, and neither.
+>
+> $P(E)=0.75$, $P(B)=0.50$, $P(E\cap B)=0.40$.
+>
+> **Step 1 — At least one.**
+>
+> $$
+> P(E\cup B)=0.75+0.50-0.40=0.85
+> $$
+>
+> **Step 2 — Neither.**
+>
+> $$
+> P(\text{neither})=1-0.85=0.15
+> $$
+>
+> **Answer.** At least one: **0.85**. Neither: **0.15**.
 
-### Axiomatic definition
+> [!example] Practice 2.2 — rings and necklaces (lecture style)
+> **Given.** At a college, 60% of students wear neither a ring nor a necklace, 20% wear a ring and 30% wear a necklace. Find the probability that a student wears both.
+>
+> **Step 1 — At least one.** "Neither" is 0.60, so
+>
+> $$
+> P(R\cup N)=1-0.60=0.40
+> $$
+>
+> **Step 2 — Rearrange the addition rule.**
+>
+> $$
+> \begin{aligned}
+> P(R\cap N)&=P(R)+P(N)-P(R\cup N)\\
+> &=0.20+0.30-0.40\\
+> &=0.10
+> \end{aligned}
+> $$
+>
+> **Answer.** $P(\text{both})=\mathbf{0.10}$.
 
-The modern definition says a probability is any rule $P$ that assigns a number to each event and obeys three axioms.
+> [!example] Practice 2.3 — subjects
+> **Given.** In a class, 60% passed Mathematics, 50% passed Physics and 30% passed both. Find the probability that a student passed (i) at least one subject, (ii) neither, (iii) Mathematics only.
+>
+> **Step 1 — (i) At least one.**
+>
+> $$
+> P(M\cup P)=0.6+0.5-0.3=0.8
+> $$
+>
+> **Step 2 — (ii) Neither.**
+>
+> $$
+> P(\text{neither})=1-0.8=0.2
+> $$
+>
+> **Step 3 — (iii) Mathematics only.**
+>
+> $$
+> P(M \text{ only})=P(M)-P(M\cap P)=0.6-0.3=0.3
+> $$
+>
+> **Answer.** (i) **0.8**, (ii) **0.2**, (iii) **0.3**.
 
-> [!important] Memorize: The three axioms of probability
-> First, $P(A)\ge 0$ for every event $A$. Second, $P(S)=1$. Third, if $A_1, A_2, \dots$ are mutually exclusive events, then $P(A_1\cup A_2\cup\cdots)=P(A_1)+P(A_2)+\cdots$.
-
-From these axioms we can prove everything else, for example that $P(\emptyset)=0$, that $0\le P(A)\le 1$, and the complement rule
-
-$$
-P(A^c)=1-P(A).
-$$
-
-The complement rule is one of the most useful tricks in the whole course. Whenever a question says "at least one", it is almost always easier to compute $1-P(\text{none})$.
-
-### Relative frequency (empirical) definition
-
-If an experiment is repeated $n$ times and event $A$ occurs $f$ times, then the relative frequency $f/n$ approaches $P(A)$ as $n$ becomes very large. This is how probabilities such as "1 in every 1000 glass items has a bubble" (2019-20 Q8(a)) are obtained in practice.
+> [!example] Example 2.4 (lecture) — men or brown eyes
+> **Given.** A class has 10 men and 20 women; half of each group has brown eyes. Find $P(\text{man or brown eyes})$.
+>
+> **Step 1 — Count.** Of 30 people, 10 are men, 15 have brown eyes and 5 are brown-eyed men.
+>
+> **Step 2 — Addition rule.**
+>
+> $$
+> P(M\cup Br)=\frac{10}{30}+\frac{15}{30}-\frac{5}{30}=\frac{20}{30}
+> $$
+>
+> **Answer.** $P=\mathbf{2/3}$.
 
 ---
 
-## 4. The addition rule
+### Type 3 — Odds
 
-> [!important] Memorize: Addition rule
-> For any two events,
-> $$
-> P(A\cup B)=P(A)+P(B)-P(A\cap B).
-> $$
-> If $A$ and $B$ are mutually exclusive, $P(A\cap B)=0$ and the rule becomes $P(A\cup B)=P(A)+P(B)$.
-> For three events,
-> $$
-> P(A\cup B\cup C)=P(A)+P(B)+P(C)-P(A\cap B)-P(A\cap C)-P(B\cap C)+P(A\cap B\cap C).
-> $$
+**How to recognise it:** "odds in favour" or "odds against".
 
-The reason we subtract $P(A\cap B)$ is that the outcomes in both $A$ and $B$ were counted twice, once inside $P(A)$ and once inside $P(B)$. If you picture two overlapping circles inside a rectangle (a Venn diagram), the union is "A only" plus "overlap" plus "B only", and simply adding the two circles counts the overlap twice, so we remove it once.
+**Recipe:**
 
-**Worked example (lecture style).** In an office of 100 employees, 75 read an English daily, 50 read a Bangla daily and 40 read both. What is the probability that a randomly selected employee reads at least one of the two papers, and what is the probability that the employee reads neither?
+1. Convert the odds to probabilities first.
+2. Then solve as a normal (usually independent) probability problem.
 
-Let $E$ be "reads English" and $B$ be "reads Bangla". Then $P(E)=0.75$, $P(B)=0.50$ and $P(E\cap B)=0.40$. By the addition rule,
+**Odds in favour $a:b$:**
 
 $$
-P(E\cup B)=0.75+0.50-0.40=0.85 .
+P=\frac{a}{a+b}
 $$
 
-By De Morgan, "reads neither" is the complement of "reads at least one", so $P(\text{neither})=1-0.85=0.15$. So 85% read at least one paper and 15% read neither.
+**Odds against $a:b$:**
+
+$$
+P=\frac{b}{a+b}
+$$
+
+> [!example] Example 3.1 (lecture) — two students
+> **Given.** The odds against X solving a problem are $8:6$ and the odds in favour of Y solving it are $14:16$. They work independently. Find the probability that (a) both solve, (b) at least one solves, (c) exactly one solves.
+>
+> **Step 1 — Convert odds to probabilities.**
+>
+> $$
+> P(X)=\frac{6}{14}=\frac37,\qquad P(\bar X)=\frac47
+> $$
+>
+> $$
+> P(Y)=\frac{14}{30}=\frac7{15},\qquad P(\bar Y)=\frac8{15}
+> $$
+>
+> **Step 2 — (a) Both solve.**
+>
+> $$
+> P(X\cap Y)=\frac37\cdot\frac7{15}=\frac15
+> $$
+>
+> **Step 3 — (b) At least one solves.**
+>
+> $$
+> \begin{aligned}
+> P(\text{at least one})&=1-P(\bar X)P(\bar Y)\\
+> &=1-\frac47\cdot\frac8{15}\\
+> &=1-\frac{32}{105}=\frac{73}{105}\approx0.695
+> \end{aligned}
+> $$
+>
+> **Step 4 — (c) Exactly one solves.** Remove the "both" case from "at least one".
+>
+> $$
+> P(\text{exactly one})=\frac{73}{105}-\frac{21}{105}=\frac{52}{105}\approx0.495
+> $$
+>
+> **Answer.** (a) **1/5**, (b) **0.695**, (c) **0.495**.
+
+> [!example] Practice 3.2
+> **Given.** The odds against A hitting a target are $3:2$ and the odds in favour of B hitting it are $4:5$. They shoot independently. Find the probability that (i) both hit, (ii) exactly one hits, (iii) the target is hit.
+>
+> **Step 1 — Convert odds.**
+>
+> $$
+> P(A)=\frac{2}{5},\qquad P(B)=\frac{4}{9}
+> $$
+>
+> **Step 2 — (i) Both hit.**
+>
+> $$
+> \frac25\cdot\frac49=\frac{8}{45}\approx0.178
+> $$
+>
+> **Step 3 — (ii) Exactly one hits.**
+>
+> $$
+> \begin{aligned}
+> P(A)P(\bar B)+P(\bar A)P(B)&=\frac25\cdot\frac59+\frac35\cdot\frac49\\
+> &=\frac{10+12}{45}=\frac{22}{45}\approx0.489
+> \end{aligned}
+> $$
+>
+> **Step 4 — (iii) Target is hit (at least one hits).**
+>
+> $$
+> 1-P(\bar A)P(\bar B)=1-\frac35\cdot\frac59=1-\frac13=\frac23
+> $$
+>
+> **Answer.** (i) **0.178**, (ii) **0.489**, (iii) **2/3**.
 
 ---
 
-## 5. Counting: permutations and combinations
+### Type 4 — "At least one" with independent events
 
-When the outcomes are equally likely we need to count them, and counting is done with the multiplication principle, permutations and combinations.
+**How to recognise it:** several independent parts, trials or people; "at least one fails", "the problem is solved".
 
-The **multiplication principle** says that if one job can be done in $m$ ways and, after it, a second job can be done in $n$ ways, then the two jobs together can be done in $m\times n$ ways. This is why two dice give $6\times 6=36$ outcomes.
-
-> [!important] Memorize: Permutation and combination
-> A **permutation** is an arrangement where ==order matters==. The number of ways to arrange $r$ objects chosen from $n$ distinct objects is
-> $$
-> ^nP_r=\frac{n!}{(n-r)!}.
-> $$
-> A **combination** is a selection where ==order does not matter==. The number of ways to choose $r$ objects from $n$ is
-> $$
-> ^nC_r=\binom{n}{r}=\frac{n!}{r!\,(n-r)!}.
-> $$
-
-The way to decide which to use is to ask yourself, "If I swap two of the chosen objects, do I get a different result?" Electing a president, vice-president and secretary from 5 members is a permutation, because swapping the president and the secretary gives a different committee: $^5P_3 = 5!/2! = 60$ ways. Choosing a team of 3 from 5 members is a combination, because the same three people form the same team in any order: $^5C_3=10$ ways.
-
-> [!tip] Exam trick: "drawn at random" from a bag
-> In almost every bag problem (balls, pens, cars, markers), the items are drawn together or without replacement and their order is irrelevant, so you use combinations. The probability of getting exactly $x$ items of type 1 and $y$ items of type 2 is
-> $$
-> P=\frac{\binom{\text{type-1 total}}{x}\binom{\text{type-2 total}}{y}\binom{\text{others}}{\text{rest}}}{\binom{\text{all items}}{\text{sample size}}} .
-> $$
-> This one formula is behind 2021-22 Q6(c) (hypergeometric), 2023-24 Q2(b) (joint distribution of pens) and many lecture problems.
-
-**Worked example.** A bag contains 10 balls of which 4 are black and 6 are white. Three balls are drawn at random without replacement. Find the probability that exactly 2 are black.
-
-The total number of ways to choose 3 balls from 10 is $\binom{10}{3}=120$. To get exactly 2 black balls we must choose 2 of the 4 black balls and 1 of the 6 white balls, which can be done in $\binom{4}{2}\binom{6}{1}=6\times 6=36$ ways. Hence
+**Recipe:**
 
 $$
-P(\text{exactly 2 black})=\frac{36}{120}=0.3 .
+P(\text{at least one})=1-P(\text{none})
 $$
 
-**Worked example.** Two cards are drawn from a standard deck of 52 without replacement. Find the probability that both are aces. There are $\binom{4}{2}=6$ ways to pick two aces and $\binom{52}{2}=1326$ ways to pick any two cards, so the probability is $6/1326=1/221\approx 0.0045$. You can also get the same answer with the multiplication law, $\frac{4}{52}\times\frac{3}{51}=\frac{1}{221}$, which is a nice check.
+and $P(\text{none})$ is a product of complements.
+
+> [!example] Practice 4.1 — machine components
+> **Given.** A machine has three independent components that fail with probabilities 0.10, 0.20 and 0.05. Find the probability that (i) at least one fails, (ii) exactly one fails.
+>
+> **Step 1 — (i) None fails.**
+>
+> $$
+> P(\text{none fails})=0.9\times0.8\times0.95=0.684
+> $$
+>
+> $$
+> P(\text{at least one fails})=1-0.684=0.316
+> $$
+>
+> **Step 2 — (ii) Exactly one fails.** Add the three "only this one fails" cases.
+>
+> $$
+> \begin{aligned}
+> P&=0.1(0.8)(0.95)+0.9(0.2)(0.95)+0.9(0.8)(0.05)\\
+> &=0.076+0.171+0.036\\
+> &=0.283
+> \end{aligned}
+> $$
+>
+> **Answer.** (i) **0.316**, (ii) **0.283**.
+
+> [!example] Practice 4.2 — how many trials?
+> **Given.** How many times must a fair die be rolled so that the probability of getting at least one six is at least 0.9?
+>
+> **Step 1 — Set up the inequality.**
+>
+> $$
+> P(\text{at least one six in } n \text{ rolls})=1-\left(\frac56\right)^n\ge0.9
+> $$
+>
+> $$
+> \left(\frac56\right)^n\le0.1
+> $$
+>
+> **Step 2 — Take logs.**
+>
+> $$
+> n\ge\frac{\ln 0.1}{\ln(5/6)}=12.6
+> $$
+>
+> **Step 3 — Check.** $1-(5/6)^{13}=0.9065$, while 12 rolls give only $0.8878$.
+>
+> **Answer.** $n=\mathbf{13}$ rolls.
 
 ---
 
-## 6. Odds
+## Extra practice
 
-Odds compare the chance that an event happens with the chance that it does not happen. They are a ratio, not a probability.
-
-> [!important] Memorize: Odds and probability
-> If $P(A)=p$, then the **odds in favour** of $A$ are $\dfrac{p}{1-p}$ and the **odds against** $A$ are $\dfrac{1-p}{p}$. Odds in favour and odds against are reciprocals of each other.
-> If the odds in favour of $A$ are $a:b$, then
-> $$
-> P(A)=\frac{a}{a+b}, \qquad P(A^c)=\frac{b}{a+b}.
-> $$
-
-If the odds in favour of red balls are $3:7$, then out of every $3+7=10$ balls, 3 are red, so $P(\text{red})=0.3$ and $P(\text{blue})=0.7$. If the probability of an athlete winning is 0.2, the odds against winning are $0.8/0.2=4$, written $4:1$, which means for every one chance of winning there are four chances of losing.
-
-**Worked example (lecture Problem 1).** The odds against student X solving a problem are $8:6$, and the odds in favour of student Y solving it are $14:16$. They work independently. Find the probability that at least one solves the problem.
-
-From "odds against X are $8:6$", we get $P(\bar X)=\frac{8}{14}=\frac47$ and $P(X)=\frac{6}{14}=\frac37$. From "odds in favour of Y are $14:16$", we get $P(Y)=\frac{14}{30}=\frac{7}{15}$ and $P(\bar Y)=\frac{8}{15}$. Since they work independently, the probability that neither solves it is $P(\bar X)P(\bar Y)=\frac47\cdot\frac{8}{15}=\frac{32}{105}$. Therefore
-
-$$
-P(\text{at least one solves})=1-\frac{32}{105}=\frac{73}{105}\approx 0.695 .
-$$
-
-The probability that both solve is $\frac37\cdot\frac{7}{15}=\frac{1}{5}$, and the probability that exactly one solves is $\frac{73}{105}-\frac{21}{105}=\frac{52}{105}$.
-
----
-
-## 7. Joint probability tables
-
-When we classify people by two characteristics, it is very helpful to arrange the probabilities in a two-way table. The inside cells are joint probabilities like $P(A\cap B)$, and the row and column totals are the single (marginal) probabilities. This is exactly the structure that becomes a joint probability distribution in [[P4 Joint Marginal and Conditional Distributions]].
-
-**Worked example (lecture Problem 3).** A class contains 10 men and 20 women. Half of the men and half of the women have brown eyes. Find the probability that a person chosen at random is a man or has brown eyes.
-
-There are 30 people, 10 men, and $5+10=15$ brown-eyed people, of whom 5 are men. So $P(M)=\frac{10}{30}$, $P(Br)=\frac{15}{30}$ and $P(M\cap Br)=\frac{5}{30}$. Then
-
-$$
-P(M\cup Br)=\frac{10}{30}+\frac{15}{30}-\frac{5}{30}=\frac{20}{30}=\frac23 .
-$$
-
----
-
-> [!question]- Self-check
-> **1.** A die is rolled. Are "even" and "greater than 3" mutually exclusive? *No: they share 4 and 6.*
-> **2.** $P(A)=0.5$, $P(B)=0.4$, $P(A\cup B)=0.7$. Find $P(A\cap B)$. *$0.5+0.4-0.7=0.2$.*
-> **3.** How many ways can 2 pens be chosen from 8? *$\binom82=28$.*
-> **4.** Odds in favour of an event are $5:3$. What is its probability? *$5/8$.*
-> **5.** Why use $1-P(\text{none})$ for "at least one"? *Because "none" is a single simple case, while "at least one" splits into many cases.*
+> [!question]- Answers (try first)
+> **1.** From 8 red and 4 green pens, 3 are chosen. P(exactly 1 green)?
+>
+> *Answer:* $\binom41\binom82/\binom{12}3=112/220=28/55\approx0.509$.
+>
+> **2.** $P(A)=0.5$, $P(B)=0.4$, $P(A\cup B)=0.7$. Find $P(A\cap B)$ and $P(\text{neither})$.
+>
+> *Answer:* 0.2 and 0.3.
+>
+> **3.** Odds in favour of an event are $5:3$. Find its probability.
+>
+> *Answer:* $5/8$.
+>
+> **4.** Three coins are tossed. P(at least one head)?
+>
+> *Answer:* $1-1/8=7/8$.
+>
+> **5.** In how many ways can a president, secretary and treasurer be chosen from 7 members?
+>
+> *Answer:* ${}^7P_3=210$.
+>
+> **6.** Two dice are thrown. P(sum = 8)?
+>
+> *Answer:* $5/36$.
 
 Previous: [[index]] · Next: [[P2 Conditional Probability Independence and Bayes]] · Home: [[index]]

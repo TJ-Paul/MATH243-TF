@@ -53,10 +53,15 @@ jobs:
         run: |
           sed -i 's|pageTitle: ".*"|pageTitle: "MATH 243 Term Final Guide"|' quartz.config.ts
           sed -i 's|baseUrl: ".*"|baseUrl: "${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}"|' quartz.config.ts
+          # Remove the graph view from the right-hand panel
+          sed -i '/Component\.Graph()/d' quartz.layout.ts
 
       - name: Build website
         working-directory: quartz
         run: npx quartz build
+
+      - name: Add full-width toggle to every page
+        run: python3 vault/scripts/inject-fullwidth.py quartz/public
 
       - name: Publish to gh-pages branch
         uses: peaceiris/actions-gh-pages@v4

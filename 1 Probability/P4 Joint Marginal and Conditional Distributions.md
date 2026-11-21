@@ -5,198 +5,505 @@ tags: [math243, probability, joint-distribution]
 
 # P4 · Joint, Marginal and Conditional Distributions
 
-> [!abstract] Why this matters for the term final
-> Joint distributions have been asked in three of the last four years. In 2020-21 Q5(c) you had a joint density $k(x^2+y^2)$ for tyre pressures; in 2022-23 Q2(a) a joint density $10xy^2$ on the triangle $0<x<y<1$ with marginals and a conditional density; and in 2023-24 Q2(b) (20 marks) a joint pmf built from drawing two pens from a bag, followed by $P[(X,Y)\in A]$, the marginals, $\mathrm{Var}(X)$ and $\mathrm{Cov}(X,Y)$. The last two are solved in [[TF 2022-23 Solutions]] and [[TF 2023-24 Solutions]]. In this note you learn every one of these steps and practise on fresh examples of exactly the same shape.
+> [!abstract] Why this matters for the TF
+> Joint distributions were asked in 2020-21 Q5(c) (joint density $k(x^2+y^2)$), 2022-23 Q2(a) (density $10xy^2$ on a triangle: marginals, conditional, conditional probability) and 2023-24 Q2(b) (20 marks: joint pmf from drawing pens, then $P[(X,Y)\in A]$, marginals, variance and covariance).
+>
+> The last two are solved in [[TF 2022-23 Solutions]] and [[TF 2023-24 Solutions]].
+>
+> Every one of those shapes is practised below.
+
+## Core tools (memorize)
+
+> [!important] Memorize
+> **Joint pmf (discrete)**
+>
+> $$
+> f(x,y)=P(X=x,\ Y=y)
+> $$
+>
+> $$
+> \sum_x\sum_y f(x,y)=1
+> $$
+>
+> $P[(X,Y)\in A]$ is the sum of the cells in $A$.
+>
+> **Joint pdf (continuous)**
+>
+> Use the total $=1$ to find $k$.
+>
+> $$
+> \iint f(x,y)\,dx\,dy=1
+> $$
+>
+> $$
+> P[(X,Y)\in A]=\iint_A f(x,y)\,dx\,dy
+> $$
+>
+> **Marginals**
+>
+> Discrete: row and column totals. Continuous:
+>
+> $$
+> g(x)=\int f(x,y)\,dy
+> $$
+>
+> $$
+> h(y)=\int f(x,y)\,dx
+> $$
+>
+> **Conditional**
+>
+> $$
+> f(y\mid x)=\frac{f(x,y)}{g(x)}
+> $$
+>
+> $$
+> f(x\mid y)=\frac{f(x,y)}{h(y)}
+> $$
+>
+> $$
+> P(a<Y<b\mid X=x)=\int_a^b f(y\mid x)\,dy
+> $$
+>
+> **Independence**
+>
+> $X$ and $Y$ are independent if, for every $(x,y)$,
+>
+> $$
+> f(x,y)=g(x)\,h(y)
+> $$
+>
+> If the support is not a rectangle (for example $0<x<y<1$), $X$ and $Y$ are **not** independent.
+>
+> **Drawing objects of three colours (sample of size $n$)**
+>
+> Valid for $x+y\le n$.
+>
+> $$
+> f(x,y)=\frac{\binom{N_1}{x}\binom{N_2}{y}\binom{N_3}{n-x-y}}{\binom{N}{n}}
+> $$
 
 ---
 
-## 1. Joint probability mass function (discrete case)
+## Problem types you will face
 
-When two discrete random variables $X$ and $Y$ are observed on the same experiment, their **joint pmf** gives the probability of each pair of values:
+### Type 1 — Joint pmf from drawing objects (the 2023-24 Q2(b) shape)
 
-$$
-f(x,y)=P(X=x,\;Y=y).
-$$
+**How to recognise it:** "a bag contains ... of three colours, $n$ are selected; $X$ = number of colour 1, $Y$ = number of colour 2".
 
-> [!important] Memorize: Properties of a joint pmf
+**Recipe:**
+
+1. List all pairs with $x+y\le n$.
+2. Compute each cell with the three-colour formula.
+3. Fill the table with row and column totals (the marginals) and check it adds to 1.
+4. Answer $P[(X,Y)\in A]$ by adding cells.
+5. Find $E(X)$, $E(X^2)$ and $\mathrm{Var}(X)$ from $g(x)$; $E(XY)$ from the table; then $\mathrm{Cov}=E(XY)-E(X)E(Y)$.
+
+> [!example] Practice 1.1 (full 2023-24 Q2(b) shape)
+> **Given.** A box has 4 red, 3 green and 2 white balls. Two balls are drawn at random. $X$ = number of red, $Y$ = number of green. (i) Find the joint distribution and plot it. (ii) Find $P[(X,Y)\in A]$, $A=\{(x,y): x+y\le1\}$. (iii) Marginals. (iv) $\mathrm{Var}(X)$. (v) $\mathrm{Cov}(X,Y)$.
+>
+> **Step 1 — (i) Total samples.**
+>
 > $$
-> f(x,y)\ge 0,\qquad \sum_x\sum_y f(x,y)=1,\qquad P[(X,Y)\in A]=\sum\sum_{(x,y)\in A} f(x,y).
+> \binom92=36
 > $$
-
-The joint pmf is usually displayed in a two-way table with $x$ values along one side and $y$ values along the other. The row and column totals of this table are the marginal distributions described below.
-
-## 2. Joint probability density function (continuous case)
-
-For two continuous random variables, the **joint pdf** $f(x,y)$ is a surface over the $xy$-plane, and probabilities are ==volumes under that surface==.
-
-> [!important] Memorize: Properties of a joint pdf
+>
+> **Step 2 — (i) Two sample cells.**
+>
 > $$
-> f(x,y)\ge 0,\qquad \int_{-\infty}^{\infty}\int_{-\infty}^{\infty} f(x,y)\,dx\,dy=1,\qquad P[(X,Y)\in A]=\iint_A f(x,y)\,dx\,dy .
+> f(1,1)=\frac{\binom41\binom31\binom20}{36}=\frac{12}{36}
 > $$
-
-To find an unknown constant $k$, integrate over the whole region where $f$ is non-zero and set the result equal to 1, exactly as for a single variable.
-
-## 3. Marginal distributions
-
-The **marginal distribution** of $X$ alone is obtained by "adding up" (summing or integrating) the joint distribution over all values of $Y$, and vice versa.
-
-> [!important] Memorize: Marginals
-> Discrete: $\displaystyle g(x)=\sum_y f(x,y)$ and $\displaystyle h(y)=\sum_x f(x,y)$ (the row and column totals of the table).
-> Continuous: $\displaystyle g(x)=\int_{-\infty}^{\infty} f(x,y)\,dy$ and $\displaystyle h(y)=\int_{-\infty}^{\infty} f(x,y)\,dx$.
-
-## 4. Conditional distributions
-
-The conditional distribution of $Y$ given $X=x$ tells us how $Y$ behaves when we already know the value of $X$. It is the joint divided by the marginal of the variable we condition on, which is the same idea as $P(A\mid B)=P(A\cap B)/P(B)$.
-
-> [!important] Memorize: Conditional distributions
+>
 > $$
-> f(y\mid x)=\frac{f(x,y)}{g(x)},\quad g(x)>0, \qquad\qquad f(x\mid y)=\frac{f(x,y)}{h(y)},\quad h(y)>0 .
+> f(0,0)=\frac{\binom22}{36}=\frac1{36}
 > $$
-> Then $P(a<Y<b\mid X=x)=\int_a^b f(y\mid x)\,dy$ (or a sum in the discrete case).
+>
+> All cells:
+>
+> | $f(x,y)$ | $y=0$ | $y=1$ | $y=2$ | $g(x)$ |
+> |---|---|---|---|---|
+> | $x=0$ | 1/36 | 6/36 | 3/36 | 10/36 |
+> | $x=1$ | 8/36 | 12/36 | 0 | 20/36 |
+> | $x=2$ | 6/36 | 0 | 0 | 6/36 |
+> | $h(y)$ | 15/36 | 18/36 | 3/36 | 1 |
+>
+> **Plot.** Draw the $x$ and $y$ axes on the floor and mark the six points $(0,0),(0,1),(0,2),(1,0),(1,1),(2,0)$. Draw a vertical stick at each point with height $f(x,y)$. The tallest stick is at $(1,1)$, height $\frac13$.
+>
+> **Step 3 — (ii) Add the cells with $x+y\le1$**: $(0,0),(0,1),(1,0)$.
+>
+> $$
+> P[(X,Y)\in A]=\frac{1+6+8}{36}=\frac{15}{36}=\frac5{12}
+> $$
+>
+> **Step 4 — (iii) Marginals** (row and column totals).
+>
+> $$
+> g(0)=\frac5{18},\quad g(1)=\frac59,\quad g(2)=\frac16
+> $$
+>
+> $$
+> h(0)=\frac5{12},\quad h(1)=\frac12,\quad h(2)=\frac1{12}
+> $$
+>
+> **Step 5 — (iv) Variance of $X$.**
+>
+> $$
+> E(X)=\frac59+2\cdot\frac16=\frac89
+> $$
+>
+> $$
+> E(X^2)=\frac59+4\cdot\frac16=\frac{11}9
+> $$
+>
+> $$
+> \mathrm{Var}(X)=\frac{11}9-\frac{64}{81}=\frac{35}{81}\approx0.4321
+> $$
+>
+> **Step 6 — (v) Covariance.** Only the $(1,1)$ cell has $xy\ne0$.
+>
+> $$
+> E(XY)=1\cdot1\cdot\frac{12}{36}=\frac13
+> $$
+>
+> $$
+> E(Y)=\frac12+2\cdot\frac1{12}=\frac23
+> $$
+>
+> $$
+> \begin{aligned}
+> \mathrm{Cov}(X,Y)&=E(XY)-E(X)E(Y)\\
+> &=\frac13-\frac89\cdot\frac23\\
+> &=\frac{9-16}{27}=-\frac7{27}\approx-0.2593
+> \end{aligned}
+> $$
+>
+> **Answer.** (ii) **5/12**, (iv) **35/81 ≈ 0.4321**, (v) **−7/27 ≈ −0.2593**.
+>
+> The negative covariance makes sense: more red balls leave less room for green ones.
 
-## 5. Independence
-
-> [!important] Memorize: Independent random variables
-> $X$ and $Y$ are independent if and only if
-> $$
-> f(x,y)=g(x)\,h(y) \quad\text{for every } (x,y).
-> $$
-> To show they are **not** independent it is enough to find a single pair where this fails. A quick warning sign: if the region where $f>0$ is not a rectangle (for example a triangle like $0<x<y<1$), then $X$ and $Y$ cannot be independent.
+> [!warning] Common mistakes
+> Forgetting the third-colour factor $\binom{N_3}{n-x-y}$.
+>
+> Including impossible cells such as $(1,2)$ when only 2 items are drawn.
+>
+> Always check the table totals 1.
 
 ---
 
-## 6. Regions that are not rectangles
+### Type 2 — Joint pmf given by a formula
 
-When the support is a triangle such as $0<x<y<1$, you must think about the limits of integration carefully. Draw the region first. For a fixed $x$, the variable $y$ runs from the line $y=x$ up to $y=1$. For a fixed $y$, the variable $x$ runs from $0$ up to $y$.
+**How to recognise it:** "$f(x,y)=k(\dots)$ for $x=\dots$, $y=\dots$".
+
+**Recipe:**
+
+1. Add over all cells to find $k$.
+2. Find the marginals by summing.
+3. Conditional = cell ÷ marginal.
+4. Check independence by comparing $f$ with $g\cdot h$.
+
+> [!example] Practice 2.1
+> **Given.** $f(x,y)=k(x+y)$ for $x=0,1,2$ and $y=0,1,2,3$. Find (i) $k$, (ii) the marginals, (iii) $P(X\le1,\,Y\ge2)$, (iv) $f(y\mid x=1)$, (v) $\mathrm{Cov}(X,Y)$.
+>
+> **Step 1 — (i) Find $k$.**
+>
+> $$
+> \sum\sum(x+y)=4(0+1+2)+3(0+1+2+3)=12+18=30
+> $$
+>
+> $$
+> k=\frac1{30}
+> $$
+>
+> **Step 2 — (ii) Marginal of $X$.**
+>
+> $$
+> g(x)=\sum_{y=0}^3\frac{x+y}{30}=\frac{4x+6}{30}
+> $$
+>
+> $$
+> g(0)=\frac15,\quad g(1)=\frac13,\quad g(2)=\frac7{15}
+> $$
+>
+> **Step 3 — (ii) Marginal of $Y$.**
+>
+> $$
+> h(y)=\sum_{x=0}^2\frac{x+y}{30}=\frac{3+3y}{30}
+> $$
+>
+> $$
+> h(0)=\frac1{10},\quad h(1)=\frac15,\quad h(2)=\frac3{10},\quad h(3)=\frac25
+> $$
+>
+> **Step 4 — (iii) Add cells** $(0,2),(0,3),(1,2),(1,3)$.
+>
+> $$
+> P(X\le1,\ Y\ge2)=\frac{2+3+3+4}{30}=\frac{12}{30}=\frac25
+> $$
+>
+> **Step 5 — (iv) Conditional.** For $y=0,1,2,3$:
+>
+> $$
+> f(y\mid1)=\frac{(1+y)/30}{1/3}=\frac{1+y}{10}
+> $$
+>
+> **Step 6 — (v) Covariance.**
+>
+> $$
+> E(X)=\frac13+2\cdot\frac7{15}=\frac{19}{15}
+> $$
+>
+> $$
+> E(Y)=\frac15+\frac{6}{10}+\frac{6}{5}=2
+> $$
+>
+> $$
+> E(XY)=\sum\sum xy\,\frac{x+y}{30}=\frac{12}5
+> $$
+>
+> $$
+> \mathrm{Cov}(X,Y)=\frac{12}{5}-\frac{19}{15}\cdot2=\frac{36-38}{15}=-\frac2{15}
+> $$
+>
+> **Answer.** $k=\mathbf{1/30}$, (iii) **2/5**, (v) **−2/15**.
+>
+> Since $\mathrm{Cov}\ne0$, $X$ and $Y$ are not independent (also $f(0,0)=0\ne g(0)h(0)$).
+
+---
+
+### Type 3 — Joint pdf on a rectangle: find $k$ and rectangle probabilities
+
+**How to recognise it:** "$f(x,y)=k(\dots)$ for $a\le x<b,\ c\le y<d$".
+
+**Recipe:**
+
+1. Integrate over $y$ first (treat $x$ as a constant), then over $x$.
+2. Set the total to 1 to find $k$.
+3. For each probability, use the same integral with the new limits.
+4. Translate words into limits carefully ("underfilled" = below the target).
+
+> [!example] Past TF 2020-21 Q5(c) (10 marks) — tyre pressures
+> **Given.** $f(x,y)=k(x^2+y^2)$ for $30\le x<50$, $30\le y<50$.
+>
+> **Step 1 — (i) Inner integral.** For fixed $x$:
+>
+> $$
+> \int_{30}^{50}(x^2+y^2)\,dy=20x^2+\frac{50^3-30^3}{3}=20x^2+\frac{98000}{3}
+> $$
+>
+> **Step 2 — (i) Outer integral.**
+>
+> $$
+> \int_{30}^{50}\left(20x^2+\frac{98000}3\right)dx=20\cdot\frac{98000}{3}+20\cdot\frac{98000}{3}=\frac{3{,}920{,}000}{3}
+> $$
+>
+> $$
+> k=\frac{3}{3{,}920{,}000}\approx7.653\times10^{-7}
+> $$
+>
+> **Step 3 — (ii) $P(30\le X\le40,\ 40\le Y<50)$.** For fixed $x$:
+>
+> $$
+> \int_{40}^{50}(x^2+y^2)\,dy=10x^2+\frac{61000}{3}
+> $$
+>
+> $$
+> \int_{30}^{40}\left(10x^2+\frac{61000}3\right)dx=\frac{370000+610000}{3}=\frac{980000}3
+> $$
+>
+> $$
+> P=\frac{980000}{3{,}920{,}000}=0.25
+> $$
+>
+> **Step 4 — (iii) Both underfilled** ($30\le X<40$, $30\le Y<40$).
+>
+> $$
+> \int_{30}^{40}\!\!\int_{30}^{40}(x^2+y^2)\,dy\,dx=\frac{370000}{3}+\frac{370000}{3}=\frac{740000}{3}
+> $$
+>
+> $$
+> P=\frac{740000}{3{,}920{,}000}=\frac{37}{196}\approx0.1888
+> $$
+>
+> **Answer.** (i) $k=\mathbf{3/3{,}920{,}000}$, (ii) **0.25**, (iii) **0.1888**.
+
+> [!example] Practice 3.1
+> **Given.** $f(x,y)=k(x+2y)$ for $0<x<1$, $0<y<1$. Find $k$, $P(X<\frac12,Y<\frac12)$, the marginals, and check independence.
+>
+> **Step 1 — Find $k$.**
+>
+> $$
+> \int_0^1\!\int_0^1(x+2y)\,dy\,dx=\int_0^1(x+1)\,dx=\frac32
+> $$
+>
+> $$
+> k=\frac23
+> $$
+>
+> **Step 2 — Rectangle probability.**
+>
+> $$
+> \begin{aligned}
+> P\left(X<\tfrac12,\ Y<\tfrac12\right)&=\frac23\int_0^{1/2}\!\!\int_0^{1/2}(x+2y)\,dy\,dx\\
+> &=\frac23\int_0^{1/2}\left(\frac x2+\frac14\right)dx\\
+> &=\frac23\cdot\frac{3}{16}=\frac18
+> \end{aligned}
+> $$
+>
+> **Step 3 — Marginals.**
+>
+> $$
+> g(x)=\frac23\int_0^1(x+2y)\,dy=\frac23(x+1)
+> $$
+>
+> $$
+> h(y)=\frac23\int_0^1(x+2y)\,dx=\frac23\left(\frac12+2y\right)
+> $$
+>
+> **Step 4 — Independence.** The product $g(x)h(y)$ is not $\frac23(x+2y)$.
+>
+> **Answer.** $k=\mathbf{2/3}$, $P=\mathbf{1/8}$, **not independent**.
+
+> [!example] Practice 3.2 — an independent case
+> **Given.** $f(x,y)=kxy$ for $0<x<1$, $0<y<2$. Find $k$ and show $X$, $Y$ are independent.
+>
+> **Step 1 — Find $k$.**
+>
+> $$
+> k\int_0^1x\,dx\int_0^2y\,dy=k\cdot\frac12\cdot2=k=1
+> $$
+>
+> **Step 2 — Marginals.**
+>
+> $$
+> g(x)=\int_0^2xy\,dy=2x
+> $$
+>
+> $$
+> h(y)=\int_0^1xy\,dx=\frac y2
+> $$
+>
+> **Step 3 — Check.**
+>
+> $$
+> g(x)\,h(y)=2x\cdot\frac y2=xy=f(x,y)
+> $$
+>
+> **Answer.** $k=\mathbf{1}$, and $X$, $Y$ are **independent**.
+
+---
+
+### Type 4 — Joint pdf on a triangle: marginals, conditional, conditional probability
+
+**How to recognise it:** support like $0<x<y<1$ (the 2022-23 Q2(a) shape).
+
+**Recipe:**
+
+1. Draw the region.
+2. For $g(x)$, integrate over $y$ from the line to the edge.
+3. For $h(y)$, integrate over $x$.
+4. $f(y\mid x)=f/g$.
+5. Substitute the given $x$ and integrate over the required $y$-range (keeping inside the support).
 
 ![[m243-joint-region-triangle.png]]
 
-> [!tip] Exam trick
-> Write the limits next to the region before integrating: "for marginal of $X$, integrate over $y$ from $x$ to 1; for marginal of $Y$, integrate over $x$ from 0 to $y$." Marginals of triangle-shaped densities always contain the variable in the limits, so $g(x)$ usually looks like a polynomial in $x$ with a factor such as $(1-x^3)$.
+> [!example] Practice 4.1
+> **Given.** $f(x,y)=8xy$ for $0<y<x<1$. Find the marginals, $f(y\mid x)$ and $P(Y<\frac14\mid X=\frac12)$.
+>
+> **Step 1 — Limits.** For fixed $x$, $y$ runs from 0 to $x$. For fixed $y$, $x$ runs from $y$ to 1.
+>
+> **Step 2 — Marginal of $X$** ($0<x<1$).
+>
+> $$
+> g(x)=\int_0^x8xy\,dy=4x^3
+> $$
+>
+> **Step 3 — Marginal of $Y$** ($0<y<1$).
+>
+> $$
+> h(y)=\int_y^18xy\,dx=4y(1-y^2)
+> $$
+>
+> **Step 4 — Conditional** ($0<y<x$).
+>
+> $$
+> f(y\mid x)=\frac{8xy}{4x^3}=\frac{2y}{x^2}
+> $$
+>
+> **Step 5 — Conditional probability.** At $x=\frac12$, $f(y\mid\frac12)=8y$ on $0<y<\frac12$.
+>
+> $$
+> P\left(Y<\tfrac14\mid X=\tfrac12\right)=\int_0^{1/4}8y\,dy=\frac14
+> $$
+>
+> **Answer.** $g(x)=4x^3$, $h(y)=4y(1-y^2)$, $f(y\mid x)=2y/x^2$, $P=\mathbf{1/4}$.
 
-**Fresh practice (same shape as 2022-23 Q2(a)).** Let $f(x,y)=8xy$ for $0<y<x<1$ and $0$ elsewhere. Find the marginals, the conditional density of $Y$ given $X=x$, and $P(Y<\tfrac14\mid X=\tfrac12)$.
+> [!example] Practice 4.2
+> **Given.** $f(x,y)=6x$ for $0<x<y<1$. Find $g(x)$, $h(y)$, $f(x\mid y)$, $P(X<\frac14\mid Y=\frac12)$ and $P(X+Y<1)$.
+>
+> **Step 1 — Marginal of $X$** ($0<x<1$).
+>
+> $$
+> g(x)=\int_x^16x\,dy=6x(1-x)
+> $$
+>
+> **Step 2 — Marginal of $Y$** ($0<y<1$).
+>
+> $$
+> h(y)=\int_0^y6x\,dx=3y^2
+> $$
+>
+> **Step 3 — Conditional** ($0<x<y$).
+>
+> $$
+> f(x\mid y)=\frac{6x}{3y^2}=\frac{2x}{y^2}
+> $$
+>
+> **Step 4 — Conditional probability.** At $y=\frac12$, $f(x\mid\frac12)=8x$ on $0<x<\frac12$.
+>
+> $$
+> P\left(X<\tfrac14\mid Y=\tfrac12\right)=\int_0^{1/4}8x\,dx=\frac14
+> $$
+>
+> **Step 5 — $P(X+Y<1)$.** Inside the triangle, $x$ runs from 0 to $\frac12$ and $y$ from $x$ to $1-x$.
+>
+> $$
+> \begin{aligned}
+> P(X+Y<1)&=\int_0^{1/2}\!\int_x^{1-x}6x\,dy\,dx\\
+> &=\int_0^{1/2}6x(1-2x)\,dx\\
+> &=6\left(\frac18-\frac1{12}\right)=\frac14
+> \end{aligned}
+> $$
+>
+> **Answer.** $g=6x(1-x)$, $h=3y^2$, $f(x\mid y)=2x/y^2$, **1/4**, **1/4**.
 
-Here the triangle is below the diagonal, so for fixed $x$ the variable $y$ runs from 0 to $x$, and for fixed $y$ the variable $x$ runs from $y$ to 1.
-
-$$
-g(x)=\int_0^x 8xy\,dy=8x\cdot\frac{x^2}{2}=4x^3,\quad 0<x<1 .
-$$
-
-$$
-h(y)=\int_y^1 8xy\,dx=8y\cdot\frac{1-y^2}{2}=4y(1-y^2),\quad 0<y<1 .
-$$
-
-As a check, $\int_0^1 4x^3dx=1$. The conditional density is
-
-$$
-f(y\mid x)=\frac{f(x,y)}{g(x)}=\frac{8xy}{4x^3}=\frac{2y}{x^2},\qquad 0<y<x .
-$$
-
-With $x=\tfrac12$ this is $f(y\mid \tfrac12)=8y$ for $0<y<\tfrac12$, so
-
-$$
-P\left(Y<\tfrac14\,\middle|\,X=\tfrac12\right)=\int_0^{1/4}8y\,dy=4\left(\tfrac14\right)^2=\tfrac14 .
-$$
-
-Since $g(x)h(y)=16x^3y(1-y^2)\ne 8xy$, the variables are not independent, as expected for a triangular region.
+> [!tip] Limits on a triangle
+> Write the limits next to the sketch before integrating.
+>
+> Marginals of triangle densities always have the variable in the limits, so they look like $6x(1-x)$ or $\frac{10x}{3}(1-x^3)$, never a constant.
 
 ---
 
-## 7. Building a joint pmf from a "draw from a bag" experiment
+## Extra practice
 
-This is the 2023-24 Q2(b) type. The idea is the combination formula from [[P1 Probability Basics and Counting]]: to get $x$ items of colour 1 and $y$ items of colour 2 in a sample of size $n$, we choose them separately and fill the rest of the sample with the third colour.
-
-$$
-f(x,y)=\frac{\binom{N_1}{x}\binom{N_2}{y}\binom{N_3}{n-x-y}}{\binom{N}{n}}, \qquad x+y\le n .
-$$
-
-**Fresh practice.** A box contains 4 red, 3 green and 2 white balls. Two balls are drawn at random. Let $X$ be the number of red balls and $Y$ the number of green balls in the sample. (i) Find the joint distribution and show it graphically. (ii) Find $P[(X,Y)\in A]$ where $A=\{(x,y): x+y\le 1\}$. (iii) Find the marginal distributions. (iv) Find $\mathrm{Var}(X)$. (v) Find $\mathrm{Cov}(X,Y)$.
-
-**(i) Joint distribution.** There are 9 balls, so the number of possible samples is $\binom92=36$. Since only 2 balls are drawn, the possible pairs are those with $x+y\le 2$. For example,
-
-$$
-f(1,1)=\frac{\binom41\binom31\binom20}{36}=\frac{12}{36}=\frac13,\qquad f(0,0)=\frac{\binom40\binom30\binom22}{36}=\frac1{36}.
-$$
-
-Doing this for every pair gives the table.
-
-| $f(x,y)$ | $y=0$ | $y=1$ | $y=2$ | $g(x)$ |
-|---|---|---|---|---|
-| $x=0$ | 1/36 | 6/36 | 3/36 | 10/36 = 5/18 |
-| $x=1$ | 8/36 | 12/36 | 0 | 20/36 = 5/9 |
-| $x=2$ | 6/36 | 0 | 0 | 6/36 = 1/6 |
-| $h(y)$ | 15/36 = 5/12 | 18/36 = 1/2 | 3/36 = 1/12 | 1 |
-
-All entries add to $36/36=1$. To "plot $f(x,y)$ versus $(x,y)$", draw the $x$ and $y$ axes on the floor, mark each of the six points $(0,0),(0,1),(0,2),(1,0),(1,1),(2,0)$, and at each point draw a vertical stick whose height is $f(x,y)$. The tallest stick is at $(1,1)$ with height $1/3$.
-
-**(ii)** The pairs with $x+y\le 1$ are $(0,0)$, $(0,1)$ and $(1,0)$, so
-
-$$
-P[(X,Y)\in A]=\frac{1}{36}+\frac{6}{36}+\frac{8}{36}=\frac{15}{36}=\frac{5}{12}.
-$$
-
-**(iii)** The marginals are the row and column totals of the table: $g(0)=\frac5{18}$, $g(1)=\frac59$, $g(2)=\frac16$; and $h(0)=\frac5{12}$, $h(1)=\frac12$, $h(2)=\frac1{12}$.
-
-**(iv) Variance of $X$.** Using the marginal of $X$,
-
-$$
-E(X)=0\cdot\tfrac{5}{18}+1\cdot\tfrac59+2\cdot\tfrac16=\tfrac89,\qquad E(X^2)=0+1\cdot\tfrac59+4\cdot\tfrac16=\tfrac{11}9,
-$$
-
-$$
-\mathrm{Var}(X)=E(X^2)-[E(X)]^2=\tfrac{11}{9}-\tfrac{64}{81}=\tfrac{35}{81}\approx 0.4321 .
-$$
-
-**(v) Covariance.** We need $E(XY)=\sum\sum xy\,f(x,y)$. Every term with $x=0$ or $y=0$ vanishes, and the only remaining pair is $(1,1)$, so $E(XY)=1\cdot1\cdot\frac13=\frac13$. Also $E(Y)=1\cdot\frac12+2\cdot\frac1{12}=\frac23$. Hence
-
-$$
-\mathrm{Cov}(X,Y)=E(XY)-E(X)E(Y)=\frac13-\frac89\cdot\frac23=\frac{9}{27}-\frac{16}{27}=-\frac{7}{27}\approx -0.2593 .
-$$
-
-The covariance is negative, which makes sense: with only two balls drawn, more red balls leaves less room for green balls. As a conditional example, $P(X=1\mid Y=1)=\dfrac{f(1,1)}{h(1)}=\dfrac{1/3}{1/2}=\dfrac23$.
-
-> [!warning] Common mistake
-> Students often forget the "third colour" factor $\binom{N_3}{n-x-y}$, or they include impossible cells like $(1,2)$ when only 2 items are drawn. Always check that the table adds to exactly 1.
-
----
-
-## 8. Past TF question solved
-
-> [!example] Past TF 2020-21 Q5(c) (10 marks) — tyre pressures
-> The joint density is $f(x,y)=k(x^2+y^2)$ for $30\le x<50,\ 30\le y<50$, and $0$ elsewhere. Here $X$ is the right-tyre pressure and $Y$ the left-tyre pressure, and each should be 40 psi.
+> [!question]- Answers (try first)
+> **1.** From 3 red, 2 blue, 1 green pen, 2 are chosen. $X$ = red, $Y$ = blue. Find $f(1,1)$ and $P(X=0)$.
 >
-> **(i) Finding $k$.** The region is a square, so we integrate over $y$ first and then over $x$. For fixed $x$,
-> $$
-> \int_{30}^{50}(x^2+y^2)\,dy=20x^2+\frac{50^3-30^3}{3}=20x^2+\frac{98000}{3}.
-> $$
-> Integrating this over $x$ from 30 to 50,
-> $$
-> \int_{30}^{50}\left(20x^2+\frac{98000}{3}\right)dx=20\cdot\frac{98000}{3}+20\cdot\frac{98000}{3}=\frac{3{,}920{,}000}{3}.
-> $$
-> Setting $k\cdot\frac{3{,}920{,}000}{3}=1$ gives $k=\dfrac{3}{3{,}920{,}000}\approx 7.653\times10^{-7}$.
+> *Answer:* $f(1,1)=\frac{3\cdot2}{15}=\frac25$; $P(X=0)=\frac{\binom32}{15}=\frac15$.
 >
-> **(ii) $P(30\le X\le 40,\ 40\le Y<50)$.** For fixed $x$, $\int_{40}^{50}(x^2+y^2)dy=10x^2+\frac{50^3-40^3}{3}=10x^2+\frac{61000}{3}$. Then
-> $$
-> \int_{30}^{40}\left(10x^2+\frac{61000}{3}\right)dx=10\cdot\frac{40^3-30^3}{3}+10\cdot\frac{61000}{3}=\frac{370000+610000}{3}=\frac{980000}{3}.
-> $$
-> So the probability is $k\cdot\dfrac{980000}{3}=\dfrac{980000}{3{,}920{,}000}=0.25$.
+> **2.** $f(x,y)=c\,xy$ for $x=1,2$, $y=1,2,3$. Find $c$.
 >
-> **(iii) Both tyres underfilled**, meaning both pressures are below 40: $30\le X<40,\ 30\le Y<40$. By the same steps,
-> $$
-> \int_{30}^{40}\!\!\int_{30}^{40}(x^2+y^2)\,dy\,dx=10\cdot\frac{37000}{3}+10\cdot\frac{37000}{3}=\frac{740000}{3},
-> $$
-> so the probability is $\dfrac{740000}{3{,}920{,}000}=\dfrac{37}{196}\approx 0.1888$.
-
-> [!tip] Exam trick
-> For a square region and a function like $x^2+y^2$, the two halves of the integral are mirror images. Compute one carefully and double it, but show the line of working so the examiner sees where the factor 2 comes from.
-
----
-
-> [!question]- Self-check
-> **1.** How do you get $h(y)$ from a joint pdf? *Integrate $f(x,y)$ over $x$.*
-> **2.** What is the formula for $f(y\mid x)$? *$f(x,y)/g(x)$.*
-> **3.** If the support is $0<x<y<1$, can $X$ and $Y$ be independent? *No, the region is not a rectangle.*
-> **4.** In a joint pmf table, where are the marginals? *In the row and column totals.*
-> **5.** Formula for covariance? *$E(XY)-E(X)E(Y)$.*
+> *Answer:* $c(1+2)(1+2+3)=18c=1$, so $c=\frac1{18}$ (and $X$, $Y$ are independent).
+>
+> **3.** $f(x,y)=4xy$ on the unit square. Find $P(X<\frac12,Y>\frac12)$.
+>
+> *Answer:* $\frac14\cdot\frac34=\frac3{16}$.
+>
+> **4.** $f(x,y)=2$ on $0<x<y<1$. Find $g(x)$ and $f(y\mid x)$.
+>
+> *Answer:* $g(x)=2(1-x)$; $f(y\mid x)=\frac1{1-x}$, $x<y<1$.
+>
+> **5.** Why can't $X$, $Y$ be independent on $0<x<y<1$?
+>
+> *Answer:* The support is not a rectangle.
 
 Previous: [[P3 Random Variables PMF PDF CDF]] · Next: [[P5 Expectation Variance Covariance and Chebyshev]] · Home: [[index]]

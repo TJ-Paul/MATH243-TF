@@ -5,101 +5,168 @@ tags: [math243, probability, bayes, conditional]
 
 # P2 · Conditional Probability, Independence and Bayes' Rule
 
-> [!abstract] Why this matters for the term final
-> This is the ==single most reliable topic in Section A==. It appeared in 2019-20 Q7(a) (truth serum, Bayes), 2022-23 Q1(a) (transfer a ball from bag 1 to bag 2) and Q1(b) (three machines, Bayes), and 2023-24 Q1(a) (can events be mutually exclusive and independent?), Q1(b) (define the multiplication law, then a ball-transfer problem) and Q1(c) (opinion poll, Bayes). Expect at least one full question of 30–35 marks from this note. The 2022-23 and 2023-24 versions are solved in [[TF 2022-23 Solutions]] and [[TF 2023-24 Solutions]]; here you learn the method and practise on similar problems.
+> [!abstract] Why this matters for the TF
+> This is the ==most reliable topic in Section A==.
+>
+> It appeared in 2019-20 Q7(a) (truth serum), 2022-23 Q1(a) (ball transfer) and Q1(b) (three machines), and 2023-24 Q1(a), (b) and (c) (a whole 35-mark question). Expect one full question from this note.
+>
+> The 2022-23 and 2023-24 versions are solved in [[TF 2022-23 Solutions]] and [[TF 2023-24 Solutions]]; every problem shape they use is practised below.
 
----
+## Core tools (memorize)
 
-## 1. Conditional probability
-
-Very often we learn some information before we compute a probability. The **conditional probability** of $A$ given $B$, written $P(A\mid B)$, is the probability that $A$ occurs when we already know that $B$ has occurred. Knowing that $B$ happened shrinks the sample space down to $B$, and inside this smaller space we look at the part where $A$ also happens, which is $A\cap B$.
-
-> [!important] Memorize: Conditional probability
+> [!important] Memorize
+> **Conditional probability**
+>
+> Use when something is "given" or "known".
+>
 > $$
-> P(A\mid B)=\frac{P(A\cap B)}{P(B)}, \qquad P(B)\neq 0 .
+> P(A\mid B)=\frac{P(A\cap B)}{P(B)}
 > $$
-> Read $P(A\mid B)$ as "the probability of $A$ given $B$". In general $P(A\mid B)\neq P(B\mid A)$ and $P(A\mid B)\ne P(A)$.
-
-**Worked example (lecture Problem 01).** A pair of dice is thrown. Find the probability that the sum is 10 or more, given that a 5 appears on the first die.
-
-Let $A$ be "sum is 10 or more" and $B$ be "first die shows 5". The event $B$ contains 6 outcomes, $(5,1),\dots,(5,6)$, so $P(B)=6/36$. Among these, only $(5,5)$ and $(5,6)$ have a sum of 10 or more, so $P(A\cap B)=2/36$. Therefore
-
-$$
-P(A\mid B)=\frac{2/36}{6/36}=\frac13 .
-$$
-
----
-
-## 2. The multiplication law (law of compound probability)
-
-If we rearrange the definition of conditional probability, we get a rule for the probability that two events happen together.
-
-> [!important] Memorize: Multiplication law — definition (asked in 2023-24 Q1(b))
-> For two events $A$ and $B$, ==the probability of their simultaneous occurrence equals the unconditional probability of one of them multiplied by the conditional probability of the other, given that the first has occurred==. Symbolically,
+>
+> **Multiplication law**
+>
+> Use for events happening one after another.
+>
 > $$
-> P(A\cap B)=P(A)\,P(B\mid A)=P(B)\,P(A\mid B).
+> P(A\cap B)=P(A)\,P(B\mid A)
 > $$
-> For three events, $P(A_1\cap A_2\cap A_3)=P(A_1)\,P(A_2\mid A_1)\,P(A_3\mid A_1\cap A_2)$, and the pattern continues for $k$ events.
-> If $A$ and $B$ are independent, the law simplifies to $P(A\cap B)=P(A)P(B)$.
-
-When a question says "define the multiplication law", write the statement in words, write the formula, mention the independent special case, and give a one-line example such as drawing two cards without replacement: $P(\text{both aces})=\frac{4}{52}\cdot\frac{3}{51}$.
-
-**Worked example (lecture Problem 02).** The probability that a married man watches a certain TV show is 0.4, the probability that his wife watches it is 0.5, and the probability that the man watches it given that his wife does is 0.7. Find the probability that both watch, the probability that the wife watches given that the husband does, and the probability that at least one watches.
-
-Let $H$ be "husband watches" and $W$ be "wife watches". By the multiplication law, $P(W\cap H)=P(W)P(H\mid W)=0.5\times 0.7=0.35$. Then $P(W\mid H)=\frac{P(W\cap H)}{P(H)}=\frac{0.35}{0.40}=0.875$. Finally, by the addition rule, $P(W\cup H)=0.5+0.4-0.35=0.55$.
-
----
-
-## 3. Independent events
-
-Two events are **independent** if the occurrence of one does not change the probability of the other, that is $P(A\mid B)=P(A)$. Substituting into the multiplication law gives the working test.
-
-> [!important] Memorize: Independence
+>
+> **Independence test**
+>
 > $A$ and $B$ are independent if and only if
+>
 > $$
-> P(A\cap B)=P(A)\,P(B).
+> P(A\cap B)=P(A)\,P(B)
 > $$
-> If $A$ and $B$ are independent, then so are $A$ and $B^c$, $A^c$ and $B$, and $A^c$ and $B^c$.
+>
+> **Total probability**
+>
+> Use when the final event can happen through several routes $B_1,\dots,B_k$.
+>
+> $$
+> P(A)=\sum_{i} P(B_i)\,P(A\mid B_i)
+> $$
+>
+> **Bayes' rule**
+>
+> Use when the result is given and you want the probability of a route.
+>
+> $$
+> P(B_r\mid A)=\frac{P(B_r)\,P(A\mid B_r)}{\sum_i P(B_i)\,P(A\mid B_i)}
+> $$
 
-Tossing a coin and rolling a die are independent experiments, so $P(H \text{ and } 6)=\frac12\cdot\frac16=\frac1{12}$. Drawing two cards without replacement is a dependent situation, because the first card changes what is left in the deck.
+---
+
+## Theory the TF actually asks
+
+### Define the multiplication law (2023-24 Q1(b))
+
+> [!important] Exam answer: multiplication law of probability
+> For two events $A$ and $B$, ==the probability of their simultaneous occurrence is equal to the unconditional probability of one of them multiplied by the conditional probability of the other, given that the first has occurred==.
+>
+> Symbolically,
+>
+> $$
+> P(A\cap B)=P(A)\,P(B\mid A)=P(B)\,P(A\mid B)
+> $$
+>
+> For three events,
+>
+> $$
+> P(A_1\cap A_2\cap A_3)=P(A_1)\,P(A_2\mid A_1)\,P(A_3\mid A_1\cap A_2)
+> $$
+>
+> and so on for $k$ events.
+>
+> If $A$ and $B$ are independent, then $P(B\mid A)=P(B)$ and the law becomes
+>
+> $$
+> P(A\cap B)=P(A)\,P(B)
+> $$
+>
+> **Example.** Drawing two cards without replacement,
+>
+> $$
+> P(\text{both aces})=\frac{4}{52}\cdot\frac{3}{51}=\frac{1}{221}
+> $$
 
 ### Can two events be mutually exclusive and independent at the same time? (2023-24 Q1(a))
 
-> [!important] Memorize: The answer and the justification
-> Suppose $A$ and $B$ are mutually exclusive, so $A\cap B=\emptyset$ and $P(A\cap B)=0$. If they were also independent we would need $P(A\cap B)=P(A)P(B)$, that is $0=P(A)P(B)$. This is only possible if $P(A)=0$ or $P(B)=0$.
-> So ==two events with non-zero probabilities can never be both mutually exclusive and independent==. In fact, mutually exclusive events with positive probabilities are strongly *dependent*: if $A$ happens, we know for certain that $B$ did not happen, so $P(B\mid A)=0\neq P(B)$. The only exception is the trivial case where at least one of the events has probability zero (for example an impossible event), which is independent of everything and also disjoint from everything.
-
-A simple illustration helps in the exam. When a die is rolled, let $A=\{1\}$ and $B=\{2\}$. They are mutually exclusive. But $P(A)P(B)=\frac1{36}\ne 0=P(A\cap B)$, so they are not independent. Knowing that a 1 appeared tells us for sure that 2 did not appear.
+> [!important] Exam answer
+> If $A$ and $B$ are mutually exclusive, then $A\cap B=\varnothing$, so
+>
+> $$
+> P(A\cap B)=0
+> $$
+>
+> If they are also independent, then
+>
+> $$
+> P(A\cap B)=P(A)\,P(B)
+> $$
+>
+> Together these give $P(A)P(B)=0$, which is possible only if $P(A)=0$ or $P(B)=0$.
+>
+> Therefore ==two events with non-zero probabilities can never be both mutually exclusive and independent==.
+>
+> In fact mutually exclusive events are strongly dependent: if $A$ occurs, $B$ certainly does not, so $P(B\mid A)=0\ne P(B)$. The only exception is the trivial case where one event has probability zero.
+>
+> **Example.** One roll of a die, $A=\{1\}$, $B=\{2\}$. They are mutually exclusive, but
+>
+> $$
+> P(A\cap B)=0\ne\frac16\cdot\frac16
+> $$
+>
+> so they are not independent.
 
 ---
 
-## 4. The total probability rule
+## Problem types you will face
 
-Many problems describe a process in two stages: first something happens that can go several ways (which machine, which party, which bag, which colour was transferred), and then the event of interest happens with a probability that depends on the first stage. The total probability rule adds up all the routes.
+### Type 1 — Two-stage problems: ball transfer and "choose a bag" (total probability)
 
-> [!important] Memorize: Theorem of total probability
-> If $B_1,B_2,\dots,B_k$ form a partition of the sample space (mutually exclusive and exhaustive, each with $P(B_i)>0$), then for any event $A$,
+**How to recognise it:** "one ball is transferred unseen from bag I to bag II, then a ball is drawn from bag II", or "a bag is selected at random, then a ball is drawn".
+
+**Recipe:**
+
+1. Define the first-stage events (they form a partition).
+2. After a transfer, recount bag II, which now has one more ball.
+3. Multiply along each branch and add.
+
+> [!example] Practice 1.1 (same shape as 2022-23 Q1(a) and 2023-24 Q1(b))
+> **Given.** Bag I has 6 red and 4 green balls. Bag II has 3 red and 7 green balls. One ball is moved from bag I to bag II unseen, then a ball is drawn from bag II. Find P(red).
+>
+> **Step 1 — Name the first-stage events.** Let $R_1$ = "transferred ball is red" and $G_1$ = "transferred ball is green".
+>
 > $$
-> P(A)=\sum_{i=1}^{k}P(B_i)\,P(A\mid B_i)=P(B_1)P(A\mid B_1)+\cdots+P(B_k)P(A\mid B_k).
+> P(R_1)=\frac{6}{10},\qquad P(G_1)=\frac4{10}
 > $$
+>
+> Let $R_2$ = "ball drawn from bag II is red".
+>
+> **Step 2 — Recount bag II for each branch.** If red was moved, bag II has 4 red out of 11. If green was moved, bag II has 3 red out of 11.
+>
+> $$
+> P(R_2\mid R_1)=\frac4{11}
+> $$
+>
+> $$
+> P(R_2\mid G_1)=\frac3{11}
+> $$
+>
+> **Step 3 — Total probability.**
+>
+> $$
+> \begin{aligned}
+> P(R_2)&=\frac{6}{10}\cdot\frac{4}{11}+\frac{4}{10}\cdot\frac{3}{11}\\
+> &=\frac{24+12}{110}\\
+> &=\frac{18}{55}\approx0.3273
+> \end{aligned}
+> $$
+>
+> **Answer.** $P(\text{red})=\mathbf{18/55\approx0.3273}$.
 
-The logic is simple. The event $A$ can happen together with $B_1$, or together with $B_2$, and so on; these pieces do not overlap, so we add them, and each piece is computed with the multiplication law.
-
-### Ball-transfer problems
-
-The classic exam form is: "One ball is transferred unseen from bag 1 to bag 2, then a ball is drawn from bag 2." The first stage (the colour of the transferred ball) is the partition. The trick is to remember that after the transfer, bag 2 has ==one more ball than before==, and one more of the transferred colour.
-
-**Fresh practice (similar to 2022-23 Q1(a) and 2023-24 Q1(b)).** Bag I contains 6 red and 4 green balls. Bag II contains 3 red and 7 green balls. One ball is drawn from Bag I and placed unseen in Bag II. A ball is then drawn from Bag II. What is the probability that it is red?
-
-Let $R_1$ be "the transferred ball is red" and $G_1$ be "the transferred ball is green". These two events form a partition, with $P(R_1)=\frac{6}{10}$ and $P(G_1)=\frac{4}{10}$. Let $R_2$ be "the ball drawn from Bag II is red".
-
-If a red ball was transferred, Bag II now has $3+1=4$ red balls out of $10+1=11$, so $P(R_2\mid R_1)=\frac{4}{11}$. If a green ball was transferred, Bag II still has 3 red balls out of 11, so $P(R_2\mid G_1)=\frac{3}{11}$. By the total probability rule,
-
-$$
-P(R_2)=\frac{6}{10}\cdot\frac{4}{11}+\frac{4}{10}\cdot\frac{3}{11}=\frac{24+12}{110}=\frac{36}{110}=\frac{18}{55}\approx 0.3273 .
-$$
-
-The same tree, drawn as a diagram, looks like this. Multiply along each branch and add the branches that end in the event you want.
+The tree for this problem looks like this. Multiply along each branch and add the branches that end in the event you want.
 
 ```mermaid
 flowchart LR
@@ -111,78 +178,425 @@ flowchart LR
     G1 -- "8/11" --> A4["Green drawn"]
 ```
 
-> [!tip] Exam trick
-> Always write a sentence that defines your events before you write numbers ("Let $W_1$ be the event that a white ball is transferred..."). Examiners give marks for clear event definitions, and it stops you from mixing up $P(A\mid B)$ and $P(B\mid A)$.
+> [!example] Practice 1.2 — two balls transferred
+> **Given.** Bag I has 3 white and 2 black balls; bag II has 2 white and 4 black balls. Two balls are transferred at random from bag I to bag II, then one ball is drawn from bag II. Find P(white).
+>
+> **Step 1 — What can be transferred.** The two transferred balls can be WW, WB or BB, out of $\binom52=10$ ways.
+>
+> $$
+> P(WW)=\frac{\binom32}{10}=\frac{3}{10}
+> $$
+>
+> $$
+> P(WB)=\frac{3\cdot2}{10}=\frac{6}{10}
+> $$
+>
+> $$
+> P(BB)=\frac{1}{10}
+> $$
+>
+> **Step 2 — Recount bag II.** After the transfer, bag II has 8 balls, with 4, 3 or 2 white respectively.
+>
+> **Step 3 — Total probability.**
+>
+> $$
+> \begin{aligned}
+> P(W)&=\frac{3}{10}\cdot\frac48+\frac{6}{10}\cdot\frac38+\frac{1}{10}\cdot\frac28\\
+> &=\frac{12+18+2}{80}\\
+> &=\frac{32}{80}=0.4
+> \end{aligned}
+> $$
+>
+> **Answer.** $P(\text{white})=\mathbf{0.4}$.
+
+> [!example] Practice 1.3 — choose a bag, then reverse it with Bayes
+> **Given.** Urn 1 has 2 white and 3 red balls; urn 2 has 4 white and 1 red. A fair coin decides the urn, then one ball is drawn. (i) Find P(white). (ii) If the ball is white, find the probability it came from urn 1.
+>
+> **Step 1 — (i) Total probability.**
+>
+> $$
+> P(W)=\frac12\cdot\frac25+\frac12\cdot\frac45=\frac15+\frac25=\frac35=0.6
+> $$
+>
+> **Step 2 — (ii) Bayes.**
+>
+> $$
+> P(U_1\mid W)=\frac{\frac12\cdot\frac25}{\frac35}=\frac{1/5}{3/5}=\frac13
+> $$
+>
+> **Answer.** (i) **0.6**, (ii) **1/3**.
+
+> [!warning] Common mistake in transfer problems
+> After moving one ball, bag II has one more ball in total.
+>
+> Students often keep the old total (11 instead of 12, or 10 instead of 11) in the denominator.
 
 ---
 
-## 5. Bayes' rule
+### Type 2 — Bayes' rule with 2 to 4 causes
 
-Bayes' rule answers the *reverse* question. We observe the final result (the product is defective, the person did not vote, the serum says guilty) and want the probability that it came through a particular route $B_r$.
+**How to recognise it:** an observed result (defective, positive test, did not vote, late, judged guilty) and the question asks for the probability of one cause.
 
-> [!important] Memorize: Bayes' theorem
-> If $B_1,\dots,B_k$ form a partition of $S$ with $P(B_i)>0$, and $P(A)>0$, then
-> $$
-> P(B_r\mid A)=\frac{P(B_r)\,P(A\mid B_r)}{\sum_{i=1}^{k}P(B_i)\,P(A\mid B_i)}=\frac{P(B_r)\,P(A\mid B_r)}{P(A)} .
-> $$
-> In words: ==posterior = (prior × likelihood of that route) ÷ (total probability of the observed result)==. The numerator is just one branch of the tree; the denominator is the sum of all branches that lead to $A$.
+**Recipe (5 steps):**
 
-> [!tip] A five-step routine for every Bayes question
-> Step 1, define the partition events $B_1,\dots,B_k$ and write their prior probabilities, which must add to 1. Step 2, define the observed event $A$ and write $P(A\mid B_i)$ for each $i$. Be careful when the question gives the *opposite* event: if it says "65% of party A supporters voted" and the person *did not* vote, you need $P(\text{not voted}\mid A)=0.35$. Step 3, compute each product $P(B_i)P(A\mid B_i)$. Step 4, add them to get $P(A)$. Step 5, divide each product by $P(A)$. As a final check, the posteriors must add to 1.
-
-### Past TF solved: 2019-20 Q7(a)
+1. Define the causes $B_i$ and write their priors (they add to 1).
+2. Define the observed event $A$ and write $P(A\mid B_i)$. If the data describe the opposite event, take $1-$ the given value.
+3. Multiply each prior by its likelihood.
+4. Add the products to get $P(A)$.
+5. Divide each product by $P(A)$, and check the answers add to 1.
 
 > [!example] Past TF 2019-20 Q7(a) (17 marks) — the truth serum
-> **Setting up.** Let $G$ be the event that the suspect is guilty and $I$ the event that the suspect is innocent. Only 5% of the group have ever committed a crime, so the priors are $P(G)=0.05$ and $P(I)=0.95$. Let $J$ be the event that the serum judges the suspect guilty. The serum judges 90% of guilty suspects properly, so $P(J\mid G)=0.90$. Innocent suspects are misjudged (that is, judged guilty) 1% of the time, so $P(J\mid I)=0.01$.
+> **Given.** Let $G$ = guilty and $I$ = innocent. Let $J$ = the serum judges the suspect guilty.
 >
-> **Total probability that the serum says guilty.**
+> **Step 1 — Priors.**
+>
 > $$
-> P(J)=P(G)P(J\mid G)+P(I)P(J\mid I)=0.05(0.90)+0.95(0.01)=0.045+0.0095=0.0545 .
+> P(G)=0.05,\qquad P(I)=0.95
 > $$
-> **Bayes' rule.** We want the probability that he is innocent although the serum says guilty:
+>
+> **Step 2 — Likelihoods.** 90% of the guilty are judged guilty, and innocent suspects are misjudged 1% of the time.
+>
 > $$
-> P(I\mid J)=\frac{P(I)P(J\mid I)}{P(J)}=\frac{0.0095}{0.0545}=0.1743 .
+> P(J\mid G)=0.90
 > $$
-> **Comment.** About 17.4% of the suspects whom the serum labels guilty are actually innocent. Although the serum is wrong only 1% of the time for an innocent person, innocent people are so much more common (95%) that they make up a noticeable share of the "guilty" verdicts.
+>
+> $$
+> P(J\mid I)=0.01
+> $$
+>
+> **Step 3 — Total probability.**
+>
+> $$
+> \begin{aligned}
+> P(J)&=0.05(0.90)+0.95(0.01)\\
+> &=0.045+0.0095\\
+> &=0.0545
+> \end{aligned}
+> $$
+>
+> **Step 4 — Bayes.**
+>
+> $$
+> P(I\mid J)=\frac{0.95(0.01)}{0.0545}=\frac{0.0095}{0.0545}=0.1743
+> $$
+>
+> **Answer.** $P(\text{innocent}\mid\text{judged guilty})=\mathbf{0.1743}$.
+>
+> **Comment.** About 17.4% of the suspects the serum calls guilty are actually innocent. Innocent people are so common (95%) that even a 1% error rate produces many false "guilty" verdicts.
 
-### Fresh practice in the style of 2022-23 Q1(b)
+> [!example] Practice 2.1 (same shape as 2022-23 Q1(b)) — three suppliers
+> **Given.** Suppliers $S_1,S_2,S_3$ provide 50%, 30%, 20% of a component; their defect rates are 1%, 4%, 5%. A component is found defective. Find the probability it came from each supplier.
+>
+> **Step 1 — Branch products.**
+>
+> $$
+> P(S_1)P(D\mid S_1)=0.5(0.01)=0.005
+> $$
+>
+> $$
+> P(S_2)P(D\mid S_2)=0.3(0.04)=0.012
+> $$
+>
+> $$
+> P(S_3)P(D\mid S_3)=0.2(0.05)=0.010
+> $$
+>
+> **Step 2 — Total.**
+>
+> $$
+> P(D)=0.005+0.012+0.010=0.027
+> $$
+>
+> **Step 3 — Bayes for each supplier.**
+>
+> $$
+> P(S_1\mid D)=\frac{0.005}{0.027}=0.1852
+> $$
+>
+> $$
+> P(S_2\mid D)=\frac{0.012}{0.027}=0.4444
+> $$
+>
+> $$
+> P(S_3\mid D)=\frac{0.010}{0.027}=0.3704
+> $$
+>
+> **Answer.** **0.1852, 0.4444, 0.3704** (they add to 1).
 
-A factory buys a component from three suppliers $S_1, S_2, S_3$ in the proportions 50%, 30% and 20%. From past records, 1%, 4% and 5% of their components are defective. A component is picked at random and found to be defective. Find the probability that it came from each supplier.
+> [!example] Practice 2.2 (same shape as 2023-24 Q1(c)) — the "did NOT" twist with four groups
+> **Given.** In a town, 40% support party A, 30% party B, 20% party C and 10% party D. In the last election 70% of A, 60% of B, 80% of C and 50% of D supporters voted. A person chosen at random did **not** vote. Find the probability that the person supports each party.
+>
+> **Step 1 — Use the observed event.** The observed event is $N$ = "did not vote", so the likelihoods are $0.30, 0.40, 0.20, 0.50$.
+>
+> **Step 2 — Branch products.**
+>
+> $$
+> 0.4(0.3)=0.12
+> $$
+>
+> $$
+> 0.3(0.4)=0.12
+> $$
+>
+> $$
+> 0.2(0.2)=0.04
+> $$
+>
+> $$
+> 0.1(0.5)=0.05
+> $$
+>
+> **Step 3 — Total.**
+>
+> $$
+> P(N)=0.12+0.12+0.04+0.05=0.33
+> $$
+>
+> **Step 4 — Bayes for each party.**
+>
+> $$
+> P(A\mid N)=\frac{0.12}{0.33}=0.3636
+> $$
+>
+> $$
+> P(B\mid N)=\frac{0.12}{0.33}=0.3636
+> $$
+>
+> $$
+> P(C\mid N)=\frac{0.04}{0.33}=0.1212
+> $$
+>
+> $$
+> P(D\mid N)=\frac{0.05}{0.33}=0.1515
+> $$
+>
+> **Answer.** A **0.3636**, B **0.3636**, C **0.1212**, D **0.1515**.
 
-The priors are $P(S_1)=0.5$, $P(S_2)=0.3$, $P(S_3)=0.2$, and the likelihoods are $P(D\mid S_1)=0.01$, $P(D\mid S_2)=0.04$, $P(D\mid S_3)=0.05$. The branch products are $0.5(0.01)=0.005$, $0.3(0.04)=0.012$ and $0.2(0.05)=0.010$, so
+> [!example] Practice 2.3 — medical test
+> **Given.** A disease affects 1% of a population. A test detects it in 90% of people who have it, but also gives a positive result for 2% of healthy people. (i) Find P(positive). (ii) A person tests positive; find the probability they have the disease. (iii) A person tests negative; find the probability they still have the disease.
+>
+> **Step 1 — (i) Total probability.**
+>
+> $$
+> \begin{aligned}
+> P(+)&=0.01(0.90)+0.99(0.02)\\
+> &=0.009+0.0198\\
+> &=0.0288
+> \end{aligned}
+> $$
+>
+> **Step 2 — (ii) Bayes for a positive result.**
+>
+> $$
+> P(D\mid +)=\frac{0.009}{0.0288}=0.3125
+> $$
+>
+> **Step 3 — (iii) Bayes for a negative result.**
+>
+> $$
+> P(D\mid -)=\frac{0.01(0.10)}{1-0.0288}=\frac{0.001}{0.9712}=0.00103
+> $$
+>
+> **Answer.** (i) **0.0288**, (ii) **0.3125**, (iii) **0.00103**.
+>
+> **Comment.** Only about 31% of positive results are real, because the disease is rare.
 
-$$
-P(D)=0.005+0.012+0.010=0.027 .
-$$
+> [!example] Practice 2.4 — getting to work
+> **Given.** A person goes to work by car 30% of the time, walks 30% of the time and takes the bus 40% of the time. The probability of being late is 0.05 by car, 0.10 walking and 0.20 by bus. Given that the person was late, which mode is most likely?
+>
+> **Step 1 — Branch products.**
+>
+> $$
+> 0.3(0.05)=0.015
+> $$
+>
+> $$
+> 0.3(0.10)=0.03
+> $$
+>
+> $$
+> 0.4(0.20)=0.08
+> $$
+>
+> **Step 2 — Total.**
+>
+> $$
+> P(L)=0.015+0.03+0.08=0.125
+> $$
+>
+> **Step 3 — Bayes.**
+>
+> $$
+> P(\text{car}\mid L)=\frac{0.015}{0.125}=0.12
+> $$
+>
+> $$
+> P(\text{walk}\mid L)=\frac{0.03}{0.125}=0.24
+> $$
+>
+> $$
+> P(\text{bus}\mid L)=\frac{0.08}{0.125}=0.64
+> $$
+>
+> **Answer.** The **bus** is the most likely mode (0.64).
 
-Then by Bayes' rule,
-
-$$
-P(S_1\mid D)=\frac{0.005}{0.027}=0.1852,\qquad P(S_2\mid D)=\frac{0.012}{0.027}=0.4444,\qquad P(S_3\mid D)=\frac{0.010}{0.027}=0.3704 .
-$$
-
-These add to 1, as they must. Notice that supplier $S_1$ provides half the components but only about 18.5% of the defective ones, because its defect rate is low.
-
-### Fresh practice in the style of 2023-24 Q1(c) (the "complement" twist)
-
-Using the same factory, suppose instead that the component is found to be **not defective**. Find the probability that it came from each supplier.
-
-Now the observed event is $D^c$, so we need $P(D^c\mid S_1)=0.99$, $P(D^c\mid S_2)=0.96$, $P(D^c\mid S_3)=0.95$. The branch products are $0.495$, $0.288$ and $0.190$, giving $P(D^c)=0.973$ (which also equals $1-0.027$, a good check). Hence
-
-$$
-P(S_1\mid D^c)=\frac{0.495}{0.973}=0.5087,\qquad P(S_2\mid D^c)=\frac{0.288}{0.973}=0.2960,\qquad P(S_3\mid D^c)=\frac{0.190}{0.973}=0.1953 .
-$$
-
-> [!warning] Common mistake
-> In questions like 2023-24 Q1(c), the data are given as "65% of A supporters turned up to vote", but the person chosen *did not* vote. Students often plug in 0.65 instead of $1-0.65=0.35$. Always ask yourself which event was actually observed, and use the probability of *that* event under each route.
+> [!warning] The most common Bayes mistake
+> When the data say "65% of A supporters voted" but the chosen person did **not** vote, you must use $0.35$, not $0.65$.
+>
+> Always use the probability of the event that was actually observed.
 
 ---
 
-> [!question]- Self-check
-> **1.** State the multiplication law in words. *The probability that two events occur together equals the probability of one times the conditional probability of the other given the first.*
-> **2.** $P(A)=0.3$, $P(B)=0.4$, $A$ and $B$ independent. Find $P(A\cup B)$. *$0.3+0.4-0.12=0.58$.*
-> **3.** Can events with $P(A)=0.2$, $P(B)=0.3$ be both disjoint and independent? *No, since $0\ne 0.06$.*
-> **4.** In Bayes' rule, what is the denominator? *The total probability of the observed event, the sum over all branches.*
-> **5.** After transferring one ball into a bag of 11 balls, how many balls does it hold? *12.*
+### Type 3 — Dependent draws (multiplication law)
+
+**How to recognise it:** items drawn one after another without replacement, and a specific sequence is asked.
+
+**Recipe:** multiply the probabilities step by step, updating the counts after each draw.
+
+> [!example] Practice 3.1 — sequence of draws
+> **Given.** A box has 20 items, 5 defective. Three are drawn one by one without replacement. Find P(first two good and third defective).
+>
+> **Step 1 — Multiply, updating counts after each draw.**
+>
+> $$
+> P(G_1\cap G_2\cap D_3)=\frac{15}{20}\cdot\frac{14}{19}\cdot\frac{5}{18}=\frac{35}{228}
+> $$
+>
+> **Answer.** $\mathbf{35/228\approx0.1535}$.
+
+> [!example] Example 3.2 (lecture) — TV show
+> **Given.** $P(H)=0.4$ (husband watches), $P(W)=0.5$ (wife watches), $P(H\mid W)=0.7$. Find (a) P(both watch), (b) $P(W\mid H)$, (c) P(at least one watches).
+>
+> **Step 1 — (a) Both watch (multiplication law).**
+>
+> $$
+> P(W\cap H)=P(W)\,P(H\mid W)=0.5\times0.7=0.35
+> $$
+>
+> **Step 2 — (b) Conditional probability.**
+>
+> $$
+> P(W\mid H)=\frac{0.35}{0.4}=0.875
+> $$
+>
+> **Step 3 — (c) Addition rule.**
+>
+> $$
+> P(W\cup H)=0.5+0.4-0.35=0.55
+> $$
+>
+> **Answer.** (a) **0.35**, (b) **0.875**, (c) **0.55**.
+
+> [!example] Example 3.3 (lecture) — dice
+> **Given.** Two dice are thrown. Find P(sum $\ge10$ given the first die shows 5).
+>
+> **Step 1 — Count.** $B$ = "first die is 5" has 6 outcomes. Of these, $(5,5)$ and $(5,6)$ give sum $\ge 10$.
+>
+> **Step 2 — Conditional probability.**
+>
+> $$
+> P(A\mid B)=\frac{2/36}{6/36}=\frac13
+> $$
+>
+> **Answer.** $\mathbf{1/3}$.
+
+---
+
+### Type 4 — Checking independence
+
+**How to recognise it:** "are A and B independent?"
+
+**Recipe:** compute $P(A\cap B)$ and $P(A)P(B)$. Equal means independent.
+
+> [!example] Practice 4.1
+> **(i) Given.** $P(A)=0.4$, $P(B)=0.5$, $P(A\cup B)=0.7$. Are $A$ and $B$ independent?
+>
+> $$
+> P(A\cap B)=0.4+0.5-0.7=0.2
+> $$
+>
+> $$
+> P(A)\,P(B)=0.4\times0.5=0.2
+> $$
+>
+> Equal, so **independent**.
+>
+> **(ii) Given.** A die is rolled. $A$ = "even", $B$ = "at most 4". Are they independent?
+>
+> $A\cap B=\{2,4\}$, so
+>
+> $$
+> P(A\cap B)=\frac26=\frac13
+> $$
+>
+> $$
+> P(A)\,P(B)=\frac12\cdot\frac46=\frac13
+> $$
+>
+> Equal, so **independent**.
+
+---
+
+### Type 5 — Independent people or parts working together
+
+**How to recognise it:** "three students try independently", "the problem is solved if at least one solves it".
+
+**Recipe:**
+
+$$
+P(\text{solved})=1-\prod P(\text{fails})
+$$
+
+"Exactly one" is the sum of the "only this one" cases.
+
+> [!example] Practice 5.1
+> **Given.** Three students solve a problem independently with probabilities $\frac12,\frac13,\frac14$. Find the probability that (i) the problem is solved, (ii) exactly one solves it.
+>
+> **Step 1 — (i) Nobody solves.**
+>
+> $$
+> P(\text{none})=\frac12\cdot\frac23\cdot\frac34=\frac14
+> $$
+>
+> $$
+> P(\text{solved})=1-\frac14=\frac34
+> $$
+>
+> **Step 2 — (ii) Exactly one.**
+>
+> $$
+> \begin{aligned}
+> P&=\frac12\cdot\frac23\cdot\frac34+\frac12\cdot\frac13\cdot\frac34+\frac12\cdot\frac23\cdot\frac14\\
+> &=\frac{6+3+2}{24}\\
+> &=\frac{11}{24}\approx0.458
+> \end{aligned}
+> $$
+>
+> **Answer.** (i) **3/4**, (ii) **11/24 ≈ 0.458**.
+
+---
+
+## Extra practice
+
+> [!question]- Answers (try first)
+> **1.** Bag A: 4 white, 6 black; bag B: 5 white, 5 black. One ball moves from A to B, then a ball is drawn from B. P(white)?
+>
+> *Answer:* $\frac4{10}\cdot\frac6{11}+\frac6{10}\cdot\frac5{11}=\frac{54}{110}=\frac{27}{55}\approx0.491$.
+>
+> **2.** Machines produce 60% and 40% of output with defect rates 3% and 5%. An item is defective; P(from machine 2)?
+>
+> *Answer:* $0.02/0.038=0.526$.
+>
+> **3.** $P(A)=0.3$, $P(B)=0.4$, independent. Find $P(A\cup B)$.
+>
+> *Answer:* $0.58$.
+>
+> **4.** Two cards drawn without replacement. P(both hearts)?
+>
+> *Answer:* $\frac{13}{52}\cdot\frac{12}{51}=\frac1{17}$.
+>
+> **5.** Can $A$ and $B$ with $P(A)=0.2$, $P(B)=0.3$ be mutually exclusive and independent?
+>
+> *Answer:* No, because $0\ne0.06$.
 
 Previous: [[P1 Probability Basics and Counting]] · Next: [[P3 Random Variables PMF PDF CDF]] · Home: [[index]]

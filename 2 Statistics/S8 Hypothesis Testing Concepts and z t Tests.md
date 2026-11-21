@@ -1,197 +1,597 @@
 ---
 title: "S8 · Hypothesis Testing: Concepts, z-tests and t-tests"
-tags: [math243, statistics, hypothesis-testing]
+tags: [math243, statistics, hypothesis-testing, z-test, t-test]
 ---
 
 # S8 · Hypothesis Testing: Concepts, z-tests and t-tests
 
-**Why this matters for the term final.** Hypothesis testing carries the most marks in Section B. Every year has at least two test questions. 2019-20 Q6(b): one-mean test with a P-value. 2020-21 Q8(b): one-mean $t$-test; Q8(c): Type I and Type II errors in a DNA paternity setting. 2021-22 Q8(a): small-sample $t$-test on heights. 2022-23 Q7(a): differences between statistic/parameter, critical/acceptance region, exact/inexact hypothesis, uni-/non-directional test, level of significance/p-value; Q7(b): large-sample $z$-test plus a 99% CI; Q7(c): one-tailed $t$-test. 2023-24 Q6(c): one-tailed $z$-test; Q7(a): short notes on goodness of fit, one- and two-tailed tests, degrees of freedom, null and alternative hypotheses; Q7(b): **two-proportion test**; Q7(c): **two-sample pooled $t$-test**. The 2019-20 to 2021-22 questions are solved below; 2022-23 and 2023-24 are in [[TF 2022-23 Solutions]] and [[TF 2023-24 Solutions]], with fresh practice of every type here.
+**Why this matters for the TF.** Every paper has at least one test of a mean, and the MATH 243 papers have three or four testing parts.
+
+Past papers have asked a z-test with a P-value (2019-20), a one-sample t-test (2020-21, 2021-22, 2022-23), a z-test with a confidence interval (2022-23), two-proportion and pooled two-sample t-tests (2023-24), and short-note theory (2020-21, 2022-23, 2023-24).
+
+The 2022-23 and 2023-24 questions are in [[TF 2022-23 Solutions]] and [[TF 2023-24 Solutions]].
 
 ---
 
-## 1. The idea of a test
+## Core tools (memorize)
 
-A **statistical hypothesis** is a statement or assumption about a population parameter (or about the form of a distribution), for example "the mean life of bulbs is 3 years" or "the defect rate is 4%". A **test of hypothesis** is a rule, based on sample data, for deciding whether to reject that statement. We assume the claim is true, see how surprising our sample would be under that assumption, and reject the claim if the sample is too surprising to be explained by chance.
+> [!important] Memorize: which statistic, when
+> **One mean, $\sigma$ known or $n\ge30$** — use $s$ if $\sigma$ is unknown and $n$ is large:
+>
+> $$z=\frac{\bar x-\mu_0}{\sigma/\sqrt n}$$
+>
+> **One mean, small $n$, $\sigma$ unknown** — df $=n-1$:
+>
+> $$t=\frac{\bar x-\mu_0}{s/\sqrt n}$$
+>
+> **Two means, large samples:**
+>
+> $$z=\frac{\bar x_1-\bar x_2}{\sqrt{s_1^2/n_1+s_2^2/n_2}}$$
+>
+> **Two means, small samples, equal variances** — df $=n_1+n_2-2$:
+>
+> $$t=\frac{\bar x_1-\bar x_2}{s_p\sqrt{1/n_1+1/n_2}}$$
+>
+> **Pooled variance** for that test:
+>
+> $$s_p^2=\frac{\sum(x_1-\bar x_1)^2+\sum(x_2-\bar x_2)^2}{n_1+n_2-2}$$
+>
+> **Paired data** (before/after on the same units), $d=x-y$, df $=n-1$:
+>
+> $$t=\frac{\bar d}{s_d/\sqrt n}$$
+>
+> **One proportion:**
+>
+> $$z=\frac{\hat p-p_0}{\sqrt{p_0q_0/n}}$$
+>
+> **Two proportions:**
+>
+> $$z=\frac{\hat p_1-\hat p_2}{\sqrt{\hat p\hat q\,(1/n_1+1/n_2)}}$$
+>
+> **Pooled proportion** for that test:
+>
+> $$\hat p=\frac{x_1+x_2}{n_1+n_2}$$
+>
+> **Critical $z$:**
+>
+> Two-tailed: **1.96** (5%) and **2.58** (1%).
+>
+> One-tailed: **1.645** (5%) and **2.33** (1%).
 
-> [!important] Memorize: Null and alternative hypotheses
-> The ==null hypothesis $H_0$== is the hypothesis of "no difference" or "no effect" that is tested for possible rejection under the assumption that it is true; it always contains the equality, e.g. $H_0: \mu = \mu_0$. The ==alternative hypothesis $H_1$ (or $H_a$)== is the statement we accept if $H_0$ is rejected; it is what the researcher usually wants to show, e.g. $H_1: \mu \ne \mu_0$, $\mu > \mu_0$ or $\mu < \mu_0$.
-
-> [!tip] Exam trick: writing $H_1$ from the words
-> "Is different / has changed / differs" → $\ne$ (two-tailed). "Is greater / more / has increased / exceeds" → $>$ (right-tailed). "Is less / has decreased / has improved (fewer defects or less time)" → $<$ (left-tailed). The claim being tested with words like "at least", "at most", "not more than" goes into $H_0$ as an equality, and the direction of suspicion goes into $H_1$.
-
-## 2. All the concepts (short-note ready)
-
-**Simple and composite (exact and inexact) hypotheses.** A hypothesis that specifies the population completely, i.e. gives a single exact value to the parameter, is called a **simple** or **exact** hypothesis, e.g. $H: \mu = 50$ (with $\sigma$ known). A hypothesis that does not specify the population completely, i.e. allows a range of values, is called **composite** or **inexact**, e.g. $H: \mu > 50$ or $H: \mu \ne 50$. The null hypothesis is usually exact and the alternative is usually inexact.
-
-**Critical (rejection) region and acceptance region.** The set of all possible values of the test statistic is divided into two mutually exclusive parts. The ==critical region $w$== is the set of values for which $H_0$ is rejected; the ==acceptance region $\bar{w}$== is the set for which $H_0$ is not rejected. The boundary values are the **critical values** (for example $\pm1.96$). The size of the critical region equals the level of significance $\alpha$.
-
-**One-tailed (directional, unidirectional) and two-tailed (non-directional) tests.** A test whose critical region lies in only one tail of the sampling distribution is a **one-tailed** test; it is used when $H_1$ has a direction ($>$ or $<$). A test whose critical region is split between both tails ($\alpha/2$ in each) is a **two-tailed** test; it is used when $H_1$ is $\ne$.
+> [!important] Memorize: the answer layout (marks are given for each line)
+> **Hypothesis.**
+>
+> **Level of significance.**
+>
+> **Test statistic** (formula and distribution).
+>
+> **Critical region.**
+>
+> **Calculated value.**
+>
+> **Decision.**
+>
+> **Comment** in the words of the story.
+>
+> Read the direction of $H_1$ from the wording. "Less than", "reduced" and "improved" are one-tailed. "Differ", "significant difference" and "is the claim justified" are two-tailed.
 
 ![[m243-rejection-regions.png]]
 
-**Level of significance and p-value.** The ==level of significance $\alpha$== is the probability of rejecting $H_0$ when it is actually true (the probability of a Type I error), fixed **before** the test, usually 5% or 1%. The ==p-value== is the probability, computed assuming $H_0$ is true, of getting a test statistic as extreme as or more extreme than the one actually observed; it is computed **after** seeing the data. Decision rule: reject $H_0$ if $p \le \alpha$. The difference: $\alpha$ is a pre-chosen threshold for the whole test, while the p-value is the observed strength of evidence against $H_0$ from this particular sample (smaller p means stronger evidence).
+---
 
-> [!important] Memorize: Type I and Type II errors
-> | Decision \ Truth | $H_0$ true | $H_0$ false |
-> |---|---|---|
-> | Reject $H_0$ | **Type I error** (probability $\alpha$) | Correct (power $= 1-\beta$) |
-> | Accept $H_0$ | Correct | **Type II error** (probability $\beta$) |
+## Theory the TF actually asks
+
+### Short notes (2023-24 Q7a)
+
+> [!important] Null and alternative hypothesis
+> The ==null hypothesis $H_0$== is a statement about a population parameter that is assumed true and tested for possible rejection. It usually states "no difference" or "no effect" (for example $H_0:\mu=\mu_0$).
 >
-> ==Type I error: rejecting a true null hypothesis. Type II error: accepting (failing to reject) a false null hypothesis.== Like a court: convicting an innocent person is a Type I error; letting a guilty person go free is a Type II error. For a fixed sample size, reducing $\alpha$ increases $\beta$; only a larger sample reduces both.
+> The ==alternative hypothesis $H_1$== is the statement accepted when $H_0$ is rejected ($\mu\ne\mu_0$, $\mu>\mu_0$ or $\mu<\mu_0$).
 
-> [!example] Past TF 2020-21 Q8(c) (10 marks): Type I and II errors in DNA paternity testing
-> $H_0$: the man is the father; $H_a$: the man is not the father. The test is 100% accurate if the man is not the father and 99.9% accurate if he is.
+> [!important] One-tailed and two-tailed tests
+> In a ==two-tailed test== the critical region lies in both tails of the sampling distribution. It is used when $H_1:\mu\ne\mu_0$, and each tail has area $\alpha/2$.
 >
-> **Type I error** = rejecting $H_0$ when it is true = ==concluding that the man is **not** the father when he actually **is** the father==. This happens when the test wrongly excludes a true father. Since the test is 99.9% accurate when he is the father, $\alpha = P(\text{Type I}) = 1 - 0.999 = 0.001$.
+> In a ==one-tailed test== the whole critical region of area $\alpha$ lies in one tail. It is right-tailed for $H_1:\mu>\mu_0$ and left-tailed for $H_1:\mu<\mu_0$.
+
+> [!important] Degrees of freedom
+> ==Degrees of freedom are the number of independent observations that are free to vary after the restrictions imposed by the estimated quantities.==
 >
-> **Type II error** = accepting $H_0$ when it is false = ==concluding that the man **is** the father when he actually is **not**==. Since the test is 100% accurate when the man is not the father, it never wrongly includes him, so $\beta = P(\text{Type II}) = 0$.
+> For example, $n$ deviations from $\bar x$ must sum to zero, so only $n-1$ are free.
 >
-> **Comment.** A Type I error here would wrongly deny a child its real father; a Type II error would wrongly assign fatherhood (legal and financial responsibility) to an unrelated man. The test makes the second error impossible and the first one extremely rare.
+> This gives $n-1$ df for a one-sample $t$-test, $n_1+n_2-2$ for a pooled test, $k-1$ for goodness of fit, and $(r-1)(c-1)$ for a contingency table.
 
-**Test statistic.** A test statistic is a quantity computed from the sample whose distribution under $H_0$ is known; it measures how far the sample result is from what $H_0$ predicts, in units of standard error:
-$$\text{Test statistic} = \frac{\text{Observed value} - \text{Expected value under } H_0}{\text{Standard error}}$$
-
-**Statistic and parameter.** See [[S1 Introduction to Statistics Data and Sampling]]: a parameter describes the population (fixed, unknown, e.g. $\mu$), a statistic describes the sample (known, varies from sample to sample, e.g. $\bar{x}$).
-
-**Degrees of freedom.** The number of independent observations that are free to vary after the restrictions (such as estimated parameters) are imposed. A one-sample $t$-test has $n - 1$ df, a pooled two-sample $t$-test has $n_1 + n_2 - 2$, a contingency table has $(r - 1)(c - 1)$.
-
-**Goodness of fit.** A goodness-of-fit test checks how well an observed frequency distribution agrees with a theoretical (expected) distribution, using $\chi^2 = \sum \frac{(O - E)^2}{E}$ (see [[S9 Chi-Square Tests]]). A small $\chi^2$ means a good fit.
-
-## 3. The standard answer format (use it in every test question)
-
-> [!important] Memorize: The course's step format
-> **1. Hypothesis:** $H_0: \dots$ against $H_1: \dots$
-> **2. Level of significance:** $\alpha = \dots$; one- or two-tailed.
-> **3. Critical value / critical region:** e.g. reject $H_0$ if $z < -1.645$.
-> **4. Test statistic:** write the formula and its distribution, e.g. $z = \frac{\bar{x} - \mu_0}{\sigma/\sqrt{n}} \sim N(0,1)$.
-> **5. Calculated value:** substitute the numbers.
-> **6. Decision:** compare with the critical value (or p-value with $\alpha$): reject / do not reject $H_0$.
-> **7. Comment:** one sentence in the language of the problem ("the claim is not supported", "the machine has improved", etc.).
-
-> [!important] Memorize: Critical values of $Z$
-> | | $\alpha = 0.10$ | $\alpha = 0.05$ | $\alpha = 0.01$ |
-> |---|---|---|---|
-> | Two-tailed ($\pm z_{\alpha/2}$) | 1.645 | ==1.96== | ==2.58== |
-> | Right-tailed ($z_\alpha$) | 1.28 | ==1.645== | ==2.33== |
-> | Left-tailed ($-z_\alpha$) | −1.28 | −1.645 | −2.33 |
-
-## 4. Choosing the right test
-
-```mermaid
-graph TD
-  A[Test about means] --> B{How many samples?}
-  B -->|One| C{σ known or n ≥ 30?}
-  C -->|Yes| Z1[z = x̄−μ₀ / σ/√n]
-  C -->|No, small n| T1[t = x̄−μ₀ / s/√n, df n−1]
-  B -->|Two independent| D{Large samples?}
-  D -->|Yes| Z2[z with s₁²/n₁ + s₂²/n₂]
-  D -->|No| T2[pooled t, df n₁+n₂−2]
-  B -->|Two paired| T3[paired t on differences, df n−1]
-  A2[Test about proportions] --> P1[one: z = p̂−P₀ / √P₀Q₀/n]
-  A2 --> P2[two: z with pooled p̂]
-```
-
-## 5. Tests for one mean
-
-> [!important] Memorize: One-sample $z$ and $t$ tests for $H_0: \mu = \mu_0$
-> **Large sample ($n \ge 30$) or $\sigma$ known:** $$z = \frac{\bar{x} - \mu_0}{\sigma/\sqrt{n}} \quad(\text{replace } \sigma \text{ by } s \text{ if unknown}) \sim N(0,1)$$
-> **Small sample ($n < 30$), $\sigma$ unknown, normal population:** $$t = \frac{\bar{x} - \mu_0}{s/\sqrt{n}} \sim t_{n-1}, \qquad s = \sqrt{\frac{\sum (x - \bar{x})^2}{n - 1}} = \sqrt{\frac{\sum x^2 - n\bar{x}^2}{n-1}}$$
-
-**p-value calculation.** For a right-tailed test, $p = P(Z \ge z_{cal}) = 1 - \Phi(z_{cal})$. For a left-tailed test, $p = P(Z \le z_{cal}) = \Phi(z_{cal})$. For a two-tailed test, $p = 2\,P(Z \ge |z_{cal}|) = 2[1 - \Phi(|z_{cal}|)]$.
-
-> [!example] Past TF 2019-20 Q6(b) (18 marks): Mice diet, test using a P-value
-> **Problem.** Is there reason to believe $\mu < 40$ months if 64 mice on the diet have mean life 38 months and SD 5.8 months?
+> [!important] Goodness of fit
+> ==A goodness-of-fit test checks how well observed frequencies agree with the frequencies expected under a hypothesised distribution==, using
 >
-> **Hypothesis:** $H_0: \mu = 40$ against $H_1: \mu < 40$ (left-tailed).
-> **Test statistic:** $n = 64$ is large, so $z = \dfrac{\bar{x} - \mu_0}{s/\sqrt{n}} \sim N(0,1)$.
-> **Calculated value:** $$z = \frac{38 - 40}{5.8/\sqrt{64}} = \frac{-2}{0.725} = -2.76$$
-> **P-value:** $p = P(Z \le -2.76) = 1 - \Phi(2.76) = 1 - 0.9971 = 0.0029$.
-> **Decision:** $p = 0.0029$ is smaller than any usual significance level ($0.05$ or even $0.01$), so we reject $H_0$.
-> **Comment:** There is strong evidence that the mean life span on this diet is less than 40 months; the student's claim of about 40 months is not supported.
-
-> [!example] Past TF 2020-21 Q8(b) (15 marks): Sodium content of cereal
-> **Problem.** $n = 20$ servings, $\bar{x} = 244$ mg, $s = 24.5$ mg. At $\alpha = 0.05$, is the mean sodium content greater than 220 mg?
+> $$\chi^2=\sum\frac{(O-E)^2}{E}$$
 >
-> **Hypothesis:** $H_0: \mu = 220$ against $H_1: \mu > 220$ (right-tailed).
-> **Level of significance:** $\alpha = 0.05$; df $= 19$; critical value $t_{0.05,19} = 1.729$. Reject $H_0$ if $t > 1.729$.
-> **Test statistic:** small sample, $\sigma$ unknown: $t = \dfrac{\bar{x} - \mu_0}{s/\sqrt{n}} \sim t_{19}$.
-> **Calculated value:** $$t = \frac{244 - 220}{24.5/\sqrt{20}} = \frac{24}{5.478} = 4.38$$
-> **Decision:** $4.38 > 1.729$, so reject $H_0$.
-> **Comment:** The data suggest that the average sodium content of a single serving of this cereal is greater than 220 mg.
-
-> [!example] Past TF 2021-22 Q8(a) (17 marks): Heights of 10 individuals
-> **Data.** 63, 63, 64, 65, 66, 69, 69, 70, 70, 71. Test the suggestion that the mean height is 65 ($t_{0.05}$ for 9 df $= 2.262$, two-tailed 5%).
+> with $k-1-m$ df ($m$ = parameters estimated).
 >
-> **Calculations.** $\sum x = 670$, so $\bar{x} = 67$. $\sum x^2 = 44978$, so $\sum (x - \bar{x})^2 = 44978 - 10(67)^2 = 44978 - 44890 = 88$. $s^2 = 88/9 = 9.778$, $s = 3.127$.
-> **Hypothesis:** $H_0: \mu = 65$ against $H_1: \mu \ne 65$ (two-tailed).
-> **Critical region:** $|t| > t_{0.025,9} = 2.262$.
-> **Calculated value:** $$t = \frac{67 - 65}{3.127/\sqrt{10}} = \frac{2}{0.989} = 2.02$$
-> **Decision:** $|t| = 2.02 < 2.262$, so we do not reject $H_0$.
-> **Comment:** The data are consistent with the suggestion that the mean height of the population is 65 inches; the observed difference of 2 inches can be explained by sampling fluctuation.
+> A small $\chi^2$ means a good fit, and $H_0$ (the data follow the distribution) is rejected if $\chi^2>\chi^2_\alpha$. See [[S9 Chi-Square Tests]].
 
-## 6. Tests for two independent means
+### Differentiate (2022-23 Q7a)
 
-> [!important] Memorize: Two-sample tests for $H_0: \mu_1 = \mu_2$
-> **Large samples:** $$z = \frac{\bar{x}_1 - \bar{x}_2}{\sqrt{\frac{s_1^2}{n_1} + \frac{s_2^2}{n_2}}} \sim N(0,1)$$
-> (with known $\sigma$'s use $\sigma_1^2, \sigma_2^2$; if variances are assumed equal use $s\sqrt{\frac{1}{n_1} + \frac{1}{n_2}}$ in the denominator).
+> [!important] Statistic vs parameter
+> A ==parameter== is a numerical characteristic of the **population** ($\mu,\sigma,p$). It is fixed but usually unknown.
 >
-> **Small samples, equal variances (pooled $t$):** $$t = \frac{\bar{x}_1 - \bar{x}_2}{s_p\sqrt{\frac{1}{n_1} + \frac{1}{n_2}}} \sim t_{n_1 + n_2 - 2}, \qquad s_p^2 = \frac{\sum(x_1 - \bar{x}_1)^2 + \sum(x_2 - \bar{x}_2)^2}{n_1 + n_2 - 2} = \frac{(n_1 - 1)s_1^2 + (n_2 - 1)s_2^2}{n_1 + n_2 - 2}$$
+> A ==statistic== is a numerical characteristic computed from a **sample** ($\bar x,s,\hat p$). It is known, but it changes from sample to sample and is used to estimate the parameter.
 
-**Fresh practice (pooled $t$).** Two methods of assembling a part give these times (minutes). Method I: 24, 27, 22, 25, 28, 26. Method II: 21, 23, 20, 24, 22. Is there a significant difference at 5% ($t_{0.025,9} = 2.262$)?
+> [!important] Critical region vs acceptance region
+> The sample space of the test statistic is split into two parts.
+>
+> The ==critical (rejection) region== is the set of values for which $H_0$ is rejected; its probability under $H_0$ is $\alpha$.
+>
+> The ==acceptance region== is the rest, where $H_0$ is not rejected; its probability under $H_0$ is $1-\alpha$.
+>
+> They are separated by the critical value(s).
 
-Method I: $n_1 = 6$, $\bar{x}_1 = 152/6 = 25.33$; deviations squared sum $\sum(x_1 - \bar{x}_1)^2 = 23.33$. Method II: $n_2 = 5$, $\bar{x}_2 = 110/5 = 22$; $\sum(x_2 - \bar{x}_2)^2 = 1 + 1 + 4 + 4 + 0 = 10$.
+> [!important] Exact (simple) vs inexact (composite) hypothesis
+> An ==exact or simple hypothesis== specifies the parameter completely as one value, for example $H_0:\mu=50$.
+>
+> An ==inexact or composite hypothesis== specifies a range of values, for example $H_1:\mu>50$ or $\mu\ne50$.
 
-Pooled variance $s_p^2 = (23.33 + 10)/(6 + 5 - 2) = 33.33/9 = 3.704$, so $s_p = 1.925$.
+> [!important] Unidirectional vs non-directional test
+> A ==unidirectional (one-tailed, directional)== test has an alternative in one direction ($>$ or $<$), with the whole $\alpha$ in one tail.
+>
+> A ==non-directional (two-tailed)== test has $H_1:\ne$, with $\alpha/2$ in each tail.
 
-**Hypothesis:** $H_0: \mu_1 = \mu_2$ against $H_1: \mu_1 \ne \mu_2$. **Critical region:** $|t| > 2.262$ with 9 df.
-$$t = \frac{25.33 - 22}{1.925\sqrt{\frac{1}{6} + \frac{1}{5}}} = \frac{3.33}{1.925 \times 0.6055} = \frac{3.33}{1.165} = 2.86$$
-**Decision:** $2.86 > 2.262$, reject $H_0$. **Comment:** the two methods differ significantly; Method II is faster on average.
+> [!important] Level of significance vs P-value
+> The ==level of significance $\alpha$== is the maximum probability of a Type I error, fixed **before** the test (5% or 1%).
+>
+> The ==P-value== is computed **from the data**: it is the probability, assuming $H_0$ is true, of getting a test statistic as extreme as or more extreme than the observed one.
+>
+> Reject $H_0$ when P-value $\le\alpha$.
 
-> [!tip] Exam trick: computing $\sum (x - \bar{x})^2$ fast
-> Use $\sum (x - \bar{x})^2 = \sum x^2 - \frac{(\sum x)^2}{n}$. For Method I: $\sum x^2 = 3874$, $(152)^2/6 = 3850.67$, difference $23.33$. ✓
+### Type I and Type II errors (2020-21 Q8c)
 
-## 7. Paired $t$-test (two related samples)
+> [!important] Definitions
+> ==Type I error: rejecting $H_0$ when it is true==, with probability $\alpha$.
+>
+> ==Type II error: accepting $H_0$ when it is false==, with probability $\beta$.
 
-When the observations come in natural pairs (before/after on the same person, two years' sales of the same company), compute the differences $d_i = x_i - y_i$ and test whether their mean is zero:
-$$t = \frac{\bar{d}}{s_d/\sqrt{n}} \sim t_{n-1}, \qquad s_d = \sqrt{\frac{\sum (d - \bar{d})^2}{n - 1}}$$
-
-**Practice (lecture data).** Sales (million Tk) of 10 companies in 2014 and 2015 give differences 3, 7, 7, 3, 4, 1, 4, 2, 3, 3. $\bar{d} = 37/10 = 3.7$, $s_d = 1.947$, so $t = 3.7/(1.947/\sqrt{10}) = 3.7/0.6155 = 6.01$. With 9 df the two-tailed 5% critical value is 2.262; $6.01 > 2.262$, so reject $H_0$: the sales records of the two years differ significantly (sales fell in 2015).
-
-## 8. Tests for proportions
-
-> [!important] Memorize: Proportion tests
-> **One proportion**, $H_0: P = P_0$: $$z = \frac{\hat{p} - P_0}{\sqrt{\frac{P_0(1 - P_0)}{n}}}, \qquad \hat{p} = \frac{x}{n}$$
-> **Two proportions**, $H_0: P_1 = P_2$: $$z = \frac{\hat{p}_1 - \hat{p}_2}{\sqrt{\hat{p}(1 - \hat{p})\left(\frac{1}{n_1} + \frac{1}{n_2}\right)}}, \qquad \hat{p} = \frac{x_1 + x_2}{n_1 + n_2} \;(\text{pooled proportion})$$
-> Note: in the one-proportion test, the SE uses the **hypothesized** $P_0$, not $\hat{p}$.
-
-**Practice (lecture example, one proportion).** Historically 4% of valves are defective; in a sample of 100, 8 are defective. Has the defect rate changed (5%)? $H_0: P = 0.04$ vs $H_1: P \ne 0.04$. $z = \frac{0.08 - 0.04}{\sqrt{0.04 \times 0.96/100}} = \frac{0.04}{0.0196} = 2.04 > 1.96$, so reject $H_0$: the defect rate has changed (increased).
-
-**Fresh practice (two proportions).** In city A, 30 of 400 sampled phones had a battery fault; in city B, 18 of 400. Test at 5% whether the fault rates differ.
-$\hat{p}_1 = 30/400 = 0.075$, $\hat{p}_2 = 18/400 = 0.045$, pooled $\hat{p} = 48/800 = 0.06$.
-$H_0: P_1 = P_2$ vs $H_1: P_1 \ne P_2$; reject if $|z| > 1.96$.
-$$z = \frac{0.075 - 0.045}{\sqrt{0.06 \times 0.94 \times \left(\frac{1}{400} + \frac{1}{400}\right)}} = \frac{0.030}{0.01679} = 1.79$$
-Since $1.79 < 1.96$, we do not reject $H_0$: the difference is not significant at 5% (two-tailed). Note that if the question had asked "is the fault rate **higher** in city A?" (right-tailed, critical value 1.645), we would reject $H_0$. ==The direction of $H_1$ can change the conclusion, so read the question carefully.==
-
-> [!warning] Common mistakes in test questions
-> Using a two-tailed critical value for a one-tailed question (or vice versa); forgetting to divide by $\sqrt{n}$; using $n$ instead of $n - 1$ in $s$ for a $t$-test; using $\hat{p}$ instead of $P_0$ in the one-proportion SE; writing "accept $H_1$" without a comment in words. Also note: if the paper gives a critical value (e.g. "$Z = \pm2.58$ at 1%") but your test is one-tailed, write the correct one-tailed value (2.33) and remark that the conclusion is the same with the given value whenever it is.
+> [!example] Past TF 2020-21 Q8(c) (10 marks): DNA paternity testing
+> **Given.** $H_0$: the man is the father. $H_a$: he is not. The test is 100% accurate if he is not the father and 99.9% accurate if he is.
+>
+> **Type I error** means concluding the man is **not** the father when he actually **is**. The test is 99.9% accurate for true fathers, so
+>
+> $$\alpha=0.001$$
+>
+> **Type II error** means concluding the man **is** the father when he is **not**. The test is 100% accurate in that case, so
+>
+> $$\beta=0$$
+>
+> **Comment.** A Type I error would wrongly deny a child its real father. A Type II error would wrongly make an unrelated man legally responsible. This test makes the second error impossible and the first one very rare.
 
 ---
 
-> [!question]- Self-check
-> **1. $n = 100$, $\bar{x} = 52$, $\sigma = 10$, $H_0: \mu = 50$ vs $H_1: \mu \ne 50$ at 5%. Decision?**
-> $z = 2/1 = 2.0 > 1.96$, reject $H_0$. (p-value $= 2(1 - 0.9772) = 0.0456$.)
+## Problem types you will face
+
+### Type 1 — z-test for one mean (with a confidence interval)
+
+**Recognise it:** $n\ge30$ or $\sigma$ given.
+
+**Recipe:** follow the layout. If asked, add $\bar x\pm z_{\alpha/2}\sigma/\sqrt n$.
+
+> [!example] Practice 1 (TF style): two-tailed + 95% CI
+> A battery maker claims a mean life of 500 h with $\sigma=40$ h. A sample of 50 gives $\bar x=488$ h. Test the claim at 5% and find a 95% CI.
 >
-> **2. What is a Type II error in a test of "the new drug is no better than the old"?**
-> Concluding the new drug is no better when in fact it is better.
+> **Hypothesis.** $H_0:\mu=500$ against $H_1:\mu\ne500$.
 >
-> **3. $n = 9$, $\bar{x} = 21$, $s = 3$, $H_0: \mu = 19$ vs $H_1: \mu > 19$, $t_{0.05,8} = 1.860$. Decision?**
-> $t = 2/(3/3) = 2.0 > 1.860$, reject $H_0$.
+> **Level of significance.** $\alpha=0.05$.
 >
-> **4. What df does a pooled $t$-test with samples of 8 and 7 have?**
-> $8 + 7 - 2 = 13$.
+> **Test statistic.**
 >
-> **5. If the p-value is 0.03, what is the decision at 5% and at 1%?**
-> Reject at 5% (0.03 ≤ 0.05); do not reject at 1% (0.03 > 0.01).
+> $$z=\frac{\bar x-\mu_0}{\sigma/\sqrt n}\sim N(0,1)$$
+>
+> **Critical region.** $|z|>1.96$.
+>
+> **Calculated value.**
+>
+> $$z=\frac{488-500}{40/\sqrt{50}}=\frac{-12}{5.657}=-2.12$$
+>
+> **Decision.** $|z|=2.12>1.96$, so reject $H_0$.
+>
+> **Comment.** The claim of 500 h is not justified.
+>
+> **95% CI.**
+>
+> $$488\pm1.96(5.657)$$
+>
+> which gives ==$476.9\le\mu\le499.1$==. It does not contain 500, which agrees with the test.
+
+> [!example] Practice 2 (TF style): left-tailed z-test
+> An ISP claims an average speed of 54 Mbps. 40 tests give $\bar x=52.5$ and $s=5$. Is the speed lower than claimed, at 5%?
+>
+> **Hypothesis.** $H_0:\mu=54$ against $H_1:\mu<54$.
+>
+> **Level of significance.** $\alpha=0.05$.
+>
+> **Test statistic.** $n$ is large, so $z=\frac{\bar x-\mu_0}{s/\sqrt n}\sim N(0,1)$.
+>
+> **Critical region.** $z<-1.645$.
+>
+> **Calculated value.**
+>
+> $$z=\frac{52.5-54}{5/\sqrt{40}}=\frac{-1.5}{0.7906}=-1.90$$
+>
+> **Decision.** $-1.90<-1.645$, so reject $H_0$.
+>
+> **Comment.** The average speed is significantly lower than 54 Mbps.
+
+---
+
+### Type 2 — z-test using a P-value
+
+**Recognise it:** "Use a P-value in your conclusion."
+
+**Recipe:** compute $z$, then the P-value:
+
+Left-tailed: $p=\Phi(z)$.
+
+Right-tailed: $p=1-\Phi(z)$.
+
+Two-tailed: $p=2[1-\Phi(|z|)]$.
+
+Reject if $p\le\alpha$.
+
+> [!example] Past TF 2019-20 Q6(b) (18 marks): mice on a diet
+> **Given.** $n=64$, $\bar x=38$, $s=5.8$. Is there reason to believe $\mu<40$?
+>
+> **Hypothesis.** $H_0:\mu=40$ against $H_1:\mu<40$ (left-tailed).
+>
+> **Test statistic.** $n$ is large, so
+>
+> $$z=\frac{\bar x-\mu_0}{s/\sqrt n}\sim N(0,1)$$
+>
+> **Calculated value.**
+>
+> $$z=\frac{38-40}{5.8/8}=\frac{-2}{0.725}=-2.76$$
+>
+> **P-value.**
+>
+> $$p=P(Z\le-2.76)=1-0.9971=0.0029$$
+>
+> **Decision.** $p=0.0029<0.01$, so reject $H_0$ even at 1%.
+>
+> **Comment.** Strong evidence that the mean life on this diet is less than 40 months.
+
+> [!example] Practice 3 (TF style): right-tailed with P-value
+> $n=50$, $\bar x=103.2$, $\sigma=10$. Test $H_0:\mu=100$ against $H_1:\mu>100$.
+>
+> **Calculated value.**
+>
+> $$z=\frac{3.2}{10/\sqrt{50}}=2.26$$
+>
+> **P-value.**
+>
+> $$p=1-\Phi(2.26)=1-0.9881=0.0119$$
+>
+> **Decision.** Since $p<0.05$, reject $H_0$ at 5%. Since $p>0.01$, do not reject at 1%.
+>
+> **Comment.** Significant at 5% but not at 1%.
+
+---
+
+### Type 3 — one-sample t-test
+
+**Recognise it:** small $n$ ($<30$) and $\sigma$ unknown.
+
+**Recipe:** with raw data, first compute $\bar x$ and $s$ using
+
+$$s^2=\frac{\sum x^2-n\bar x^2}{n-1}$$
+
+> [!example] Past TF 2020-21 Q8(b) (15 marks): sodium in cereal
+> **Given.** $n=20$, $\bar x=244$, $s=24.5$. Is the mean greater than 220 mg, at 5%?
+>
+> **Hypothesis.** $H_0:\mu=220$ against $H_1:\mu>220$.
+>
+> **Level of significance.** $\alpha=0.05$.
+>
+> **Test statistic.**
+>
+> $$t=\frac{\bar x-\mu_0}{s/\sqrt n}\sim t_{19}$$
+>
+> **Critical region.** $t>t_{0.05,19}=1.729$.
+>
+> **Calculated value.**
+>
+> $$t=\frac{244-220}{24.5/\sqrt{20}}=\frac{24}{5.478}=4.38$$
+>
+> **Decision.** $4.38>1.729$, so reject $H_0$.
+>
+> **Comment.** The average sodium content is greater than 220 mg.
+
+> [!example] Past TF 2021-22 Q8(a) (17 marks): heights, raw data
+> **Given.** 63, 63, 64, 65, 66, 69, 69, 70, 70, 71. Test the claim that $\mu=65$ ($t_{0.05}$ for 9 df $=2.262$).
+>
+> **Step 1 — mean.**
+>
+> $$\sum x=670 \qquad \bar x=67$$
+>
+> **Step 2 — sample SD.**
+>
+> $$\sum x^2=44978$$
+>
+> $$\sum(x-\bar x)^2=44978-10(67^2)=88$$
+>
+> $$s^2=\frac{88}{9}=9.778 \qquad s=3.127$$
+>
+> **Hypothesis.** $H_0:\mu=65$ against $H_1:\mu\ne65$.
+>
+> **Level of significance.** $\alpha=0.05$.
+>
+> **Test statistic.** $t=\frac{\bar x-\mu_0}{s/\sqrt n}\sim t_9$.
+>
+> **Critical region.** $|t|>2.262$.
+>
+> **Calculated value.**
+>
+> $$t=\frac{67-65}{3.127/\sqrt{10}}=\frac{2}{0.989}=2.02$$
+>
+> **Decision.** $2.02<2.262$, so do not reject $H_0$.
+>
+> **Comment.** The data are consistent with a mean height of 65 inches.
+
+> [!example] Practice 4 (TF style): raw data, left-tailed
+> Daily scrap used to average 25.5 kg. After a modification, 10 days give 25.0, 21.9, 23.5, 25.2, 22.0, 23.0, 24.5, 25.0, 26.1, 22.8. Has the scrap reduced, at 5%?
+>
+> **Step 1 — mean.**
+>
+> $$\sum x=239 \qquad \bar x=23.9$$
+>
+> **Step 2 — sample SD.**
+>
+> $$\sum x^2=5731.2$$
+>
+> $$\sum(x-\bar x)^2=5731.2-10(23.9^2)=19.1$$
+>
+> $$s^2=\frac{19.1}{9}=2.122 \qquad s=1.457$$
+>
+> **Hypothesis.** $H_0:\mu=25.5$ against $H_1:\mu<25.5$.
+>
+> **Level of significance.** $\alpha=0.05$.
+>
+> **Test statistic.** $t=\frac{\bar x-\mu_0}{s/\sqrt n}\sim t_9$.
+>
+> **Critical region.** $t<-t_{0.05,9}=-1.833$.
+>
+> **Calculated value.**
+>
+> $$t=\frac{23.9-25.5}{1.457/\sqrt{10}}=\frac{-1.6}{0.4607}=-3.47$$
+>
+> **Decision.** Reject $H_0$.
+>
+> **Comment.** The modification has significantly reduced the scrap.
+
+> [!example] Practice 5 (TF style): summary data
+> $n=15$, $\bar x=11.8$, $s=2.4$. Test $H_0:\mu=13$ against $H_1:\mu<13$ at 5%.
+>
+> **Critical region.** $t<-t_{0.05,14}=-1.761$.
+>
+> **Calculated value.**
+>
+> $$t=\frac{11.8-13}{2.4/\sqrt{15}}=\frac{-1.2}{0.6197}=-1.94$$
+>
+> **Decision.** $-1.94<-1.761$, so reject $H_0$.
+>
+> **Comment.** The mean is significantly below 13.
+
+---
+
+### Type 4 — two independent means
+
+**Recognise it:** two separate groups.
+
+**Recipe:** if both $n\ge30$, use $z$; otherwise use the pooled $t$ (assume equal variances).
+
+> [!example] Practice 6 (TF style): large samples, z
+> Method A: $n_1=45$, $\bar x_1=74$, $s_1^2=81$. Method B: $n_2=50$, $\bar x_2=70$, $s_2^2=100$. Is there a difference at 5%?
+>
+> **Hypothesis.** $H_0:\mu_1=\mu_2$ against $H_1:\mu_1\ne\mu_2$.
+>
+> **Level of significance.** $\alpha=0.05$.
+>
+> **Critical region.** $|z|>1.96$.
+>
+> **Calculated value.**
+>
+> $$z=\frac{74-70}{\sqrt{81/45+100/50}}=\frac{4}{\sqrt{3.8}}=2.05$$
+>
+> **Decision.** $2.05>1.96$, so reject $H_0$.
+>
+> **Comment.** The two teaching methods give significantly different mean scores.
+
+> [!example] Practice 7 (TF style): small samples, pooled t (raw data)
+> Sample A: 20, 24, 22, 25, 27, 23. Sample B: 18, 21, 19, 22, 20. Test at 5% whether the means differ.
+>
+> **Step 1 — summary table.**
+>
+> | | $n$ | $\sum x$ | $\bar x$ | $\sum x^2$ | $\sum(x-\bar x)^2$ |
+> |---|---|---|---|---|---|
+> | A | 6 | 141 | 23.5 | 3343 | 29.5 |
+> | B | 5 | 100 | 20.0 | 2010 | 10.0 |
+>
+> **Step 2 — pooled variance.**
+>
+> $$s_p^2=\frac{29.5+10}{6+5-2}=\frac{39.5}{9}=4.389$$
+>
+> $$s_p=2.095$$
+>
+> **Hypothesis.** $H_0:\mu_1=\mu_2$ against $H_1:\mu_1\ne\mu_2$.
+>
+> **Level of significance.** $\alpha=0.05$.
+>
+> **Test statistic.** Pooled $t$ with $6+5-2=9$ df.
+>
+> **Critical region.** $|t|>t_{0.025,9}=2.262$.
+>
+> **Calculated value.**
+>
+> $$t=\frac{23.5-20}{2.095\sqrt{1/6+1/5}}=\frac{3.5}{1.2686}=2.76$$
+>
+> **Decision.** $2.76>2.262$, so reject $H_0$.
+>
+> **Comment.** The two population means differ significantly.
+
+---
+
+### Type 5 — paired t-test
+
+**Recognise it:** the same units are measured twice (before/after, two years for the same companies).
+
+**Recipe:** work with the differences $d$.
+
+> [!example] Practice 8 (TF style): sales of 10 companies in 2014 and 2015
+> 2014: 126, 56, 86, 62, 96, 36, 52, 50, 35, 53. 2015: 123, 49, 79, 59, 92, 35, 48, 48, 32, 50. Is there a difference, at 5%?
+>
+> **Step 1 — differences.** $d=x_{2014}-x_{2015}$: 3, 7, 7, 3, 4, 1, 4, 2, 3, 3.
+>
+> $$\sum d=37 \qquad \bar d=3.7 \qquad \sum d^2=171$$
+>
+> **Step 2 — SD of differences.**
+>
+> $$s_d^2=\frac{171-10(3.7^2)}{9}=\frac{34.1}{9}=3.789$$
+>
+> $$s_d=1.947$$
+>
+> **Hypothesis.** $H_0:\mu_d=0$ against $H_1:\mu_d\ne0$.
+>
+> **Level of significance.** $\alpha=0.05$.
+>
+> **Test statistic.** $t=\frac{\bar d}{s_d/\sqrt n}\sim t_9$.
+>
+> **Critical region.** $|t|>t_{0.025,9}=2.262$.
+>
+> **Calculated value.**
+>
+> $$t=\frac{3.7}{1.947/\sqrt{10}}=\frac{3.7}{0.6155}=6.01$$
+>
+> **Decision.** Reject $H_0$.
+>
+> **Comment.** Sales differ significantly between the two years (they fell in 2015).
+
+---
+
+### Type 6 — proportions (one and two samples)
+
+**Recognise it:** counts of "defective", "faulty" or "success" out of $n$.
+
+**Recipe:** for two samples, pool the proportion under $H_0$. "Has the machine improved?" is one-tailed.
+
+> [!example] Practice 9 (TF style): one proportion, two-tailed
+> Historically 4% of valves are defective. In a sample of 100, 8 are defective. Has the rate changed, at 5%?
+>
+> **Hypothesis.** $H_0:p=0.04$ against $H_1:p\ne0.04$.
+>
+> **Level of significance.** $\alpha=0.05$.
+>
+> **Critical region.** $|z|>1.96$.
+>
+> **Calculated value.**
+>
+> $$z=\frac{0.08-0.04}{\sqrt{0.04\times0.96/100}}=\frac{0.04}{0.0196}=2.04$$
+>
+> **Decision.** $2.04>1.96$, so reject $H_0$.
+>
+> **Comment.** The defect rate has changed (it has increased).
+
+> [!example] Practice 10 (TF style): one proportion, one-tailed
+> 5% of samples usually fail. In a batch of 120, 10 fail. Has the failure rate increased, at 5%?
+>
+> **Hypothesis.** $H_0:p=0.05$ against $H_1:p>0.05$.
+>
+> **Critical region.** $z>1.645$.
+>
+> **Sample proportion.**
+>
+> $$\hat p=0.0833$$
+>
+> **Calculated value.**
+>
+> $$z=\frac{0.0833-0.05}{\sqrt{0.05\times0.95/120}}=\frac{0.0333}{0.0199}=1.68$$
+>
+> **Decision.** $1.68>1.645$, so reject $H_0$.
+>
+> **Comment.** The failure rate has increased, though only just.
+
+> [!example] Practice 11 (TF style): two proportions, two-tailed
+> Manufacturer A: 12 faulty out of 200. B: 3 faulty out of 150. Do the proportions differ, at 5%?
+>
+> **Hypothesis.** $H_0:p_1=p_2$ against $H_1:p_1\ne p_2$.
+>
+> **Critical region.** $|z|>1.96$.
+>
+> **Sample proportions.**
+>
+> $$\hat p_1=0.06 \qquad \hat p_2=0.02$$
+>
+> **Pooled proportion.**
+>
+> $$\hat p=\frac{15}{350}=0.04286$$
+>
+> **Standard error.**
+>
+> $$SE=\sqrt{0.04286\times0.95714\left(\frac1{200}+\frac1{150}\right)}=0.02188$$
+>
+> **Calculated value.**
+>
+> $$z=\frac{0.04}{0.02188}=1.83$$
+>
+> **Decision.** $1.83<1.96$, so do not reject $H_0$.
+>
+> **Comment.** No significant difference between the manufacturers.
+
+> [!example] Practice 12 (TF style): two proportions, "has it improved?" (one-tailed)
+> Before overhaul: 30 defective in 400. After: 10 defective in 300. Has the process improved, at 5%?
+>
+> **Hypothesis.** $H_0:p_1=p_2$ against $H_1:p_1>p_2$ (before is worse).
+>
+> **Critical region.** $z>1.645$.
+>
+> **Sample proportions.**
+>
+> $$\hat p_1=0.075 \qquad \hat p_2=0.0333$$
+>
+> **Pooled proportion.**
+>
+> $$\hat p=\frac{40}{700}=0.05714$$
+>
+> **Standard error.**
+>
+> $$SE=\sqrt{0.05714\times0.94286\left(\frac1{400}+\frac1{300}\right)}=0.01773$$
+>
+> **Calculated value.**
+>
+> $$z=\frac{0.0417}{0.01773}=2.35$$
+>
+> **Decision.** $2.35>1.645$, so reject $H_0$.
+>
+> **Comment.** The process has significantly improved. (2.35 also slightly exceeds the 1% one-tailed value 2.33.)
+
+---
+
+## Extra practice
+
+> [!question]- Extra practice (try first, then open for answers)
+> **E1.** $n=9$, $\bar x=52$, $s=6$. Test $\mu=48$ two-tailed at 5% ($t_{0.025,8}=2.306$).
+>
+> Answer: $t=4/2=2.00<2.306$, so do not reject.
+>
+> **E2.** A party claims 20% support; 60 of 400 support it. Is support lower, at 5%?
+>
+> Answer: $z=(0.15-0.2)/0.02=-2.5<-1.645$, so reject: support is lower.
+>
+> **E3.** Write the decision rule for $H_1:\mu<\mu_0$ at 1% with a large sample.
+>
+> Answer: reject $H_0$ if $z<-2.33$.
+>
+> **E4.** A test gives $z=1.80$ (two-tailed). Find the P-value and the decision at 5%.
+>
+> Answer: $p=2(1-0.9641)=0.0718>0.05$, so do not reject.
+>
+> **E5.** In a court trial, $H_0$ is "the accused is innocent". Describe the Type I and Type II errors.
+>
+> Answer: Type I is convicting an innocent person; Type II is acquitting a guilty person.
 
 ---
 

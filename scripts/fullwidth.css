@@ -1,0 +1,40 @@
+/* Full-width reading mode: hides both side panels and lets the article use the whole page. */
+html.m243-wide .page {
+  max-width: none !important;
+  padding-left: 2rem !important;
+  padding-right: 2rem !important;
+}
+html.m243-wide #quartz-body {
+  grid-template-columns: minmax(0, 1fr) !important;
+  grid-template-rows: auto !important;
+  grid-template-areas: "grid-header" "grid-center" "grid-footer" !important;
+}
+html.m243-wide #quartz-body > .sidebar {
+  display: none !important;
+}
+html.m243-wide #quartz-body > .center {
+  width: auto !important;
+  max-width: none !important;
+  margin: 0 !important;
+}
+#m243-wide-btn {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 1000;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--lightgray);
+  background: var(--light);
+  color: var(--dark);
+  font: 600 14px var(--bodyFont, system-ui), system-ui, sans-serif;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+}
+#m243-wide-btn:hover {
+  background: var(--highlight);
+}
+/* On phones the side panels already collapse, so the button is not needed. */
+@media (max-width: 800px) {
+  #m243-wide-btn { display: none; }
+}

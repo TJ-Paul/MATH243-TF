@@ -18,6 +18,10 @@ rsync -a \
   "$ROOT/" "$WORK/content/"
 
 sed -i.bak 's|pageTitle: ".*"|pageTitle: "MATH 243 Term Final Guide"|' "$WORK/quartz.config.ts"
+sed -i.bak '/Component\.Graph()/d' "$WORK/quartz.layout.ts"
 
 cd "$WORK"
-npx quartz build --serve
+npx quartz build
+python3 "$ROOT/scripts/inject-fullwidth.py" "$WORK/public"
+echo "Open http://localhost:8080 (press Ctrl+C to stop)"
+npx --yes serve public --listen 8080
