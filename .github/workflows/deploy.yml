@@ -1,0 +1,65 @@
+name: Build and publish website
+
+# Builds the notes into a website with Quartz (https://quartz.jzhao.xyz)
+# and publishes it to the gh-pages branch, which GitHub Pages serves.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the notes
+        uses: actions/checkout@v4
+        with:
+          path: vault
+
+      - name: Check out Quartz
+        uses: actions/checkout@v4
+        with:
+          repository: jackyzha0/quartz
+          ref: v4
+          path: quartz
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install Quartz
+        working-directory: quartz
+        run: npm ci
+
+      - name: Copy notes into Quartz
+        run: |
+          rm -rf quartz/content
+          mkdir -p quartz/content
+          rsync -a \
+            --exclude '.git' --exclude '.github' --exclude '.obsidian' \
+            --exclude 'scripts' --exclude 'README.md' --exclude '.DS_Store' \
+            vault/ quartz/content/
+
+      - name: Configure site title and address
+        working-directory: quartz
+        run: |
+          sed -i 's|pageTitle: ".*"|pageTitle: "MATH 243 Term Final Guide"|' quartz.config.ts
+          sed -i 's|baseUrl: ".*"|baseUrl: "${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}"|' quartz.config.ts
+
+      - name: Build website
+        working-directory: quartz
+        run: npx quartz build
+
+      - name: Publish to gh-pages branch
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: quartz/public
