@@ -127,20 +127,20 @@
   }
  ],
  "files": {
-  "m243-correlation-types.png": "assets/m243-correlation-types.png",
-  "m243-normal-empirical.png": "assets/m243-normal-empirical.png",
+  "m243-phi-area.png": "assets/m243-phi-area.png",
+  "m243-tf2324-q5b-scatter.png": "assets/m243-tf2324-q5b-scatter.png",
   "m243-boxplot.png": "assets/m243-boxplot.png",
   "m243-exponential.png": "assets/m243-exponential.png",
-  "m243-pdf-area.png": "assets/m243-pdf-area.png",
-  "m243-joint-region-triangle.png": "assets/m243-joint-region-triangle.png",
-  "m243-regression-residuals.png": "assets/m243-regression-residuals.png",
-  "m243-rejection-regions.png": "assets/m243-rejection-regions.png",
   "m243-tf2223-q5b-hist-ogive.png": "assets/m243-tf2223-q5b-hist-ogive.png",
-  "m243-tf2324-q5b-scatter.png": "assets/m243-tf2324-q5b-scatter.png",
+  "m243-pdf-area.png": "assets/m243-pdf-area.png",
   "m243-tf2122-q5a-ogive.png": "assets/m243-tf2122-q5a-ogive.png",
   "m243-skewness.png": "assets/m243-skewness.png",
-  "m243-phi-area.png": "assets/m243-phi-area.png",
+  "m243-correlation-types.png": "assets/m243-correlation-types.png",
+  "m243-regression-residuals.png": "assets/m243-regression-residuals.png",
+  "m243-kurtosis.png": "assets/m243-kurtosis.png",
+  "m243-joint-region-triangle.png": "assets/m243-joint-region-triangle.png",
   "m243-binom-poisson.png": "assets/m243-binom-poisson.png",
-  "m243-kurtosis.png": "assets/m243-kurtosis.png"
+  "m243-rejection-regions.png": "assets/m243-rejection-regions.png",
+  "m243-normal-empirical.png": "assets/m243-normal-empirical.png"
  }
 }
