@@ -83,7 +83,7 @@ body.hide-left #menu-btn .pane { opacity: 0; }
 /* full-width reading mode: left panel hidden, note uses the page */
 body.hide-left .sidebar { display: none; }
 body.hide-left .layout { grid-template-columns: minmax(0, 1fr); max-width: none; }
-body.hide-left .note, body.hide-left .pager { max-width: 1100px; }
+
 body.hide-left main { padding-left: 56px; padding-right: 56px; }
 .note, .pager, .layout { transition: max-width .2s; }
 .search-wrap { position: relative; margin-left: auto; width: min(360px, 40vw); }
@@ -108,7 +108,7 @@ body.hide-left main { padding-left: 56px; padding-right: 56px; }
 .layout {
   display: grid;
   grid-template-columns: 280px minmax(0, 1fr);
-  max-width: 1440px; margin: 0 auto;
+  max-width: none; margin: 0;
 }
 .sidebar, .toc {
   position: sticky; top: 56px; align-self: start;
@@ -134,7 +134,7 @@ main { min-width: 0; padding: 32px 48px 80px; }
 .toc a:hover, .toc a.active { color: var(--accent); text-decoration: none; }
 
 /* ---------- note typography ---------- */
-.note { max-width: 860px; margin: 0 auto; }
+.note { max-width: none; margin: 0; }
 .note h1 { font-size: 2.05rem; line-height: 1.25; margin: 0 0 1.2rem; letter-spacing: -.01em; }
 .note h2 { font-size: 1.5rem; line-height: 1.3; margin: 2.6rem 0 .9rem; padding-bottom: .35rem; border-bottom: 1px solid var(--border); }
 .note h3 { font-size: 1.2rem; margin: 2rem 0 .6rem; }
@@ -193,7 +193,7 @@ main { min-width: 0; padding: 32px 48px 80px; }
 .math-block { overflow-x: auto; overflow-y: hidden; margin: .2rem 0 1rem; padding: 2px 0; }
 .note .katex { font-size: 1.08em; }
 .note .katex-display { margin: .4rem 0; }
-.note img.embed { display: block; max-width: 100%; height: auto; margin: .4rem auto 1.2rem; border-radius: 8px; background: #fff; }
+.note img.embed { display: block; max-width: min(100%, 900px); height: auto; margin: .4rem auto 1.2rem; border-radius: 8px; background: #fff; }
 .callout-title {
   display: flex; gap: 8px; align-items: baseline;
   padding: 10px 14px; font-weight: 650; color: var(--c); list-style: none;
@@ -210,7 +210,7 @@ details.callout[open] > summary::after { transform: rotate(90deg); }
 .callout-body pre, .callout-body .mermaid-box { background: var(--bg); }
 
 /* ---------- pager ---------- */
-.pager { max-width: 800px; margin: 3.5rem auto 0; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.pager { max-width: none; margin: 3.5rem 0 0; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .pager a {
   display: block; padding: 12px 16px; border: 1px solid var(--border); border-radius: 10px; color: var(--text);
 }
