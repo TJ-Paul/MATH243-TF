@@ -1,0 +1,146 @@
+{
+ "notes": [
+  {
+   "path": "index",
+   "title": "index",
+   "folder": ""
+  },
+  {
+   "path": "1 Probability/P1 Probability Basics and Counting",
+   "title": "P1 Probability Basics and Counting",
+   "folder": "1 Probability"
+  },
+  {
+   "path": "1 Probability/P2 Conditional Probability Independence and Bayes",
+   "title": "P2 Conditional Probability Independence and Bayes",
+   "folder": "1 Probability"
+  },
+  {
+   "path": "1 Probability/P3 Random Variables PMF PDF CDF",
+   "title": "P3 Random Variables PMF PDF CDF",
+   "folder": "1 Probability"
+  },
+  {
+   "path": "1 Probability/P4 Joint Marginal and Conditional Distributions",
+   "title": "P4 Joint Marginal and Conditional Distributions",
+   "folder": "1 Probability"
+  },
+  {
+   "path": "1 Probability/P5 Expectation Variance Covariance and Chebyshev",
+   "title": "P5 Expectation Variance Covariance and Chebyshev",
+   "folder": "1 Probability"
+  },
+  {
+   "path": "1 Probability/P6 Bernoulli Binomial Multinomial Hypergeometric Geometric",
+   "title": "P6 Bernoulli Binomial Multinomial Hypergeometric Geometric",
+   "folder": "1 Probability"
+  },
+  {
+   "path": "1 Probability/P7 Poisson Distribution and Poisson Process",
+   "title": "P7 Poisson Distribution and Poisson Process",
+   "folder": "1 Probability"
+  },
+  {
+   "path": "1 Probability/P8 Normal Distribution",
+   "title": "P8 Normal Distribution",
+   "folder": "1 Probability"
+  },
+  {
+   "path": "1 Probability/P9 Uniform Exponential and Other Continuous Distributions",
+   "title": "P9 Uniform Exponential and Other Continuous Distributions",
+   "folder": "1 Probability"
+  },
+  {
+   "path": "2 Statistics/S1 Introduction to Statistics Data and Sampling",
+   "title": "S1 Introduction to Statistics Data and Sampling",
+   "folder": "2 Statistics"
+  },
+  {
+   "path": "2 Statistics/S2 Frequency Distributions and Graphs",
+   "title": "S2 Frequency Distributions and Graphs",
+   "folder": "2 Statistics"
+  },
+  {
+   "path": "2 Statistics/S3 Measures of Central Tendency",
+   "title": "S3 Measures of Central Tendency",
+   "folder": "2 Statistics"
+  },
+  {
+   "path": "2 Statistics/S4 Measures of Dispersion",
+   "title": "S4 Measures of Dispersion",
+   "folder": "2 Statistics"
+  },
+  {
+   "path": "2 Statistics/S5 Moments Skewness and Kurtosis",
+   "title": "S5 Moments Skewness and Kurtosis",
+   "folder": "2 Statistics"
+  },
+  {
+   "path": "2 Statistics/S6 Correlation and Regression",
+   "title": "S6 Correlation and Regression",
+   "folder": "2 Statistics"
+  },
+  {
+   "path": "2 Statistics/S7 Sampling Distributions CLT and Confidence Intervals",
+   "title": "S7 Sampling Distributions CLT and Confidence Intervals",
+   "folder": "2 Statistics"
+  },
+  {
+   "path": "2 Statistics/S8 Hypothesis Testing Concepts and z t Tests",
+   "title": "S8 Hypothesis Testing Concepts and z t Tests",
+   "folder": "2 Statistics"
+  },
+  {
+   "path": "2 Statistics/S9 Chi-Square Tests",
+   "title": "S9 Chi-Square Tests",
+   "folder": "2 Statistics"
+  },
+  {
+   "path": "2 Statistics/S10 ANOVA One-Way and Two-Way",
+   "title": "S10 ANOVA One-Way and Two-Way",
+   "folder": "2 Statistics"
+  },
+  {
+   "path": "3 Exam Toolkit/Exam Answer Templates and Strategy",
+   "title": "Exam Answer Templates and Strategy",
+   "folder": "3 Exam Toolkit"
+  },
+  {
+   "path": "3 Exam Toolkit/Formula Sheet",
+   "title": "Formula Sheet",
+   "folder": "3 Exam Toolkit"
+  },
+  {
+   "path": "3 Exam Toolkit/TF Question Map",
+   "title": "TF Question Map",
+   "folder": "3 Exam Toolkit"
+  },
+  {
+   "path": "4 TF Solutions/TF 2022-23 Solutions",
+   "title": "TF 2022-23 Solutions",
+   "folder": "4 TF Solutions"
+  },
+  {
+   "path": "4 TF Solutions/TF 2023-24 Solutions",
+   "title": "TF 2023-24 Solutions",
+   "folder": "4 TF Solutions"
+  }
+ ],
+ "files": {
+  "m243-phi-area.png": "assets/m243-phi-area.png",
+  "m243-tf2324-q5b-scatter.png": "assets/m243-tf2324-q5b-scatter.png",
+  "m243-boxplot.png": "assets/m243-boxplot.png",
+  "m243-exponential.png": "assets/m243-exponential.png",
+  "m243-tf2223-q5b-hist-ogive.png": "assets/m243-tf2223-q5b-hist-ogive.png",
+  "m243-pdf-area.png": "assets/m243-pdf-area.png",
+  "m243-tf2122-q5a-ogive.png": "assets/m243-tf2122-q5a-ogive.png",
+  "m243-skewness.png": "assets/m243-skewness.png",
+  "m243-correlation-types.png": "assets/m243-correlation-types.png",
+  "m243-regression-residuals.png": "assets/m243-regression-residuals.png",
+  "m243-kurtosis.png": "assets/m243-kurtosis.png",
+  "m243-joint-region-triangle.png": "assets/m243-joint-region-triangle.png",
+  "m243-binom-poisson.png": "assets/m243-binom-poisson.png",
+  "m243-rejection-regions.png": "assets/m243-rejection-regions.png",
+  "m243-normal-empirical.png": "assets/m243-normal-empirical.png"
+ }
+}
