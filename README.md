@@ -2,19 +2,31 @@
 
 Problem-focused notes for **MATH 243 (Probability and Statistics), L-2/T-2 CSE**, covering every question from the last five term finals, with full solutions of the 2022-23 and 2023-24 papers.
 
-**Read online:** [https://tj-paul.github.io/MATH243-TF/](https://tj-paul.github.io/MATH243-TF/)
+**Read online:** [https://tj-paul.github.io/MATH243-TF/](https://tj-paul.github.io/MATH243-TF/#/)
 
-Use the **⇔ Full width** button (bottom-right) to hide the side panels.
+Use the panel button (top-left) or press `[` to hide the side panel for a full-width reading view.
 
 ## Read offline
 
-Needs [Node.js](https://nodejs.org) 22 or newer.
+1. Download the repo: **Code → Download ZIP** on GitHub, then unzip it. You can also use `git clone`.
+2. Open a terminal in the unzipped folder and start a small local server:
 
-1. Switch to the **gh-pages** branch on GitHub, click **Code → Download ZIP**, and unzip it.
-2. In a terminal inside the unzipped folder, run:
+   ```bash
+   python3 -m http.server
+   ```
+
+3. Open **http://localhost:8000** in your browser. Press Ctrl+C in the terminal when you're done.
+
+Double-clicking `index.html` won't work, because browsers block a page opened from disk from reading the notes. The first visit also needs internet, to load fonts, the math renderer and the diagram library.
+
+## Updating the site
+
+After editing a note, just commit and push. The site updates in a minute or two.
+
+If you **add, rename or delete** a note or image, rebuild the note list before committing:
 
 ```bash
-npx serve .
+python3 build-site-index.py
 ```
 
-3. Open the address it prints (usually `http://localhost:3000`).
+Then commit the updated `notes.json` along with your notes.
